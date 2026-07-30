@@ -1,0 +1,15 @@
+# abapGit
+.abapgit/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docs build artifacts
+docs/.DS_Store

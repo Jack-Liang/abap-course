@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_MSAG" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <T100A>
+    <ARBGB>ZFLIGHT_MSG</ARBGB>
+    <MASTERLANG>E</MASTERLANG>
+    <STEXT>航班课程消息类</STEXT>
+   </T100A>
+   <T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZFLIGHT_MSG</ARBGB>
+     <MSGNR>001</MSGNR>
+     <TEXT>航空公司代码 &amp;1 不存在</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZFLIGHT_MSG</ARBGB>
+     <MSGNR>002</MSGNR>
+     <TEXT>航班已满，无法预订</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZFLIGHT_MSG</ARBGB>
+     <MSGNR>003</MSGNR>
+     <TEXT>预订成功：&amp;1-&amp;2-&amp;3</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZFLIGHT_MSG</ARBGB>
+     <MSGNR>004</MSGNR>
+     <TEXT>查询完成，共 &amp;1 条记录</TEXT>
+    </T100>
+    <T100>
+     <SPRSL>E</SPRSL>
+     <ARBGB>ZFLIGHT_MSG</ARBGB>
+     <MSGNR>005</MSGNR>
+     <TEXT>数据已导出至 &amp;1</TEXT>
+    </T100>
+   </T100>
+  </asx:values>
+ </asx:abap>
+</abapGit>
