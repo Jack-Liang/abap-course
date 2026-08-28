@@ -137,6 +137,17 @@ abap-course/
 
 > **待补充对象：** 第9课函数组 `ZAC_CALC_FLIGHT_DURATION`、第20/21课 `ZAC_CDS_BASIC` / `ZAC_CDS_ADVANCED`、第24课综合实战 `ZAC_FLIGHT_MANAGER` 将随后续课程更新逐步加入，详见[第0课的对象对照矩阵](docs/00-getting-started.md#四命名规范与对象对照)。
 
+## 🖼️ 插图管理
+
+课文插图存储在**外部对象存储**（不进本仓库，避免仓库膨胀），引用规则：
+
+- **路径结构**：`<bucket>/abap-course/<课文编号>/`（如 `05-open-sql/`），跨课复用图放 `common/`；
+- **文件命名**：英文 `kebab-case`（如 `alv-event-flow-02.png`），语义化、带序号；
+- **引用格式**：Markdown 内使用绝对 https 链接，alt 文本必填：`![说明](https://<bucket>/abap-course/.../xxx.png)`；
+- **存储配置**：HTTPS + Referer 防盗链白名单（github.com、jack-liang.github.io）+ Cache-Control；
+- **原图留底**：对象存储中的原图在本地另行备份（不入库），以便整体迁移；
+- **优先 Mermaid**：ER 图、流程图等结构性图优先用 Mermaid 语法直接写在课文里（版本化、永不失效），截图类才走对象存储。
+
 ## 🔧 常用事务码速查
 
 | 事务码 | 功能 | 对应课程 |
