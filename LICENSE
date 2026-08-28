@@ -1,0 +1,51 @@
+ABAP Course — 双许可说明
+Copyright (c) 2026 Jack-Liang
+
+本仓库按内容类型采用双许可：
+
+  ● src/ 目录下的 ABAP 源代码及仓库配置：适用 MIT License（全文见下）
+  ● docs/ 目录及根目录文档（README.md、outline.md）：适用 CC BY-NC-SA 4.0
+    （署名-非商业性使用-相同方式共享，详见 docs/LICENSE.md）
+
+使用本仓库即表示同意上述许可条款。
+
+与 SAP 的关系声明
+------------------
+
+本项目为独立的公益教学项目，与 SAP SE 无任何关联，亦未获得 SAP SE 的
+认可、授权或赞助。SAP、ABAP、SAP GUI、SFLIGHT、BAPI、BTP 及其他 SAP
+产品与技术名称是 SAP SE 在德国及其他国家/地区的商标或注册商标。课程中
+引用的 SAP 标准开发对象（如 SFLIGHT / Flight Data Model 数据模型、标准
+函数模块与 BAPI）仅出于教学演示目的，其著作权归 SAP SE 所有。本课程内容
+不代表 SAP 官方立场，亦不构成 SAP 的官方文档或培训材料。
+
+Relationship with SAP: This is an independent educational project. It is not
+affiliated with, endorsed by, or sponsored by SAP SE. SAP, ABAP, SAP GUI,
+SFLIGHT, BAPI, BTP and other SAP product names are trademarks or registered
+trademarks of SAP SE in Germany and other countries. SAP standard objects
+referenced in this course are used for educational purposes only; all rights
+remain with SAP SE.
+
+--------------------------------------------------------------------------------
+
+The MIT License (MIT) — applies to src/ and repository configuration files
+
+Copyright (c) 2026 Jack-Liang
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.

@@ -98,6 +98,7 @@ abap-course/
 ├── .abapgit.xml          # abapGit 仓库配置
 ├── .github/workflows/    # CI：文档站点自动部署
 ├── .gitignore            # Git 忽略规则
+├── LICENSE               # 双许可（代码 MIT / 文档 CC BY-NC-SA）+ SAP 关系声明
 ├── mkdocs.yml            # 文档站点配置（Material for MkDocs，同 hello-algo 技术栈）
 ├── README.md             # 课程总介绍
 ├── docs/                  # 课文稿（Markdown，同时作为站点源文件）
@@ -159,6 +160,11 @@ abap-course/
 - 核心入口：[SAP Help Portal](https://help.sap.com) · [SAP Community](https://community.sap.com) · [abapGit](https://abapgit.org) · [ABAP Keyword Documentation（7.52）](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)
 - 背景与延伸（SFLIGHT 数据模型出处、ABAP Cloud 参考场景、试用镜像等）：见 **[参考资料库 docs/references.md](docs/references.md)**，随课程更新持续登记
 
-## 📄 License
+## 📄 License 与声明
 
-本课程内容仅供学习参考。
+本仓库采用双许可（详见 [LICENSE](LICENSE)）：
+
+- **代码**（`src/` 及仓库配置）：**MIT License**——学员与企业可自由复制使用，包括商业场景；
+- **文档**（`docs/`、README、outline）：**CC BY-NC-SA 4.0**（署名-非商业性使用-相同方式共享，详见[文档许可](docs/LICENSE.md)）。
+
+> **与 SAP 的关系：** 本项目为独立的教学项目，与 SAP SE 无任何关联，亦未获得其认可或赞助。SAP、ABAP、SFLIGHT、BAPI、BTP 等名称为 SAP SE 的商标；课程引用的 SAP 标准开发对象仅出于教学演示目的，相关权利归 SAP SE 所有。
