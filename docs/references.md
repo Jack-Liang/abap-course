@@ -16,7 +16,6 @@
 | ABAP Keyword Documentation（7.52） | <https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm> | 第2-19课 | ABAP 语句与新旧语法权威参考 |
 | abapGit 官网 | <https://abapgit.org> | 第0/23课 | 独立版程序下载（`zabapgit_standalone`）、文档 |
 | abapGit GitHub | <https://github.com/abapGit/abapGit> | 第23课 | abapGit 上游仓库与 Releases |
-| Hello 算法 | <https://www.hello-algo.com> | 第4/19课 | 免费开源的图解数据结构与算法教程（动画 + 多语言代码）；理解内表三种类型（标准/排序/哈希）背后的查找复杂度差异、排序与遍历的底层逻辑 |
 
 ## 二、环境与工具
 
