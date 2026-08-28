@@ -39,6 +39,16 @@
   font-display: swap;
 }
 
+/* Noto Serif SC 细体子集（SIL OFL 1.1）：仅覆盖站点 H1 标题实际字符，
+   缺字自动回退栈内系统宋体。新增课文标题后按 FONTS.txt 说明重新生成。 */
+@font-face {
+  font-family: "Noto Serif SC";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../assets/fonts/NotoSerifSC-Light-subset.woff2") format("woff2");
+  font-display: swap;
+}
+
 /* ---------- 设计令牌：Morning Horizon ---------- */
 :root {
   --ac-blue: #0070f2;       /* BrandColor */
