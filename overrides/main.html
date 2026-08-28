@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ super() }}
+
+  <!-- giscus 评论（存储于 GitHub Discussions） -->
+  <h2 id="__comments">留言讨论</h2>
+  <script
+    src="https://giscus.app/client.js"
+    data-repo="Jack-Liang/abap-course"
+    data-repo-id="R_kgDOTn2rsw"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOTn2rs84DEYWS"
+    data-mapping="pathname"
+    data-strict="1"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+  ></script>
+
+  <!-- 深浅色切换时同步 giscus 主题 -->
+  <script>
+    var palette = __md_get("__palette");
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+      var giscus = document.querySelector("script[src*='giscus']");
+      if (giscus) giscus.setAttribute("data-theme", theme);
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      var ref = document.querySelector("[data-md-component=palette]");
+      if (ref) ref.addEventListener("click", function () {
+        var palette = __md_get("__palette");
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+          var frame = document.querySelector(".giscus-frame");
+          if (frame) frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: theme } } },
+            "https://giscus.app"
+          );
+        }
+      });
+    });
+  </script>
+{% endblock %}

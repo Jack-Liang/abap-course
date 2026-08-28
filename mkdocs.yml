@@ -8,6 +8,7 @@ edit_uri: edit/master/docs/
 
 theme:
   name: material
+  custom_dir: overrides
   language: zh
   palette:
     - scheme: default
@@ -19,7 +20,8 @@ theme:
         icon: material/weather-sunny
         name: 切换至浅色模式
   features:
-    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
     - navigation.top
     - navigation.tracking
     - search.suggest
