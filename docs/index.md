@@ -12,7 +12,12 @@ hide:
 
 **从零开始的 SAP ABAP 开发实战课程**
 
-24 课时 · Demo 驱动 · SAP 官方 SFLIGHT 数据模型 · 传统 ABAP → 新语法 → 现代开发
+<p class="ac-chips">
+  <span class="ac-chip">24 课时</span>
+  <span class="ac-chip">Demo 驱动</span>
+  <span class="ac-chip">SAP 官方 SFLIGHT 数据模型</span>
+  <span class="ac-chip">传统 ABAP → 新语法 → 现代开发</span>
+</p>
 
 [开始学习 :material-rocket-launch:](00-getting-started.md){ .md-button .md-button--primary }
 [:material-github: GitHub 仓库](https://github.com/Jack-Liang/abap-course){ .md-button }

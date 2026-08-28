@@ -1,24 +1,170 @@
-/* 首页 hero 区域 */
+/* ---------- 主题色（与 logo 渐变一致） ---------- */
+:root {
+  --md-primary-fg-color: #1565c0;
+  --md-primary-fg-color--light: #1e88e5;
+  --md-primary-fg-color--dark: #0d47a1;
+  --md-primary-bg-color: #ffffff;
+  --md-accent-fg-color: #0097a7;
+  --md-typeset-a-color: #1565c0;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #0d47a1;
+  --md-primary-fg-color--light: #1565c0;
+  --md-primary-bg-color: #0f172a;
+  --md-accent-fg-color: #26c6da;
+  --md-typeset-a-color: #4fc3f7;
+}
+
+/* ---------- 全局字体（中文系统栈） ---------- */
+:root {
+  --md-text-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
+    sans-serif;
+  --md-code-font: "SF Mono", "JetBrains Mono", Menlo, Consolas,
+    "Courier New", monospace;
+}
+
+/* ---------- 首页 hero ---------- */
 .ac-hero {
+  position: relative;
   text-align: center;
-  padding: 2.5rem 1rem 1.5rem;
+  padding: 4rem 1.5rem 3.5rem;
+  margin: 0 0 2.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 45%, #00acc1 100%);
+  color: #ffffff;
+  box-shadow: 0 8px 32px rgba(13, 71, 161, 0.25);
+  overflow: hidden;
+}
+
+.ac-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.14) 0, transparent 34%),
+    radial-gradient(circle at 82% 72%, rgba(255, 255, 255, 0.1) 0, transparent 30%);
+  pointer-events: none;
 }
 
 .ac-hero img {
   width: 112px;
   height: 112px;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.3));
 }
 
 .ac-hero h1 {
-  margin: 0 0 0.3em;
+  margin: 0 0 0.35em;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ac-hero h1 + p {
+  margin: 0 0 1.4rem;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .ac-hero .md-button {
-  margin-top: 0.8rem;
+  margin-top: 0.6rem;
+  margin-right: 0.5rem;
 }
 
-/* 深色模式下按钮与文字微调 */
-[data-md-color-scheme="slate"] .ac-hero .md-button--primary {
-  color: var(--md-primary-bg-color);
+.ac-hero .md-button--primary {
+  background-color: #ffffff;
+  color: #0d47a1;
+  border: none;
+}
+
+.ac-hero .md-button--primary:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #0d47a1;
+}
+
+.ac-hero .md-button:not(.md-button--primary) {
+  color: #ffffff;
+  background-color: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
+}
+
+.ac-hero .md-button:not(.md-button--primary):hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: #ffffff;
+}
+
+/* 特性徽章 */
+.ac-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 0 1.6rem;
+}
+
+.ac-chip {
+  display: inline-block;
+  padding: 0.28em 0.9em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+/* ---------- 首页卡片 ---------- */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  border: 1px solid var(--md-default-fg-color--lightest, #e2e8f0);
+  border-radius: 0.75rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid > .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(21, 101, 192, 0.14);
+  border-color: var(--md-primary-fg-color--light);
+}
+
+.md-typeset .grid.cards svg,
+.md-typeset .grid > .card svg {
+  color: var(--md-primary-fg-color);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li,
+[data-md-color-scheme="slate"] .md-typeset .grid > .card {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover,
+[data-md-color-scheme="slate"] .md-typeset .grid > .card:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- 细节打磨 ---------- */
+.md-header {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+.md-typeset {
+  font-size: 0.78rem;
+  line-height: 1.85;
+}
+
+.md-typeset h1,
+.md-typeset h2 {
+  font-weight: 700;
+}
+
+.md-typeset h2 {
+  border-bottom: 1px solid var(--md-default-fg-color--lightest, #e2e8f0);
+  padding-bottom: 0.3em;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
 }
