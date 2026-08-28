@@ -16,7 +16,7 @@
 | B. 公司/学校的开发系统 | 有导师带、有开发账号 | ✅ 基本兼容，个别课受权限/网络限制 | 需要申请开发权限 |
 | C. BTP 试用版（ABAP 环境） | 只想体验现代开发 | ⚠️ 仅部分课程适用（见下方说明） | 免费，注册即用 |
 
-> **为什么推荐官方试用镜像：** 本课程以传统 ABAP 开发为主线（SE38/SE11/SE16N、经典 ALV、函数模块、BAPI），这些都是 SAP GUI + NetWeaver 技术栈的内容，试用镜像完整支持；而 BTP 上的 ABAP 环境是 ABAP Cloud，没有 SAP GUI，也不放开经典 ALV / 函数模块 / 多数 BAPI。
+> **为什么推荐官方试用镜像：** 本课程以传统 ABAP 开发为主线（SE38/SE11/SE16、经典 ALV、函数模块、BAPI），这些都是 SAP GUI + NetWeaver 技术栈的内容，试用镜像完整支持；而 BTP 上的 ABAP 环境是 ABAP Cloud，没有 SAP GUI，也不放开经典 ALV / 函数模块 / 多数 BAPI。
 
 ### 方案 A：ABAP 官方试用镜像（推荐）
 
@@ -80,7 +80,7 @@ docker run --stop-timeout 3600 -i --name a4h -h vhcala4hci \
 
 有导师或账号支持时的首选，省去安装。需要向管理员申请：
 
-- SE38 / SE80 / SE11 / SE16N / SE37 / SE24 / SE91 / SE19 等事务码的开发权限；
+- SE38 / SE80 / SE11 / SE16 / SE16N / SE37 / SE24 / SE91 / SE19 等事务码的开发权限；
 - 一个可以自建对象的**开发包（Package）**和 Workbench 传输请求；
 - 注意：第 16 课调用外部 REST API，公司内网通常需要代理或防火墙放行，请提前确认。
 
@@ -100,7 +100,7 @@ docker run --stop-timeout 3600 -i --name a4h -h vhcala4hci \
 
 ## 二、确认 SFLIGHT 演示数据
 
-**官方试用镜像默认已预置 SFLIGHT 数据**。先用 SE16 或 SE16N 查看表数据 `SCARR` 验证：能看到 LH/AA/QF 等航空公司记录（且 `SFLIGHT`/`SBOOK` 有数据）就直接进入第三节。
+**官方试用镜像默认已预置 SFLIGHT 数据**。先用 SE16 查看表数据 `SCARR` 验证（试用镜像没有 SE16N，本课程统一以 SE16 演示，公司环境两者的差异在第1课说明）：能看到 LH/AA/QF 等航空公司记录（且 `SFLIGHT`/`SBOOK` 有数据）就直接进入第三节。
 
 以下情况需要跑 SAP 自带的生成器（重新生成或重置数据）：
 
@@ -203,7 +203,7 @@ SE38 运行 `ZAC_HELLO_WORLD`，看到 `Hello ABAP!` 与航空公司信息，环
 **Q1：DEVELOPER 用户密码过期/锁死了怎么办？**
 用 `DDIC` 登录，SU01 里输入 DEVELOPER，解锁并重置密码，重新登录。
 
-**Q2：SE16N 查 SFLIGHT 没有数据？**
+**Q2：SE16 查 SFLIGHT 没有数据？**
 官方试用镜像默认预置了数据；若确实为空（如公司系统），运行 `SAPBC_DATA_GENERATOR` 生成（见第二节），跑完后等几分钟数据落库再查。
 
 **Q3：第16课 REST Demo 报连接失败？**

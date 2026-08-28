@@ -12,16 +12,16 @@
 
 ### 第1课：SAP 系统入门与开发环境
 
-**Demo：** 登录 SAP，用 SE16N 浏览 SFLIGHT / SCARR / SPFLI / SBOOK 表数据
+**Demo：** 登录 SAP，用 SE16 浏览 SFLIGHT / SCARR / SPFLI / SBOOK 表数据
 
 **课程目标：** 学员首次接触 SAP，能独立导航到常用事务码，浏览数据，建立对 SAP 体系的基本认知。
 
 **知识点清单：**
 - SAP 系统架构概述（三层架构：表示层 → 应用层 → 数据库层）
 - SAP GUI 布局与操作（菜单栏、标准工具栏、状态栏、命令栏输入事务码）
-- 常用事务码：SE38（ABAP Editor）、SE80（Object Navigator）、SE16N（数据浏览器）、SE11（数据字典）、SU01（用户管理）
+- 常用事务码：SE38（ABAP Editor）、SE80（Object Navigator）、SE16（数据浏览器；试用镜像只有 SE16，公司系统另有 SE16N）、SE11（数据字典）、SU01（用户管理）
 - F1 帮助的使用方法
-- 查表技巧：SE16N vs SE16、通配符使用、最大命中数设置
+- 查表技巧：SE16 基本操作、SE16N vs SE16 的区别（公司环境）、通配符使用、最大命中数设置
 - SE11 中查看表结构、字段说明、索引
 - SAP Easy Access 与用户菜单
 - SAP 开发对象层级（Development Class / Package 的概念）
@@ -1570,7 +1570,7 @@ START-OF-SELECTION.
 | SE38 | ABAP Editor | 第1课 |
 | SE80 | Object Navigator | 第1课 |
 | SE11 | Data Dictionary | 第1课 |
-| SE16N | Data Browser | 第1课 |
+| SE16 / SE16N | Data Browser（试用镜像只有 SE16） | 第1课 |
 | SE37 | Function Builder | 第9课 |
 | SE24 | Class Builder | 第13课 |
 | SE19 | BADI Implementation | 第15课 |

@@ -87,7 +87,7 @@ SFLIGHT 是 SAP 自带的标准表，但实际项目中你一定会需要自己�
 - **激活顺序很重要**：先激活 Domain → 再激活 Data Element → 最后激活 Table。如果反过来，Table 会因为找不到 Data Element 而激活失败
 - **修改已激活的表要小心**：如果表中已经有数据，删除字段或缩短字段长度可能导致数据丢失——生产环境务必先备份数据
 - **命名规范**：自定义对象以 `Z` 或 `Y` 开头是 SAP 的惯例（`Z` = 客户开发，`Y` = 合作伙伴开发），严格遵守可以避免与标准对象冲突
-- **Client 依赖**：在技术设置中注意"Delivery & Maintenance"标签页，勾选"Data Browser/Table View Maint."后才能在 SE16N 中直接维护表数据
+- **Client 依赖**：在技术设置中注意"Delivery & Maintenance"标签页，勾选"Data Browser/Table View Maint."后才能在 SE16 中直接维护表数据
 
 ## 课后思考
 

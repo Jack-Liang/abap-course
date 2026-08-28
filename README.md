@@ -156,7 +156,7 @@ abap-course/
 | SE38 | ABAP Editor | 第1课 |
 | SE80 | Object Navigator | 第1课 |
 | SE11 | Data Dictionary | 第1课 |
-| SE16N | Data Browser | 第1课 |
+| SE16 / SE16N | Data Browser（试用镜像只有 SE16） | 第1课 |
 | SE37 | Function Builder | 第9课 |
 | SE24 | Class Builder | 第13课 |
 | SE19 | BADI Implementation | 第15课 |
