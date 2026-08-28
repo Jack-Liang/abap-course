@@ -1,0 +1,4 @@
+SAP "72" font files in this directory (72-Light/Regular/Semibold/Bold.woff2)
+are from https://github.com/SAP/theming-base-content
+(content/Base/baseLib/baseTheme/fonts/), licensed under the Apache License 2.0.
+Full license text: LICENSE-72-fonts.txt

@@ -6,11 +6,11 @@ hide:
 
 <div class="ac-hero" markdown>
 
-![ABAP Course](assets/images/logo.svg)
+<p class="ac-eyebrow">SAP ABAP · 实战二十四课</p>
 
 # ABAP Course
 
-**从零开始的 SAP ABAP 开发实战课程**
+<p class="ac-lede">从零开始的 SAP ABAP 开发实战课程——用 SAP 官方试用镜像与 SFLIGHT 演示数据搭好练习环境，再沿准备、基础、核心、高级、现代开发五个阶段走完二十四课：从 Hello World 一路走到 CDS View 与综合实战。</p>
 
 <p class="ac-chips">
   <span class="ac-chip">24 课时</span>
@@ -28,7 +28,9 @@ hide:
 
 <div class="grid cards" markdown>
 
--   :material-console: **准备篇**
+-   <span class="ac-folio">00</span>
+
+    :material-console: **准备篇**
 
     ---
 
@@ -36,7 +38,9 @@ hide:
 
     [:octicons-arrow-right-24: 第0课 环境搭建](00-getting-started.md)
 
--   :material-school: **基础篇 · 第1-6课**
+-   <span class="ac-folio">01–06</span>
+
+    :material-school: **基础篇 · 第1-6课**
 
     ---
 
@@ -44,7 +48,9 @@ hide:
 
     [:octicons-arrow-right-24: 从第1课开始](01-sap-overview.md)
 
--   :material-code-braces: **核心篇 · 第7-13课**
+-   <span class="ac-folio">07–13</span>
+
+    :material-code-braces: **核心篇 · 第7-13课**
 
     ---
 
@@ -52,7 +58,9 @@ hide:
 
     [:octicons-arrow-right-24: 从第7课开始](07-selection-screen.md)
 
--   :material-rocket-launch: **高级篇 · 第14-19课**
+-   <span class="ac-folio">14–19</span>
+
+    :material-rocket-launch: **高级篇 · 第14-19课**
 
     ---
 
@@ -60,7 +68,9 @@ hide:
 
     [:octicons-arrow-right-24: 从第14课开始](14-bapi.md)
 
--   :material-cloud: **现代开发篇 · 第20-24课**
+-   <span class="ac-folio">20–24</span>
+
+    :material-cloud: **现代开发篇 · 第20-24课**
 
     ---
 
@@ -68,7 +78,9 @@ hide:
 
     [:octicons-arrow-right-24: 从第20课开始](20-cds-basic.md)
 
--   :material-bookshelf: **附录**
+-   <span class="ac-folio">＋</span>
+
+    :material-bookshelf: **附录**
 
     ---
 

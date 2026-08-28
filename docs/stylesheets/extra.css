@@ -1,170 +1,427 @@
-/* ---------- 主题色（与 logo 渐变一致） ---------- */
-:root {
-  --md-primary-fg-color: #1565c0;
-  --md-primary-fg-color--light: #1e88e5;
-  --md-primary-fg-color--dark: #0d47a1;
-  --md-primary-bg-color: #ffffff;
-  --md-accent-fg-color: #0097a7;
-  --md-typeset-a-color: #1565c0;
+/* =========================================================================
+   ABAP Course · SAP Fiori Horizon 主题
+   -------------------------------------------------------------------------
+   设计令牌取自 SAP 官方仓库 theming-base-content（Apache 2.0）：
+   - 浅色 = Morning Horizon（sap_horizon）
+   - 深色 = Evening  Horizon（sap_horizon_dark）
+   排印骨架（眉题/大字距/细规则线/folio 编号）借鉴书册式版面。
+   "72" 字体自托管于 assets/fonts/（Apache 2.0，见该目录 README）。
+   ========================================================================= */
+
+/* ---------- SAP "72" 字体（拉丁子集；CJK 自动回退系统字体，与真实
+   Fiori 中文系统表现一致） ---------- */
+@font-face {
+  font-family: "72";
+  font-style: normal;
+  font-weight: 300;
+  src: url("../assets/fonts/72-Light.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "72";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../assets/fonts/72-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "72";
+  font-style: normal;
+  font-weight: 600;
+  src: url("../assets/fonts/72-Semibold.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "72";
+  font-style: normal;
+  font-weight: 700;
+  src: url("../assets/fonts/72-Bold.woff2") format("woff2");
+  font-display: swap;
 }
 
-[data-md-color-scheme="slate"] {
-  --md-primary-fg-color: #0d47a1;
-  --md-primary-fg-color--light: #1565c0;
-  --md-primary-bg-color: #0f172a;
-  --md-accent-fg-color: #26c6da;
-  --md-typeset-a-color: #4fc3f7;
-}
-
-/* ---------- 全局字体（中文系统栈） ---------- */
+/* ---------- 设计令牌：Morning Horizon ---------- */
 :root {
-  --md-text-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
-    sans-serif;
+  --ac-blue: #0070f2;       /* BrandColor */
+  --ac-blue-hover: #0064d9; /* HighlightColor / LinkColor */
+  --ac-canvas: #f5f6f7;     /* BackgroundColor（画布灰） */
+  --ac-surface: #ffffff;    /* BaseColor / ShellColor（表面白） */
+  --ac-hover-bg: #eaecee;   /* HoverColor */
+  --ac-text: #131e29;       /* TextColor */
+  --ac-text-soft: #556b82;  /* 次要文字 */
+  --ac-line: color-mix(in srgb, var(--ac-text) 12%, transparent);
+  --ac-line-strong: color-mix(in srgb, var(--ac-text) 24%, transparent);
+  --ac-positive: #30914c;
+  --ac-negative: #f53232;
+  --ac-warning: #dd6100;
+  --ac-informative: #0070f2;
+  --ac-neutral: #788fa6;
+  /* 装饰性衬线（首页大标题、课文 H1） */
+  --ac-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong",
+    SimSun, serif;
+
+  /* Material 桥接 */
+  --md-primary-fg-color: var(--ac-blue);
+  --md-primary-fg-color--dark: var(--ac-blue-hover);
+  --md-primary-bg-color: var(--ac-surface);
+  --md-accent-fg-color: var(--ac-blue-hover);
+  --md-typeset-a-color: var(--ac-blue);
+  --md-default-bg-color: var(--ac-canvas);
+  --md-text-font: "72", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "Noto Sans CJK SC", sans-serif;
   --md-code-font: "SF Mono", "JetBrains Mono", Menlo, Consolas,
     "Courier New", monospace;
 }
 
-/* ---------- 首页 hero ---------- */
-.ac-hero {
-  position: relative;
-  text-align: center;
-  padding: 4rem 1.5rem 3.5rem;
-  margin: 0 0 2.5rem;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #0d47a1 0%, #1565c0 45%, #00acc1 100%);
-  color: #ffffff;
-  box-shadow: 0 8px 32px rgba(13, 71, 161, 0.25);
-  overflow: hidden;
+/* ---------- 设计令牌：Evening Horizon（深色） ---------- */
+[data-md-color-scheme="slate"] {
+  --ac-blue: #008fff;       /* LinkColor(dark) */
+  --ac-blue-hover: #4db1ff; /* HighlightColor(dark) */
+  --ac-canvas: #12171c;     /* BackgroundColor(dark) */
+  --ac-surface: #1d232a;    /* ShellColor / BaseColor(dark) */
+  --ac-hover-bg: #222b35;   /* HoverColor(dark) */
+  --ac-text: #f5f6f7;       /* TextColor(dark) */
+  --ac-text-soft: #a9b4be;  /* NeutralElementColor(dark) */
+  --ac-positive: #6dad1f;
+  --ac-negative: #fa6161;
+  --ac-warning: #f7bf00;
+  --ac-informative: #4db1ff;
+  --ac-neutral: #a9b4be;
+
+  --md-primary-fg-color: #0070f2;
+  --md-primary-fg-color--dark: #4db1ff;
+  --md-primary-bg-color: var(--ac-surface);
+  --md-accent-fg-color: var(--ac-blue-hover);
+  --md-typeset-a-color: var(--ac-blue);
+  --md-default-bg-color: var(--ac-canvas);
 }
 
-.ac-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 18% 28%, rgba(255, 255, 255, 0.14) 0, transparent 34%),
-    radial-gradient(circle at 82% 72%, rgba(255, 255, 255, 0.1) 0, transparent 30%);
-  pointer-events: none;
+/* ---------- 顶栏（Fiori Shell：白底、墨字、细规则线） ---------- */
+.md-header {
+  background-color: var(--ac-surface);
+  color: var(--ac-text);
+  border-bottom: 1px solid var(--ac-line);
+  box-shadow: none;
 }
 
-.ac-hero img {
-  width: 112px;
-  height: 112px;
-  margin-bottom: 1.2rem;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.3));
+.md-header[data-md-state="shadow"] {
+  box-shadow: none;
 }
 
-.ac-hero h1 {
-  margin: 0 0 0.35em;
-  color: #ffffff;
-  font-weight: 700;
+.md-header .md-header__title {
+  color: var(--ac-text);
+  letter-spacing: 0.04em;
+}
+
+.md-header .md-header__title .md-ellipsis {
+  opacity: 0.85;
+}
+
+/* ---------- 左侧目录（白底、右边线，占满视口高的侧栏） ---------- */
+.md-sidebar--primary {
+  background-color: var(--ac-surface);
+  border-right: 1px solid var(--ac-line);
+  min-height: calc(100vh - 2.4rem);
+}
+
+.md-sidebar--secondary {
+  border-left: 1px solid var(--ac-line);
+}
+
+/* ---------- 内容区（画布上的白色“页面”） ---------- */
+.md-main__inner {
+  margin-top: 1rem;
+}
+
+.md-content {
+  background-color: var(--ac-surface);
+  border: 1px solid var(--ac-line);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.md-content__inner {
+  margin: 0 1.6rem 2.4rem;
+  padding-top: 1.2rem;
+}
+
+@media screen and (max-width: 76.1875em) {
+  .md-content__inner {
+    margin: 0 0.9rem 1.6rem;
+    padding-top: 0.9rem;
+  }
+}
+
+/* ---------- 页脚 ---------- */
+:root {
+  --md-footer-bg-color: var(--ac-surface);
+  --md-footer-fg-color: var(--ac-text-soft);
+}
+
+.md-footer {
+  border-top: 1px solid var(--ac-line);
+}
+
+.md-footer a {
+  color: var(--ac-blue);
+}
+
+/* ---------- 排印 ---------- */
+.md-typeset {
+  font-size: 0.78rem;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+}
+
+.md-typeset h1 {
+  font-family: var(--ac-serif);
+  font-weight: 300;
+  font-size: 1.9rem;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+  margin: 0 0 0.8em;
+  color: var(--ac-text);
+}
+
+.md-typeset h2 {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--ac-line);
+  padding-bottom: 0.35em;
+}
+
+.md-typeset h3 {
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 
-.ac-hero h1 + p {
-  margin: 0 0 1.4rem;
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.92);
+::selection {
+  background: color-mix(in srgb, var(--ac-blue) 24%, transparent);
 }
 
-.ac-hero .md-button {
-  margin-top: 0.6rem;
-  margin-right: 0.5rem;
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--ac-blue);
+  outline-offset: 2px;
 }
 
-.ac-hero .md-button--primary {
-  background-color: #ffffff;
-  color: #0d47a1;
-  border: none;
+/* ---------- 按钮（Fiori：微圆角、品牌蓝） ---------- */
+.md-typeset .md-button {
+  border-radius: 0.375rem;
+  letter-spacing: 0.04em;
 }
 
-.ac-hero .md-button--primary:hover {
-  background-color: rgba(255, 255, 255, 0.9);
-  color: #0d47a1;
-}
-
-.ac-hero .md-button:not(.md-button--primary) {
+.md-typeset .md-button--primary {
+  background-color: var(--ac-blue);
   color: #ffffff;
-  background-color: transparent;
-  border: 1.5px solid rgba(255, 255, 255, 0.65);
+  border: none;
+  box-shadow: var(--md-shadow-z1);
 }
 
-.ac-hero .md-button:not(.md-button--primary):hover {
-  background-color: rgba(255, 255, 255, 0.12);
-  border-color: #ffffff;
+.md-typeset .md-button--primary:hover {
+  background-color: var(--ac-blue-hover);
 }
 
-/* 特性徽章 */
+.md-typeset .md-button:not(.md-button--primary) {
+  color: var(--ac-blue);
+  border: 1px solid var(--ac-line-strong);
+}
+
+.md-typeset .md-button:not(.md-button--primary):hover {
+  color: var(--ac-blue-hover);
+  border-color: var(--ac-blue-hover);
+  background-color: color-mix(in srgb, var(--ac-blue) 6%, transparent);
+}
+
+/* ---------- 首页 hero（卷首式：眉题 + 衬线大标题 + 导语） ---------- */
+.ac-hero {
+  padding: clamp(1.8rem, 4vw, 3.2rem) 0 2.4rem;
+  margin-bottom: 2.6rem;
+  border-bottom: 1px solid var(--ac-line);
+}
+
+.ac-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--ac-blue);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  margin: 0 0 1.2rem;
+}
+
+.ac-eyebrow::before {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: var(--ac-blue);
+  flex-shrink: 0;
+}
+
+.ac-hero h1 {
+  font-family: var(--ac-serif);
+  font-weight: 300;
+  font-size: clamp(2.5rem, 6vw, 3.9rem);
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  margin: 0 0 0.45em;
+  color: var(--ac-text);
+}
+
+.ac-lede {
+  font-size: 1rem;
+  color: var(--ac-text-soft);
+  letter-spacing: 0.02em;
+  line-height: 1.95;
+  max-width: 42em;
+  margin: 0 0 1.7rem;
+}
+
 .ac-chips {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 0.5rem;
-  margin: 0 0 1.6rem;
+  margin: 0 0 1.8rem;
 }
 
 .ac-chip {
   display: inline-block;
-  padding: 0.28em 0.9em;
+  padding: 0.26em 1em;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.12);
-  color: #ffffff;
-  font-size: 0.8rem;
+  border: 1px solid var(--ac-line-strong);
+  color: var(--ac-text-soft);
+  background: transparent;
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
   line-height: 1.6;
 }
 
-/* ---------- 首页卡片 ---------- */
+.ac-hero .md-button {
+  margin-right: 0.6rem;
+}
+
+/* ---------- 首页阶段卡片（folio 编号 + 白卡） ---------- */
+.ac-folio {
+  display: inline-block;
+  color: var(--ac-blue);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.4rem;
+}
+
 .md-typeset .grid.cards > ul > li,
 .md-typeset .grid > .card {
-  border: 1px solid var(--md-default-fg-color--lightest, #e2e8f0);
-  border-radius: 0.75rem;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  border: 1px solid var(--ac-line);
+  border-radius: 0.5rem;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .md-typeset .grid.cards > ul > li:hover,
 .md-typeset .grid > .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(21, 101, 192, 0.14);
-  border-color: var(--md-primary-fg-color--light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--ac-blue) 14%, transparent);
+  border-color: var(--ac-blue);
 }
 
 .md-typeset .grid.cards svg,
 .md-typeset .grid > .card svg {
-  color: var(--md-primary-fg-color);
+  color: var(--ac-blue);
 }
 
-[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li,
-[data-md-color-scheme="slate"] .md-typeset .grid > .card {
-  border-color: rgba(255, 255, 255, 0.12);
+/* ---------- 提示框（Fiori 消息条：白底、彩色左边条、彩色标题） ---------- */
+.md-typeset .admonition,
+.md-typeset details {
+  --ac-message: var(--ac-informative);
+  background-color: var(--ac-surface);
+  border: 1px solid var(--ac-line);
+  border-left: 0.22rem solid var(--ac-message);
+  border-radius: 0.375rem;
+  box-shadow: none;
 }
 
-[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover,
-[data-md-color-scheme="slate"] .md-typeset .grid > .card:hover {
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+.md-typeset .admonition-title,
+.md-typeset summary {
+  background: color-mix(in srgb, var(--ac-message) 6%, transparent);
+  font-weight: 600;
+  color: color-mix(in srgb, var(--ac-message) 78%, var(--ac-text));
 }
 
-/* ---------- 细节打磨 ---------- */
-.md-header {
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+.md-typeset .admonition-title::before,
+.md-typeset summary::before {
+  background-color: var(--ac-message);
 }
 
-.md-typeset {
-  font-size: 0.78rem;
-  line-height: 1.85;
+.md-typeset .admonition.note,
+.md-typeset .admonition.info,
+.md-typeset .admonition.todo,
+.md-typeset details.note,
+.md-typeset details.info {
+  --ac-message: var(--ac-informative);
 }
 
-.md-typeset h1,
-.md-typeset h2 {
-  font-weight: 700;
+.md-typeset .admonition.tip,
+.md-typeset .admonition.success,
+.md-typeset .admonition.hint,
+.md-typeset details.tip,
+.md-typeset details.success {
+  --ac-message: var(--ac-positive);
 }
 
-.md-typeset h2 {
-  border-bottom: 1px solid var(--md-default-fg-color--lightest, #e2e8f0);
-  padding-bottom: 0.3em;
+.md-typeset .admonition.warning,
+.md-typeset .admonition.caution,
+.md-typeset .admonition.question,
+.md-typeset details.warning,
+.md-typeset details.caution {
+  --ac-message: var(--ac-warning);
 }
 
-[data-md-color-scheme="slate"] .md-typeset h2 {
-  border-bottom-color: rgba(255, 255, 255, 0.12);
+.md-typeset .admonition.danger,
+.md-typeset .admonition.failure,
+.md-typeset .admonition.bug,
+.md-typeset .admonition.error,
+.md-typeset details.danger,
+.md-typeset details.failure {
+  --ac-message: var(--ac-negative);
+}
+
+.md-typeset .admonition.abstract,
+.md-typeset .admonition.example,
+.md-typeset .admonition.quote,
+.md-typeset details.abstract,
+.md-typeset details.example {
+  --ac-message: var(--ac-neutral);
+}
+
+/* 与 Material 每类型的 border-color 规则同优先级，后加载覆盖之 */
+.md-typeset .admonition.note,
+.md-typeset .admonition.info,
+.md-typeset .admonition.todo,
+.md-typeset .admonition.tip,
+.md-typeset .admonition.success,
+.md-typeset .admonition.hint,
+.md-typeset .admonition.warning,
+.md-typeset .admonition.caution,
+.md-typeset .admonition.question,
+.md-typeset .admonition.danger,
+.md-typeset .admonition.failure,
+.md-typeset .admonition.bug,
+.md-typeset .admonition.error,
+.md-typeset .admonition.abstract,
+.md-typeset .admonition.example,
+.md-typeset .admonition.quote,
+.md-typeset details.note,
+.md-typeset details.info,
+.md-typeset details.tip,
+.md-typeset details.success,
+.md-typeset details.warning,
+.md-typeset details.caution,
+.md-typeset details.danger,
+.md-typeset details.failure,
+.md-typeset details.abstract,
+.md-typeset details.example {
+  border-color: var(--ac-line);
+  border-left-color: var(--ac-message);
 }

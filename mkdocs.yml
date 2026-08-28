@@ -10,6 +10,7 @@ theme:
   name: material
   custom_dir: overrides
   language: zh
+  font: false
   logo: assets/images/logo.svg
   favicon: assets/images/favicon.svg
   palette:
