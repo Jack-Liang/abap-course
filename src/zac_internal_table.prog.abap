@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO04_INTERNAL_TABLE
+*& Report ZAC_INTERNAL_TABLE
 *&---------------------------------------------------------------------*
 *& 第4课：内表与结构体操作
 *& 演示内表声明、FOR/CORRESPONDING/REDUCE 新语法
 *&---------------------------------------------------------------------*
-REPORT zdemo04_internal_table.
+REPORT zac_internal_table.
 
 START-OF-SELECTION.
   " 读取航班数据

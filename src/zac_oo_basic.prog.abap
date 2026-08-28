@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO13_OO_BASIC
+*& Report ZAC_OO_BASIC
 *&---------------------------------------------------------------------*
 *& 第13课：ABAP 面向对象编程（基础）
 *& 演示 CLASS/INTERFACE/NEW/TRY-CATCH
 *&---------------------------------------------------------------------*
-REPORT zdemo13_oo_basic.
+REPORT zac_oo_basic.
 
 INTERFACE lif_flight_query.
   METHODS:

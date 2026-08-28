@@ -65,7 +65,7 @@
 
 Function Module 源代码：
 ```abap
-FUNCTION zfm_calc_flight_duration.
+FUNCTION zac_calc_flight_duration.
 *"----------------------------------------------------------------------
 *"* IMPORTING
 *"   VALUE(IV_CARRID) TYPE S_CARR_ID
@@ -93,10 +93,10 @@ ENDFUNCTION.
 
 调用方代码：
 ```abap
-REPORT zdemo09_call_function.
+REPORT zac_call_function.
 
 START-OF-SELECTION.
-  CALL FUNCTION 'ZFM_CALC_FLIGHT_DURATION'
+  CALL FUNCTION 'ZAC_CALC_FLIGHT_DURATION'
     EXPORTING
       iv_carrid  = 'AA'
       iv_connid  = '0017'

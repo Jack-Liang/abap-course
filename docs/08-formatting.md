@@ -59,7 +59,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo08_formatting.
+REPORT zac_formatting.
 
 START-OF-SELECTION.
   " 字符串拼接 —— 新语法 &&

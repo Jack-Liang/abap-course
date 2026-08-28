@@ -63,7 +63,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo14_bapi.
+REPORT zac_bapi.
 
 START-OF-SELECTION.
   " 1. 创建航班预订

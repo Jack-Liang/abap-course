@@ -1,6 +1,6 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: '航班统计视图'
-define view ZCDS_SFLIGHT_STATS
+define view ZAC_FLIGHT_STATS
   with parameters p_carrid : abap.char3
   as select from sflight
 {

@@ -98,7 +98,7 @@
 
 - **abapGit 不是 SAP 官方产品**：abapGit 是开源社区项目，使用前需要仔细评估。生产环境使用前，建议在测试系统充分验证
 - **.abapgit.xml 是仓库的身份证**：每个 abapGit 仓库根目录必须有这个文件——它告诉 abapGit 这是一个 ABAP 仓库、主语言是什么、文件夹结构是什么。没有这个文件，abapGit 无法识别仓库
-- **文件命名约定**：abapGit 使用 `对象名.类型.扩展名` 的命名规则（如 `zdemo01.prog.abap`、`zcl_xxx.clas.abap`）。严格遵守命名约定，否则 abapGit 无法正确导入导出
+- **文件命名约定**：abapGit 使用 `对象名.类型.扩展名` 的命名规则（如 `zac_sql_crud.prog.abap`、`zcl_xxx.clas.abap`）。严格遵守命名约定，否则 abapGit 无法正确导入导出
 - **BTP Trial 账号**：SAP 提供免费的 BTP Trial 账号，可以体验 BTP 上的 ABAP 开发环境（Steampunk）。虽然有限制，但足够学习和实验
 - **冲突处理**：如果多人同时修改同一个对象，Git 推送时可能冲突。abapGit 支持在线合并，但复杂冲突建议在 Git 客户端（如 VS Code）中处理
 

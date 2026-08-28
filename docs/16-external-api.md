@@ -74,7 +74,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo16_rest_api.
+REPORT zac_rest_api.
 
 START-OF-SELECTION.
   DATA: lo_http TYPE REF TO if_http_client,

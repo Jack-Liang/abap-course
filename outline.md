@@ -47,7 +47,7 @@
 
 **代码要点：**
 ```abap
-REPORT zdemo02_hello_world.
+REPORT zac_hello_world.
 
 START-OF-SELECTION.
   WRITE: / 'Hello ABAP!', / '---'.
@@ -69,7 +69,7 @@ START-OF-SELECTION.
 
 ### 第3课：数据字典 —— 建一张自定义表
 
-**Demo：** 在 SE11 中创建一张航班补充信息表（ZFLIGHT_EXT），包含航班号、备注、优先级等字段，并在 SE16 中录入测试数据
+**Demo：** 在 SE11 中创建一张航班补充信息表（ZAC_FLIGHT_EXT），包含航班号、备注、优先级等字段，并在 SE16 中录入测试数据
 
 **课程目标：** 掌握数据字典核心对象（Domain / Data Element / Table）的创建流程，理解 SAP 数据模型的分层设计思想。
 
@@ -118,7 +118,7 @@ START-OF-SELECTION.
 
 **代码要点：**
 ```abap
-REPORT zdemo04_internal_table.
+REPORT zac_internal_table.
 
 START-OF-SELECTION.
   " 读取航班数据
@@ -178,7 +178,7 @@ START-OF-SELECTION.
 
 **代码要点：**
 ```abap
-REPORT zdemo05_sql.
+REPORT zac_sql_crud.
 
 START-OF-SELECTION.
   " 1. 单行查询
@@ -298,7 +298,7 @@ START-OF-SELECTION.
 
 **代码要点：**
 ```abap
-REPORT zdemo07_selection_screen.
+REPORT zac_selection_screen.
 
 PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA',
             p_connid TYPE sflight-connid.
@@ -310,7 +310,7 @@ AT SELECTION-SCREEN ON p_carrid.
   SELECT SINGLE carrid FROM scarr INTO @DATA(lv_check)
     WHERE carrid = @p_carrid.
   IF sy-subrc <> 0.
-    MESSAGE e000(zflight) WITH p_carrid. " 航空公司代码不存在
+    MESSAGE e000(zac_flight_msg) WITH p_carrid. " 航空公司代码不存在
   ENDIF.
 
 START-OF-SELECTION.
@@ -359,7 +359,7 @@ START-OF-SELECTION.
 
 **代码要点：**
 ```abap
-REPORT zdemo08_formatting.
+REPORT zac_formatting.
 
 START-OF-SELECTION.
   DATA(lv_carrid) = 'AA' && ' ' && '0017'.  " 新语法 &&
@@ -418,8 +418,8 @@ START-OF-SELECTION.
 
 **代码要点：**
 ```abap
-" Function Module: ZFM_CALC_FLIGHT_DURATION
-FUNCTION zfm_calc_flight_duration.
+" Function Module: ZAC_CALC_FLIGHT_DURATION
+FUNCTION zac_calc_flight_duration.
   *"----------------------------------------------------------------------
   *" IMPORTING
   *"   VALUE(IV_CARRID) TYPE S_CARR_ID
@@ -444,10 +444,10 @@ FUNCTION zfm_calc_flight_duration.
 ENDFUNCTION.
 
 " 调用方
-REPORT zdemo09_call_function.
+REPORT zac_call_function.
 
 START-OF-SELECTION.
-  CALL FUNCTION 'ZFM_CALC_FLIGHT_DURATION'
+  CALL FUNCTION 'ZAC_CALC_FLIGHT_DURATION'
     EXPORTING
       iv_carrid = 'AA'
       iv_connid = '0017'
@@ -499,7 +499,7 @@ START-OF-SELECTION.
 
 **代码要点：**
 ```abap
-REPORT zdemo10_alv_basic.
+REPORT zac_alv_basic.
 
 START-OF-SELECTION.
   " 查询数据
@@ -623,7 +623,7 @@ ENDFORM.
 
 ### 第12课：Excel 导入导出
 
-**Demo：** 将 SFLIGHT 数据导出为 Excel 文件，并从 Excel 模板导入一批新航班数据到自定义表 ZFLIGHT_EXT（第3课创建的）
+**Demo：** 将 SFLIGHT 数据导出为 Excel 文件，并从 Excel 模板导入一批新航班数据到自定义表 ZAC_FLIGHT_EXT（第3课创建的）
 
 **课程目标：** 掌握 ABAP 与 Excel 的数据交互方法，能实现常见的数据导入导出需求。
 
@@ -655,7 +655,7 @@ ENDFORM.
 
 **代码要点：**
 ```abap
-REPORT zdemo12_excel.
+REPORT zac_excel.
 
 START-OF-SELECTION.
   " 查询数据
@@ -729,7 +729,7 @@ START-OF-SELECTION.
 **代码要点：**
 ```abap
 " 本地类定义
-REPORT zdemo13_oo_basic.
+REPORT zac_oo_basic.
 
 CLASS lcl_flight_query DEFINITION.
   PUBLIC SECTION.
@@ -815,7 +815,7 @@ START-OF-SELECTION.
 
 **代码要点：**
 ```abap
-REPORT zdemo14_bapi.
+REPORT zac_bapi.
 
 START-OF-SELECTION.
   DATA: ls_booking TYPE bapisbook,
@@ -852,7 +852,7 @@ START-OF-SELECTION.
 
 ### 第15课：增强（Enhancement）
 
-**Demo：** 给 SAP 标准的航班程序或屏幕增加一个自定义字段（如 ZFLIGHT_EXT 中的备注字段），通过增强实现数据的读写联动
+**Demo：** 给 SAP 标准的航班程序或屏幕增加一个自定义字段（如 ZAC_FLIGHT_EXT 中的备注字段），通过增强实现数据的读写联动
 
 **课程目标：** 理解 SAP 增强的概念和分类，掌握查找增强、实现增强的基本方法，能完成常见增强开发。
 
@@ -888,9 +888,9 @@ START-OF-SELECTION.
 ENHANCEMENT 1  Z_SFLIGHT_EXT.  " 实际版本号由系统生成
   SPOTS z_sflight_ext.
 
-  DATA: lv_remark TYPE zflight_ext-remark.
+  DATA: lv_remark TYPE zac_flight_ext-remark.
 
-  SELECT SINGLE remark FROM zflight_ext
+  SELECT SINGLE remark FROM zac_flight_ext
     WHERE carrid = @ls_sflight-carrid
       AND connid = @ls_sflight-connid
       AND fldate = @ls_sflight-fldate
@@ -945,7 +945,7 @@ ENDENHANCEMENT.
 
 **代码要点：**
 ```abap
-REPORT zdemo16_rest_api.
+REPORT zac_rest_api.
 
 START-OF-SELECTION.
   DATA: lo_http TYPE REF TO if_http_client,
@@ -1040,7 +1040,7 @@ START-OF-SELECTION.
 
 ### 第18课：消息处理（Message Class）
 
-**Demo：** 创建一个航班相关的消息类 ZFLIGHT_MSG，包含常用消息（航空公司不存在、航班已满、预订成功等），在报表和 Function 中使用消息提示操作结果
+**Demo：** 创建一个航班相关的消息类 ZAC_FLIGHT_MSG，包含常用消息（航空公司不存在、航班已满、预订成功等），在报表和 Function 中使用消息提示操作结果
 
 **课程目标：** 掌握 SAP 消息体系的使用方法，能创建和管理消息类，实现多语言友好的用户提示。
 
@@ -1056,7 +1056,7 @@ START-OF-SELECTION.
   - 多语言维护
 - 消息使用方式
   - `MESSAGE id msgid TYPE msgty NUMBER msgnr WITH var1 var2 ...`
-  - 简写：`MESSAGE e000(zflight)`
+  - 简写：`MESSAGE e000(zac_flight_msg)`
   - `MESSAGE i... WITH`（带变量）
   - RAISING 消息（在 Function Module 中）
 - **新语法：`MESSAGE INTO @DATA(lv_msg)` 内联接收**
@@ -1071,13 +1071,13 @@ START-OF-SELECTION.
 
 **代码要点：**
 ```abap
-" 消息类 ZFLIGHT_MSG 示例消息：
+" 消息类 ZAC_FLIGHT_MSG 示例消息：
 " 001 航空公司代码 &1 不存在
 " 002 航班已满，无法预订
 " 003 预订成功：&1-&2-&3 座位 &4
 " 004 查询完成，共 &1 条记录
 
-REPORT zdemo18_message.
+REPORT zac_message.
 
 PARAMETERS: p_carrid TYPE s_carr_id OBLIGATORY.
 
@@ -1085,7 +1085,7 @@ AT SELECTION-SCREEN ON p_carrid.
   SELECT SINGLE carrid FROM scarr INTO @DATA(lv_check)
     WHERE carrid = @p_carrid.
   IF sy-subrc <> 0.
-    MESSAGE e001(zflight) WITH p_carrid. " 航空公司代码 XXX 不存在
+    MESSAGE e001(zac_flight_msg) WITH p_carrid. " 航空公司代码 XXX 不存在
   ENDIF.
 
 START-OF-SELECTION.
@@ -1093,14 +1093,14 @@ START-OF-SELECTION.
     WHERE carrid = @p_carrid
     INTO @DATA(lv_count).
 
-  MESSAGE s004(zflight) WITH lv_count. " 查询完成，共 N 条记录
+  MESSAGE s004(zac_flight_msg) WITH lv_count. " 查询完成，共 N 条记录
 
   " 新语法：消息内联接收
   SELECT SINGLE * FROM sflight INTO @DATA(ls_f)
     WHERE carrid = @p_carrid AND connid = '0017'.
   IF sy-subrc <> 0.
     " 消息文本存入变量
-    MESSAGE e002(zflight) INTO @DATA(lv_msg).
+    MESSAGE e002(zac_flight_msg) INTO @DATA(lv_msg).
     WRITE: / lv_msg.
   ENDIF.
 ```
@@ -1250,7 +1250,7 @@ DATA(lt_summary) = VALUE sflight_tab(
 @AbapCatalog.compiler.compareFilter: true
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: '航班详情视图'
-define view ZCDS_SFLIGHT_DETAIL as select from sflight
+define view ZAC_FLIGHT_DETAIL as select from sflight
   inner join scarr on sflight.carrid = scarr.carrid
   inner join spfli on sflight.carrid = spfli.carrid
                     and sflight.connid = spfli.connid
@@ -1307,7 +1307,7 @@ define view ZCDS_SFLIGHT_DETAIL as select from sflight
 " 参数化 CDS View
 @AbapCatalog.sqlViewName: 'ZV_SFLIGHT_STATS'
 @EndUserText.label: '航班统计视图'
-define view ZCDS_SFLIGHT_STATS
+define view ZAC_FLIGHT_STATS
   with parameters p_carrid : abap.char3
   as select from sflight
 {
@@ -1323,7 +1323,7 @@ group by sflight.carrid
 " DCL 访问控制
 @MappingRole: true
 define role zr_flight_data {
-  grant select on ZCDS_SFLIGHT_DETAIL
+  grant select on ZAC_FLIGHT_DETAIL
     where carrid = aspect zcds_flight_auth.carrid;
 }
 ```
@@ -1371,7 +1371,7 @@ define role zr_flight_data {
 
 **代码要点：**
 ```abap
-REPORT zdemo22_oo_alv.
+REPORT zac_oo_alv.
 
 CLASS lcl_app DEFINITION.
   PUBLIC SECTION.
@@ -1508,34 +1508,34 @@ START-OF-SELECTION.
 **代码要点：** 完整项目代码结构
 
 ```
-ZDEMO24_FLIGHT_MANAGER（主程序）
-├── ZDEMO24_TOP    → 数据声明、CDS View 使用
-├── ZDEMO24_SEL    → 选择屏幕 PBO/PAI
-├── ZDEMO24_PBO    → ALV 初始化
-├── ZDEMO24_PAI    → ALV 事件处理
-├── ZDEMO24_FORMS  → 辅助逻辑（BAPI调用、Excel导出、消息处理）
-├── ZCDS_SFLIGHT_DETAIL → CDS View
+ZAC_FLIGHT_MANAGER（主程序）
+├── ZAC_FLIGHT_TOP    → 数据声明、CDS View 使用
+├── ZAC_FLIGHT_SEL    → 选择屏幕 PBO/PAI
+├── ZAC_FLIGHT_PBO    → ALV 初始化
+├── ZAC_FLIGHT_PAI    → ALV 事件处理
+├── ZAC_FLIGHT_FORMS  → 辅助逻辑（BAPI调用、Excel导出、消息处理）
+├── ZAC_FLIGHT_DETAIL → CDS View
 ├── ZCL_FLIGHT_MANAGER → 全局类（MVC Controller）
 ├── ZCL_ALV_DISPLAY      → ALV 展示类
-└── ZCL_FLIGHT_SERVICE   → 业务逻辑类（BAPI封装）
+└── ZCL_AC_FLIGHT_SERVICE   → 业务逻辑类（BAPI封装）
 ```
 
 ```abap
-" ZDEMO24_FLIGHT_MANAGER 主程序
-REPORT zdemo24_flight_manager.
+" ZAC_FLIGHT_MANAGER 主程序
+REPORT zac_flight_manager.
 
-INCLUDE zdemo24_top.
-INCLUDE zdemo24_sel.
-INCLUDE zdemo24_pbo.
-INCLUDE zdemo24_pai.
-INCLUDE zdemo24_forms.
+INCLUDE zac_flight_top.
+INCLUDE zac_flight_sel.
+INCLUDE zac_flight_pbo.
+INCLUDE zac_flight_pai.
+INCLUDE zac_flight_forms.
 
 INITIALIZATION.
   " 初始化默认值
 
 START-OF-SELECTION.
   " 1. 通过 CDS View 取数
-  SELECT * FROM zcds_sflight_detail( p_carrid = @p_carrid )
+  SELECT * FROM zac_flight_detail( p_carrid = @p_carrid )
     INTO TABLE @DATA(lt_flights).
 
   " 2. 创建 OO ALV 展示

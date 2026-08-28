@@ -69,7 +69,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo02_hello_world.
+REPORT zac_hello_world.
 
 START-OF-SELECTION.
   WRITE: / 'Hello ABAP!', / '---'.

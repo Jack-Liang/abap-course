@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO07_SELECTION_SCREEN
+*& Report ZAC_SELECTION_SCREEN
 *&---------------------------------------------------------------------*
 *& 第7课：选择屏幕
 *& 演示 PARAMETERS/SELECT-OPTIONS、屏幕事件、输入校验
 *&---------------------------------------------------------------------*
-REPORT zdemo07_selection_screen.
+REPORT zac_selection_screen.
 
 SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
 PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA',

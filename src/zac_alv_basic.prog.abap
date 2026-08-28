@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO10_ALV_BASIC
+*& Report ZAC_ALV_BASIC
 *&---------------------------------------------------------------------*
 *& 第10课：ALV 报表（基础）
 *& 演示 REUSE_ALV_GRID_DISPLAY、Field Catalog、Layout
 *&---------------------------------------------------------------------*
-REPORT zdemo10_alv_basic.
+REPORT zac_alv_basic.
 
 START-OF-SELECTION.
   SELECT f~carrid, f~connid, f~fldate, f~seatsmax,

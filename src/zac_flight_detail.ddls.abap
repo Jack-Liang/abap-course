@@ -1,7 +1,7 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: '航班详情视图'
 @Metadata.ignorePropagatedAnnotations: true
-define view entity ZCDS_SFLIGHT_DETAIL
+define view entity ZAC_FLIGHT_DETAIL
   as select from sflight
     inner join scarr on sflight.carrid = scarr.carrid
     inner join spfli on sflight.carrid = spfli.carrid

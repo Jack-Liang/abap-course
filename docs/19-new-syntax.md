@@ -83,7 +83,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo19_new_syntax.
+REPORT zac_new_syntax.
 
 START-OF-SELECTION.
   " ========================

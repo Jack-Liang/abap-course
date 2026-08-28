@@ -65,7 +65,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo10_alv_basic.
+REPORT zac_alv_basic.
 
 START-OF-SELECTION.
   " 查询数据

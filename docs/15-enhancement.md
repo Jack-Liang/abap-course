@@ -70,9 +70,9 @@ ENHANCEMENT 1  Z_SFLIGHT_EXT.
   SPOTS z_sflight_ext.
 
   " 在标准 ALV 展示前追加自定义字段
-  DATA: lv_remark TYPE zflight_ext-remark.
+  DATA: lv_remark TYPE zac_flight_ext-remark.
 
-  SELECT SINGLE remark FROM zflight_ext
+  SELECT SINGLE remark FROM zac_flight_ext
     WHERE carrid = @ls_sflight-carrid
       AND connid = @ls_sflight-connid
       AND fldate = @ls_sflight-fldate

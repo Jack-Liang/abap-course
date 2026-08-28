@@ -69,7 +69,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo13_oo_basic.
+REPORT zac_oo_basic.
 
 " 工具接口定义
 INTERFACE lif_flight_query.

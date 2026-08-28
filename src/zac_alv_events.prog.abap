@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO11_ALV_EVENTS
+*& Report ZAC_ALV_EVENTS
 *&---------------------------------------------------------------------*
 *& 第11课：ALV 交互事件
 *& 演示 USER_COMMAND、Hotspot、Top-of-Page、Drill-Down
 *&---------------------------------------------------------------------*
-REPORT zdemo11_alv_events.
+REPORT zac_alv_events.
 
 TYPES: BEGIN OF ty_sflight,
          carrid   TYPE sflight-carrid,

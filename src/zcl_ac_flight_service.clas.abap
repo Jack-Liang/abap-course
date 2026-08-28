@@ -1,5 +1,5 @@
 " 航班业务逻辑服务类（第24课综合实战）
-CLASS zcl_flight_service DEFINITION
+CLASS zcl_ac_flight_service DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC.
@@ -24,7 +24,7 @@ CLASS zcl_flight_service DEFINITION
 
 ENDCLASS.
 
-CLASS zcl_flight_service IMPLEMENTATION.
+CLASS zcl_ac_flight_service IMPLEMENTATION.
 
   METHOD create_booking.
     " 调用 BAPI 创建预订（实际实现请根据系统 BAPI 调整）

@@ -8,15 +8,26 @@
 
 **教学模式：** 每节课先运行 Demo 看效果，再逐行拆解代码，从中提炼知识点。
 
+## 🚀 快速开始
+
+1. 准备一套 ABAP 练习系统（推荐官方试用镜像 `sapse/abap-cloud-developer-trial`）；
+2. 确认 SFLIGHT 演示数据（官方镜像默认预置，为空时跑 `SAPBC_DATA_GENERATOR`）；
+3. 用 abapGit 把本仓库 Clone/Pull 到开发包 `ZABAP_COURSE`。
+
+详细步骤见 **[第0课：环境搭建与仓库导入](docs/00-getting-started.md)**。
+
 ## 📋 课程信息
 
 - **总课时：** 24 课时
 - **每课时：** 45 分钟
 - **语言：** 中文授课，中文代码注释
-- **贯穿数据：** SAP 标准 SFLIGHT 航班模型（SCARR / SPFLI / SFLIGHT / SBOOK）
+- **贯穿数据：** SAP 官方 Flight Data Model（SFLIGHT 航班数据模型：SCARR / SPFLI / SFLIGHT / SBOOK，SAP 官方培训同款演示模型）
 - **方向：** 传统 ABAP → 新语法 → 现代开发（CDS / BTP / abapGit）
+- **练习环境：** 推荐 SAP 官方试用镜像（Docker）或公司开发系统，详见[第0课](docs/00-getting-started.md)
 
 ## 📚 课程目录
+
+**[第0课：环境搭建与仓库导入](docs/00-getting-started.md)**（准备篇，开课前完成）
 
 ### 第一阶段：基础篇（第1-6课）
 
@@ -78,34 +89,52 @@ SPFLI（航线规划）────────────┘
 | SFLIGHT | 航班 | CARRID, CONNID, FLDATE, PRICE, SEATSMAX, SEATSOCC, PLANETYPE |
 | SBOOK | 航班预订 | CARRID, CONNID, FLDATE, BOOKID, CUSTOMID, LOCCURAM |
 
+> 这是 SAP 官方交付的演示数据模型（**Flight Data Model**），除上表四张核心表外还包括 SCUSTOM（客户）、SAIRPORT（机场）等；数据可用 `SAPBC_DATA_GENERATOR` 生成/重置。[官方文档与延伸资料](docs/references.md)见参考资料库。
+
 ## 📁 仓库结构
 
 ```
 abap-course/
 ├── .abapgit.xml          # abapGit 仓库配置
+├── .github/workflows/    # CI：文档站点自动部署
 ├── .gitignore            # Git 忽略规则
+├── mkdocs.yml            # 文档站点配置（Material for MkDocs，同 hello-algo 技术栈）
 ├── README.md             # 课程总介绍
-├── docs/                  # 课文稿（Markdown）
+├── docs/                  # 课文稿（Markdown，同时作为站点源文件）
+│   ├── index.md                # 站点首页
+│   ├── 00-getting-started.md   # 环境搭建与仓库导入
 │   ├── 01-sap-overview.md
 │   ├── 02-hello-world.md
 │   ├── ...
-│   └── 24-capstone.md
+│   ├── 24-capstone.md
+│   └── references.md           # 参考资料库（外部链接集中登记）
 ├── src/                   # ABAP 开发对象（abapGit 标准）
 │   ├── package.devc.xml   # 开发包定义
-│   ├── zdemo02_hello_world.prog.abap
-│   ├── zdemo02_hello_world.prog.xml
-│   ├── zdemo05_sql.prog.abap
-│   ├── zdemo05_sql.prog.xml
-│   ├── ...                # 所有报表程序
-│   ├── zfm_calc_flight_duration.fugr.*  # Function Module
-│   ├── zcl_flight_query.clas.abap        # Class
-│   ├── zcl_flight_query.clas.xml
-│   ├── zflight_ext.tabl.xml              # 自定义表
-│   ├── zcds_sflight_detail.ddls.xml      # CDS View
-│   ├── zflight_msg.msag.xml              # 消息类
-│   └── ...
+│   ├── zac_hello_world.prog.abap   # 报表程序源码
+│   ├── zac_hello_world.prog.xml   # 对应的 abapGit 序列化文件
+│   ├── ...                # 每个 demo 程序均含 .abap + .xml 成对文件
+│   ├── zcl_ac_flight_query.clas.abap      # Class（源码 + .xml）
+│   ├── zcl_ac_flight_service.clas.abap    # Class（源码 + .xml）
+│   ├── zac_flight_ext.tabl.xml            # 自定义表
+│   ├── zac_flight_detail.ddls.abap   # CDS View（源码 + .xml）
+│   ├── zac_flight_stats.ddls.abap    # CDS View（源码 + .xml）
+│   └── zac_flight_msg.msag.xml            # 消息类
 └── outline.md             # 完整课程提纲
 ```
+
+## 🏷️ 命名规范
+
+课程所有开发对象统一带课程前缀 **`zac_`**（Z + ABAP Course），避免与系统里其他项目的 Z 对象重名；**课号不写进对象名**，课与对象的对应关系（含一对象服务多课的情况）维护在[第0课的对照矩阵](docs/00-getting-started.md#四命名规范与对象对照)中。
+
+| 对象类型 | 命名规则 | 示例 |
+|---------|---------|------|
+| 报表程序 / INCLUDE | `zac_<语义名>` | `zac_sql_crud`、`zac_flight_top` |
+| 类 / 接口 | `zcl_ac_` / `zif_ac_<语义名>` | `zcl_ac_flight_query` |
+| 函数组 / 函数模块 | `zac_<语义名>` | `zac_flight_utils` / `zac_calc_flight_duration` |
+| CDS 视图 | `zac_<语义名>` | `zac_flight_detail` |
+| 表 / 消息类 | `zac_<语义名>` | `zac_flight_ext` / `zac_flight_msg` |
+
+> **待补充对象：** 第9课函数组 `ZAC_CALC_FLIGHT_DURATION`、第20/21课 `ZAC_CDS_BASIC` / `ZAC_CDS_ADVANCED`、第24课综合实战 `ZAC_FLIGHT_MANAGER` 将随后续课程更新逐步加入，详见[第0课的对象对照矩阵](docs/00-getting-started.md#四命名规范与对象对照)。
 
 ## 🔧 常用事务码速查
 
@@ -127,10 +156,8 @@ abap-course/
 
 ## 📖 推荐学习资源
 
-- [SAP Help Portal](https://help.sap.com)
-- [SAP Community](https://community.sap.com)
-- [abapGit](https://abapGit.org)
-- [ABAP 7.4+ 新语法官方文档](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)
+- 核心入口：[SAP Help Portal](https://help.sap.com) · [SAP Community](https://community.sap.com) · [abapGit](https://abapgit.org) · [ABAP Keyword Documentation（7.52）](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)
+- 背景与延伸（SFLIGHT 数据模型出处、ABAP Cloud 参考场景、试用镜像等）：见 **[参考资料库 docs/references.md](docs/references.md)**，随课程更新持续登记
 
 ## 📄 License
 

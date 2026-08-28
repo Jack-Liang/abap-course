@@ -77,7 +77,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo22_oo_alv.
+REPORT zac_oo_alv.
 
 " 全局数据
 TYPES: BEGIN OF ty_alv_data,

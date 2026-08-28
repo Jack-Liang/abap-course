@@ -1,5 +1,5 @@
 " 飞行查询工具类（第13课封装版）
-CLASS zcl_flight_query DEFINITION
+CLASS zcl_ac_flight_query DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC.
@@ -18,7 +18,7 @@ CLASS zcl_flight_query DEFINITION
 
 ENDCLASS.
 
-CLASS zcl_flight_query IMPLEMENTATION.
+CLASS zcl_ac_flight_query IMPLEMENTATION.
 
   METHOD constructor.
     mv_carrid = COND #( WHEN iv_carrid IS NOT INITIAL THEN iv_carrid ELSE 'AA' ).

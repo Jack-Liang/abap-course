@@ -27,7 +27,7 @@
 
 ## Demo
 
-创建航班统计 CDS View（ZCDS_SFLIGHT_STATS），按航空公司聚合航班数量和平均票价，使用 CDS 注解定义列标题和格式。
+创建航班统计 CDS View（ZAC_FLIGHT_STATS），按航空公司聚合航班数量和平均票价，使用 CDS 注解定义列标题和格式。
 
 ## 知识点
 
@@ -66,7 +66,7 @@
 ```sql
 @AbapCatalog.sqlViewName: 'ZV_SFLIGHT_STATS'
 @EndUserText.label: '航班统计视图'
-define view ZCDS_SFLIGHT_STATS
+define view ZAC_FLIGHT_STATS
   with parameters p_carrid : abap.char3
   as select from sflight
 {
@@ -86,18 +86,18 @@ DCL 访问控制：
 ```sql
 @MappingRole: true
 define role zr_flight_data {
-  grant select on ZCDS_SFLIGHT_DETAIL
+  grant select on ZAC_FLIGHT_DETAIL
     where carrid = aspect zcds_flight_auth.carrid;
 }
 ```
 
 ABAP 调用参数化 CDS：
 ```abap
-REPORT zdemo21_cds_advanced.
+REPORT zac_cds_advanced.
 
 START-OF-SELECTION.
   " 使用参数化 CDS View
-  SELECT * FROM ZCDS_SFLIGHT_STATS( p_carrid = 'AA' )
+  SELECT * FROM ZAC_FLIGHT_STATS( p_carrid = 'AA' )
     INTO @DATA(lt_stats).
 
   IF lt_stats IS NOT INITIAL.

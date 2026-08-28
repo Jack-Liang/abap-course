@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO19_NEW_SYNTAX
+*& Report ZAC_NEW_SYNTAX
 *&---------------------------------------------------------------------*
 *& 第19课：新语法专题
 *& 系统对比新旧写法：VALUE/CORRESPONDING/COND/SWITCH/FOR/REDUCE/FILTER
 *&---------------------------------------------------------------------*
-REPORT zdemo19_new_syntax.
+REPORT zac_new_syntax.
 
 START-OF-SELECTION.
   " 对比1：内联声明

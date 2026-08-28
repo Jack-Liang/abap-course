@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DDLS>
-    <DDLNAME>ZCDS_SFLIGHT_STATS</DDLNAME>
+    <DDLNAME>ZAC_FLIGHT_STATS</DDLNAME>
     <DDLANGUAGE>E</DDLANGUAGE>
     <DDTEXT>航班统计视图</DDTEXT>
     <SOURCE_TYPE>V</SOURCE_TYPE>

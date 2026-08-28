@@ -28,7 +28,7 @@
 
 ## Demo
 
-将 SFLIGHT 数据导出为 Excel 文件，并从 Excel 模板导入一批新航班数据到自定义表 ZFLIGHT_EXT。
+将 SFLIGHT 数据导出为 Excel 文件，并从 Excel 模板导入一批新航班数据到自定义表 ZAC_FLIGHT_EXT。
 
 ## 知识点
 
@@ -54,7 +54,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo12_excel.
+REPORT zac_excel.
 
 START-OF-SELECTION.
   " 导出 SFLIGHT 到 CSV

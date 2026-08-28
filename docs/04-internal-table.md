@@ -68,7 +68,7 @@ SFLIGHT 有几千条数据，你用 `SELECT SINGLE` 一次只能取一条——�
 ## Demo 代码
 
 ```abap
-REPORT zdemo04_internal_table.
+REPORT zac_internal_table.
 
 START-OF-SELECTION.
   " 读取航班数据

@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO14_BAPI
+*& Report ZAC_BAPI
 *&---------------------------------------------------------------------*
 *& 第14课：BAPI 调用
 *& 演示 BAPI 创建/查询预订、RETURN_INFO 处理、事务控制
 *&---------------------------------------------------------------------*
-REPORT zdemo14_bapi.
+REPORT zac_bapi.
 
 START-OF-SELECTION.
   DATA: lt_booking TYPE TABLE OF bapisbook,

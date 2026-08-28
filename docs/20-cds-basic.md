@@ -27,7 +27,7 @@
 
 ## Demo
 
-创建一个 CDS View（ZCDS_SFLIGHT_DETAIL），关联 SFLIGHT、SCARR、SPFLI 三张表，在 ABAP 程序中通过 Open SQL 访问该 CDS。
+创建一个 CDS View（ZAC_FLIGHT_DETAIL），关联 SFLIGHT、SCARR、SPFLI 三张表，在 ABAP 程序中通过 Open SQL 访问该 CDS。
 
 ## 知识点
 
@@ -75,7 +75,7 @@ CDS DDL 定义：
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: '航班详情视图'
 @Metadata.ignorePropagatedAnnotations: true
-define view entity ZCDS_SFLIGHT_DETAIL
+define view entity ZAC_FLIGHT_DETAIL
   as select from sflight
     inner join scarr on sflight.carrid = scarr.carrid
     inner join spfli on sflight.carrid = spfli.carrid
@@ -99,11 +99,11 @@ define view entity ZCDS_SFLIGHT_DETAIL
 
 ABAP 程序使用 CDS：
 ```abap
-REPORT zdemo20_cds_basic.
+REPORT zac_cds_basic.
 
 START-OF-SELECTION.
   " 使用 CDS View 查询数据
-  SELECT * FROM ZCDS_SFLIGHT_DETAIL
+  SELECT * FROM ZAC_FLIGHT_DETAIL
     INTO TABLE @DATA(lt_flights)
     UP TO 20 ROWS.
 

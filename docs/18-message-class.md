@@ -27,7 +27,7 @@
 
 ## Demo
 
-创建航班系统消息类 ZFLIGHT_MSG，定义常用消息（如"航班不存在"、"座位已满"等），在报表中选择屏幕校验、SQL 操作等场景中使用这些消息。
+创建航班系统消息类 ZAC_FLIGHT_MSG，定义常用消息（如"航班不存在"、"座位已满"等），在报表中选择屏幕校验、SQL 操作等场景中使用这些消息。
 
 ## 知识点
 
@@ -45,7 +45,7 @@
 
 ### 3. 消息使用方式
 - MESSAGE id msgid TYPE msgty NUMBER msgnr WITH var1 var2 ...
-- 简写：MESSAGE e000(zflight)
+- 简写：MESSAGE e000(zac_flight_msg)
 - MESSAGE i... WITH（带变量）
 - RAISING 消息（在 Function Module 中）
 - MESSAGE INTO @DATA(lv_msg)（新语法：内联接收）
@@ -64,9 +64,9 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo18_message.
+REPORT zac_message.
 
-" 消息类 ZFLIGHT_MSG 示例消息：
+" 消息类 ZAC_FLIGHT_MSG 示例消息：
 " 001 航空公司代码 &1 不存在
 " 002 航班已满，无法预订
 " 003 预订成功：&1-&2-&3 座位 &4
@@ -80,7 +80,7 @@ AT SELECTION-SCREEN ON p_carrid.
   SELECT SINGLE carrid FROM scarr INTO @DATA(lv_check)
     WHERE carrid = @p_carrid.
   IF sy-subrc <> 0.
-    MESSAGE e001(zflight) WITH p_carrid.
+    MESSAGE e001(zac_flight_msg) WITH p_carrid.
   ENDIF.
 
 START-OF-SELECTION.
@@ -89,7 +89,7 @@ START-OF-SELECTION.
     INTO @DATA(lv_count).
 
   " 成功消息
-  MESSAGE s004(zflight) WITH lv_count.
+  MESSAGE s004(zac_flight_msg) WITH lv_count.
 
   " 获取单条详情
   SELECT SINGLE * FROM sflight INTO @DATA(ls_f)
@@ -97,12 +97,12 @@ START-OF-SELECTION.
 
   IF sy-subrc <> 0.
     " 新语法：消息内联接收
-    MESSAGE e002(zflight) INTO @DATA(lv_msg).
+    MESSAGE e002(zac_flight_msg) INTO @DATA(lv_msg).
     WRITE: / lv_msg.
   ELSE.
     " 判断是否已满
     IF ls_f-seatsocc >= ls_f-seatsmax.
-      MESSAGE w002(zflight).
+      MESSAGE w002(zac_flight_msg).
     ELSE.
       WRITE: / |航班 { ls_f-carrid }-{ ls_f-connid }|.
       WRITE: / |已占/最大: { ls_f-seatsocc }/{ ls_f-seatsmax }|.

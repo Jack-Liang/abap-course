@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO22_OO_ALV
+*& Report ZAC_OO_ALV
 *&---------------------------------------------------------------------*
 *& 第22课：OO ALV（面向对象 ALV）
 *& 演示 CL_GUI_ALV_GRID、Container、事件注册
 *&---------------------------------------------------------------------*
-REPORT zdemo22_oo_alv.
+REPORT zac_oo_alv.
 
 CLASS lcl_app DEFINITION.
   PUBLIC SECTION.

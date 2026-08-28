@@ -61,7 +61,7 @@
 ## Demo 代码
 
 ```abap
-REPORT zdemo07_selection_screen.
+REPORT zac_selection_screen.
 
 SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
 PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA',

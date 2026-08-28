@@ -55,7 +55,7 @@ ALV 报表展示航班列表已经不错了，但用户想"双击某条航班，
 ## Demo 代码
 
 ```abap
-REPORT zdemo11_alv_events.
+REPORT zac_alv_events.
 
 TYPES: BEGIN OF ty_sflight,
          carrid TYPE sflight-carrid, connid TYPE sflight-connid,

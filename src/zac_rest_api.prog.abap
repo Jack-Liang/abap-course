@@ -1,10 +1,10 @@
 *&---------------------------------------------------------------------*
-*& Report ZDEMO16_REST_API
+*& Report ZAC_REST_API
 *&---------------------------------------------------------------------*
 *& 第16课：调用外部接口（REST/SOAP/PO/CPI）
 *& 演示 CL_HTTP_CLIENT 调用 REST API、JSON 解析
 *&---------------------------------------------------------------------*
-REPORT zdemo16_rest_api.
+REPORT zac_rest_api.
 
 START-OF-SELECTION.
   DATA: lo_http TYPE REF TO if_http_client,

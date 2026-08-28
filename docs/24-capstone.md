@@ -64,30 +64,30 @@
 ## 项目代码结构
 
 ```
-ZDEMO24_FLIGHT_MANAGER（主程序）
-├── ZDEMO24_TOP      → 全局数据声明、CDS View 类型引用
-├── ZDEMO24_SEL      → 选择屏幕 PBO / PAI 事件
-├── ZDEMO24_PBO      → ALV 初始化、Screen 处理
-├── ZDEMO24_PAI      → ALV 事件处理（双击 / Toolbar）
-├── ZDEMO24_FORMS    → 辅助逻辑（BAPI 调用、Excel 导出、消息）
-├── ZCDS_SFLIGHT_DETAIL    → CDS View（航班详情）
-├── ZCDS_SFLIGHT_STATS     → CDS View（统计）
+ZAC_FLIGHT_MANAGER（主程序）
+├── ZAC_FLIGHT_TOP      → 全局数据声明、CDS View 类型引用
+├── ZAC_FLIGHT_SEL      → 选择屏幕 PBO / PAI 事件
+├── ZAC_FLIGHT_PBO      → ALV 初始化、Screen 处理
+├── ZAC_FLIGHT_PAI      → ALV 事件处理（双击 / Toolbar）
+├── ZAC_FLIGHT_FORMS    → 辅助逻辑（BAPI 调用、Excel 导出、消息）
+├── ZAC_FLIGHT_DETAIL    → CDS View（航班详情）
+├── ZAC_FLIGHT_STATS     → CDS View（统计）
 ├── ZCL_FLIGHT_MANAGER     → 全局类（MVC Controller）
 ├── ZCL_ALV_DISPLAY        → ALV 展示类
-└── ZCL_FLIGHT_SERVICE     → 业务逻辑类（BAPI 封装）
+└── ZCL_AC_FLIGHT_SERVICE     → 业务逻辑类（BAPI 封装）
 ```
 
 ## Demo 代码
 
 主程序：
 ```abap
-REPORT zdemo24_flight_manager.
+REPORT zac_flight_manager.
 
-INCLUDE zdemo24_top.
-INCLUDE zdemo24_sel.
-INCLUDE zdemo24_pbo.
-INCLUDE zdemo24_pai.
-INCLUDE zdemo24_forms.
+INCLUDE zac_flight_top.
+INCLUDE zac_flight_sel.
+INCLUDE zac_flight_pbo.
+INCLUDE zac_flight_pai.
+INCLUDE zac_flight_forms.
 
 INITIALIZATION.
   PERFORM init_default.
@@ -99,7 +99,7 @@ START-OF-SELECTION.
 
 TOP Include：
 ```abap
-* ZDEMO24_TOP
+* ZAC_FLIGHT_TOP
 TABLES: sflight.
 
 DATA: go_app TYPE REF TO lcl_flight_app.
@@ -110,7 +110,7 @@ SELECT-OPTIONS: s_date FOR sflight-fldate.
 
 * CDS 类型声明
 TYPES: BEGIN OF ty_flight_detail.
-        INCLUDE TYPE zcds_sflight_detail.
+        INCLUDE TYPE zac_flight_detail.
 TYPES:   status TYPE string,
 TYPES:   load_factor TYPE p DECIMALS 2,
 TYPES: END OF ty_flight_detail.
@@ -141,7 +141,7 @@ CLASS lcl_flight_app IMPLEMENTATION.
 
   METHOD get_data.
     " 通过 CDS View 取数
-    SELECT * FROM zcds_sflight_detail( p_carrid = @mv_carrid )
+    SELECT * FROM zac_flight_detail( p_carrid = @mv_carrid )
       WHERE fldate IN @s_date
       INTO CORRESPONDING FIELDS OF TABLE @mt_data.
 
@@ -163,7 +163,7 @@ CLASS lcl_flight_app IMPLEMENTATION.
 
   METHOD create_booking.
     " 调用 BAPI 创建预订
-    zcl_flight_service=>create_booking(
+    zcl_ac_flight_service=>create_booking(
       iv_carrid  = mv_carrid
       iv_connid  = iv_connid
       iv_fldate  = iv_fldate ).
