@@ -10,6 +10,8 @@ theme:
   name: material
   custom_dir: overrides
   language: zh
+  logo: assets/images/logo.svg
+  favicon: assets/images/favicon.svg
   palette:
     - scheme: default
       toggle:
@@ -35,6 +37,9 @@ markdown_extensions:
   - def_list
   - footnotes
   - md_in_html
+  - toc:
+      permalink: true
+      slugify: !!python/name:pymdownx.slugs.uslugify
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -85,3 +90,6 @@ nav:
   - 附录:
       - 参考资料库: references.md
       - 许可与声明: LICENSE.md
+
+extra_css:
+  - stylesheets/extra.css

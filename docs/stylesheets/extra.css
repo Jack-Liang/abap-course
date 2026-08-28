@@ -1,0 +1,24 @@
+/* 首页 hero 区域 */
+.ac-hero {
+  text-align: center;
+  padding: 2.5rem 1rem 1.5rem;
+}
+
+.ac-hero img {
+  width: 112px;
+  height: 112px;
+  margin-bottom: 1rem;
+}
+
+.ac-hero h1 {
+  margin: 0 0 0.3em;
+}
+
+.ac-hero .md-button {
+  margin-top: 0.8rem;
+}
+
+/* 深色模式下按钮与文字微调 */
+[data-md-color-scheme="slate"] .ac-hero .md-button--primary {
+  color: var(--md-primary-bg-color);
+}
