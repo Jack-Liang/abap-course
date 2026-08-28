@@ -1,123 +1,174 @@
 ---
-status: draft
+status: beta
 ---
 
 # 第7课：选择屏幕
 
-> 45分钟 | 阶段：核心篇
+> 45分钟 | 阶段：核心篇 | 建议边读边做
 
 ## 前置依赖
 
-- 第4课：会使用内表和基本 SQL 查询
-- 第5课：了解 SFLIGHT / SCARR / SPFLI 表结构
+- [第5课](05-open-sql.md)：会带条件的 SELECT。
 
 ## 问题引入
 
-前几课的报表都是写死的查询条件——比如固定查"AA航空"的数据。但实际需求是让用户自己输入条件：航空公司、日期范围、航班号。怎么给报表加一个"输入界面"？输入的数据如何校验——用户输入了一个不存在的航空公司怎么办？
+跑报表前，领导说"只看 LH 的、上个月的、座位占用超过 100 的航班"。你不可能为每种组合写一个程序——**选择屏幕**就是 ABAP 报表的标准入口：用户填条件，程序按条件查。本课做出第一个"像样的"交互式报表：带默认值、必填校验、日期区间和数量筛选。
 
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
 |------|------|------|
-| 场景引入 | 为什么报表需要选择屏幕 / 真实报表的交互需求 | 3 分钟 |
-| Demo 演示 | 运行带选择屏幕的航班查询报表 | 5 分钟 |
-| 代码拆解 | PARAMETERS、SELECT-OPTIONS、事件块、校验逻辑 | 28 分钟 |
-| 知识总结 | PARAMETERS vs SELECT-OPTIONS 对比表 | 6 分钟 |
-| 课后思考 | 练习 | 3 分钟 |
+| 场景引入 | 为什么需要选择屏幕 | 3 分钟 |
+| Demo 跟做 | 运行 + 体验筛选 + 制造一次校验报错 | 10 分钟 |
+| 代码拆解 | PARAMETERS / SELECT-OPTIONS / 事件链 / 校验 | 24 分钟 |
+| 知识总结 | 组件速查表、事件时序图 | 6 分钟 |
+| 课后思考 | 练习 | 2 分钟 |
 
 ## 本课目标
 
-掌握 PARAMETERS 和 SELECT-OPTIONS 的用法，理解选择屏幕的事件处理，能编写带校验的查询报表。
+完成本课你将能够：
 
-## Demo
+- 用 PARAMETERS 做单值输入（含 OBLIGATORY / DEFAULT / 复选框 / 单选组）；
+- 用 SELECT-OPTIONS 做区间/多值/排除等复杂筛选，理解其四段结构（SIGN/OPTION/LOW/HIGH）；
+- 说清选择屏幕的**事件时序**：INITIALIZATION → 显示 → 字段校验 → START-OF-SELECTION；
+- 在 AT SELECTION-SCREEN 事件里做输入校验并用 MESSAGE 拦截。
 
-编写航班查询报表，支持按航空公司、航线编号、航班日期范围筛选，带输入校验。
+## Demo：航班条件查询（分步跟做）
 
-## 知识点
-
-### 1. PARAMETERS 语句
-- 基本参数：PARAMETERS p_name TYPE c LENGTH 10.
-- 引用 DDIC 类型：PARAMETERS p_carrid TYPE s_carrid.
-- OBLIGATORY（必填）
-- DEFAULT（默认值）
-- AS CHECKBOX / RADIOBUTTON GROUP
-- NO-DISPLAY（隐藏参数）
-- MATCHCODE OBJECT（F4 搜索帮助）
-- VALUE CHECK（值校验）
-
-### 2. SELECT-OPTIONS 语句
-- 低值/高值结构（SIGN / OPTION / LOW / HIGH）
-- 选项类型：EQ / BT / NB / NE / GT / LE 等
-- NO INTERVALS / NO-EXTENSION
-- DEFAULT / MEMORY ID
-
-### 3. SELECTION-SCREEN 事件
-- INITIALIZATION（初始化默认值）
-- AT SELECTION-SCREEN OUTPUT（PBO / 修改屏幕属性）
-- AT SELECTION-SCREEN ON field（单个字段校验）
-- AT SELECTION-SCREEN ON END OF（内表行校验）
-- AT SELECTION-SCREEN（全局校验）
-
-### 4. 选择屏幕分组
-- SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
-- SELECTION-SCREEN END OF BLOCK b1.
-
-## Demo 代码
+程序 `zac_selection_screen` 已随仓库下发，SE38 运行：
 
 ```abap
 REPORT zac_selection_screen.
 
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
-PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA',
-            p_connid TYPE sflight-connid.
-SELECT-OPTIONS: s_date  FOR sy-datum NO-EXTENSION,
-                s_seats FOR sflight-seatsocc.
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE '航班查询条件'.
+PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA'.
+SELECT-OPTIONS: s_connid FOR sflight-connid NO-EXTENSION,
+                s_date   FOR sflight-fldate,
+                s_seats  FOR sflight-seatsocc.
 SELECTION-SCREEN END OF BLOCK b1.
-
-INITIALIZATION.
-  %_p_carrid%_text = '航空公司'.
-  %_p_connid%_text = '航线编号'.
-  %_s_date%_text   = '航班日期'.
 
 AT SELECTION-SCREEN ON p_carrid.
   SELECT SINGLE carrid FROM scarr INTO @DATA(lv_check)
     WHERE carrid = @p_carrid.
   IF sy-subrc <> 0.
-    MESSAGE e001(00) WITH p_carrid. " 航空公司代码不存在
+    MESSAGE e001(zac_flight_msg) WITH p_carrid.  " 航空公司代码 &1 不存在
   ENDIF.
 
 START-OF-SELECTION.
   SELECT carrid, connid, fldate, seatsmax, seatsocc, price
     FROM sflight
-    WHERE carrid = @p_carrid AND connid IN @s_connid AND fldate IN @s_date
+    WHERE carrid = @p_carrid
+      AND connid IN @s_connid
+      AND fldate IN @s_date
+      AND seatsocc IN @s_seats
     INTO TABLE @DATA(lt_sflight).
 
   IF lt_sflight IS INITIAL.
     WRITE: / '未找到符合条件的航班'.
   ELSE.
     LOOP AT lt_sflight INTO @DATA(ls).
-      WRITE: / |{ ls-carrid } { ls-connid } { ls-fldate } { ls-seatsocc }|.
+      WRITE: / |{ ls-carrid } { ls-connid } { ls-fldate } 座位 { ls-seatsocc }/{ ls-seatsmax }|.
     ENDLOOP.
     WRITE: / |共 { lines( lt_sflight ) } 条记录|.
   ENDIF.
 ```
 
-## 代码拆解要点
+**跟做三步：**
 
-1. PARAMETERS vs SELECT-OPTIONS 的区别与适用场景
-2. AT SELECTION-SCREEN ON 的校验触发时机
-3. SELECT-OPTIONS 的 IN 操作符使用
-4. INITIALIZATION 中修改标签文字
+1. 直接 F8（默认值 AA）→ 看到全部 AA 航班；
+2. 展开日期区间填 `2026-01-01 ~ 2026-12-31`，已占座位选 GreaterThan 填 `100` → F8，看结果收窄；
+3. 把航空公司改成 `ZZ` → F8 → **状态栏红字"航空公司代码 ZZ 不存在"，程序拒绝往下走**——字段级校验在工作。
+
+<!-- 配图（待截图后启用）：![选择屏幕界面](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/07-selection-screen/sel-screen.png) -->
+
+## 知识点
+
+### 1. PARAMETERS：单值输入
+
+```abap
+PARAMETERS p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA'.
+PARAMETERS p_show   AS CHECKBOX DEFAULT 'X'.                  " 复选框
+PARAMETERS p_mode   TYPE c RADIOBUTTON GROUP g1 DEFAULT 'X'.  " 单选组
+PARAMETERS p_hide   NO-DISPLAY.                               " 隐形参数
+```
+
+| 附加项 | 作用 |
+|--------|------|
+| `OBLIGATORY` | 必填（留空点执行直接拦） |
+| `DEFAULT` | 默认值 |
+| `AS CHECKBOX` | 布尔（`'X'`/`' '`） |
+| `RADIOBUTTON GROUP g1` | 同组互斥 |
+| `NO-DISPLAY` | 不显示，但可被 SUBMIT/变式传值 |
+| `MATCHCODE OBJECT` | 挂搜索帮助（F4） |
+| `VALUE CHECK` | 对照检查表验值 |
+
+### 2. SELECT-OPTIONS：区间输入——本课的主角
+
+屏幕上它是一行"从…到…"+ 扩展按钮；程序里它是一个**内表**，每行四段：
+
+| 字段 | 含义 | 常见值 |
+|------|------|--------|
+| SIGN | 包含/排除 | `I`（Include）/ `E`（Exclude） |
+| OPTION | 比较方式 | `EQ` / `BT`（区间）/ `GT` / `NE` / `CP`（通配）… |
+| LOW | 低值/单值 | — |
+| HIGH | 高值（仅 BT） | — |
+
+用户在屏幕上的每次"添加行"，就是往这个内表加一行规则；**空 select-option = 零行 = 不限制**（Demo 里 s_seats 不填就是全量）。SQL 侧直接 `WHERE seatsocc IN @s_seats`，运行时自动展开成 SQL 条件——选择屏幕和 Open SQL 的天作之合。
+
+常用附加项：`NO-EXTENSION`（禁止多行）、`NO INTERVALS`（只单值无区间）、`DEFAULT`（可给到 SIGN/OPTION/LOW/HIGH 全套）、`MEMORY ID`（跨程序记忆输入）。
+
+### 3. 事件时序：谁先谁后
+
+```mermaid
+flowchart TD
+    A["INITIALIZATION<br/>进屏幕前：填默认值"] --> B["选择屏幕显示<br/>（AT SELECTION-SCREEN OUTPUT 可改屏幕属性）"]
+    B --> C{"用户点执行"}
+    C --> D["AT SELECTION-SCREEN ON 字段<br/>逐字段校验（失败弹回屏幕）"]
+    D --> E["AT SELECTION-SCREEN<br/>全局校验"]
+    E --> F["START-OF-SELECTION<br/>主逻辑"]
+```
+
+- **校验越早越好**：字段级校验放 `ON p_carrid`（错误贴着字段），跨字段一致性放全局 `AT SELECTION-SCREEN`；
+- **MESSAGE e** 在校验事件里 = 拦下执行、弹回屏幕；`MESSAGE s` = 状态栏提示不拦截——校验用 E，提示用 S（第18课展开）；
+- `AT SELECTION-SCREEN OUTPUT` 是选择屏幕的 PBO（显示前处理），可动态隐藏/灰化字段。
+
+### 4. 布局：BLOCK 分组与文本
+
+```abap
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE '航班查询条件'.
+  ...
+SELECTION-SCREEN END OF BLOCK b1.
+```
+
+块 + 框架标题让参数不散架；多组参数（主条件/显示选项/调试开关）分块是报表标配。屏幕元素的中文标签走正道：菜单 **Goto → Text Elements → Selection Texts**（把 `P_CARRID` 显示为"航空公司"）。
 
 ## 💡 实战经验
 
-- **SELECT-OPTIONS 的 Low/High 是什么？** SELECT-OPTIONS 实际上创建了一个内表，有 SIGN、OPTION、LOW、HIGH 四个字段。`BETWEEN` 和 `IN` 底层就是操作这个内表
-- **OBLIGATORY 的用户体验问题**：加了 OBLIGATORY 后用户不填就无法执行，但提示不够友好。更好的做法是不加 OBLIGATORY，在 AT SELECTION-SCREEN 事件中自己校验并输出 MESSAGE
-- **INITIALIZATION 是设置默认值的地方**：在 INITIALIZATION 事件中给选择屏幕字段赋值，用户打开报表时就能看到预填的默认值——比每次手动输入方便得多
-- **选择屏幕上的按钮**：用 SELECTION-SCREEN PUSHBUTTON 可以在选择屏幕上加自定义按钮，配合 USER-COMMAND 实现特殊功能（如一键导出、切换查询模式）
+!!! tip "校验永远做在选择屏幕事件里"
+
+    把校验写进 `START-OF-SELECTION` 再报错，用户体验割裂；`AT SELECTION-SCREEN ON 字段` 校验失败停在原屏幕、错误信息贴字段——这是 SAP 用户几十年的肌肉记忆，别打破。
+
+!!! tip "高频查询给 DEFAULT"
+
+    把使用者最常见的条件做成默认值（如默认当月区间），一行 DEFAULT 换每天少点十次。
+
+!!! warning "别手工拆 SELECT-OPTIONS"
+
+    有人爱 LOOP 着 `s_date` 手拼 WHERE——没必要，`IN @s_date` 原生支持。确需加工（如整体加一天）再操作内表，改完照样 IN。
+
+## 📖 延伸阅读
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——`PARAMETERS` / `SELECT-OPTIONS` / `SELECTION-SCREEN` 条目。
 
 ## 课后思考
 
-1. PARAMETERS 和 SELECT-OPTIONS 各自适合什么场景？
-2. AT SELECTION-SCREEN ON 和 AT SELECTION-SCREEN 有什么区别？
-3. 尝试添加一个 RADIOBUTTON GROUP 让用户选择查询方式。
+> 把你的回答写在**页面底部评论区**，注明题号，一起讨论。
+
+1. PARAMETERS 和 SELECT-OPTIONS 的本质区别？（提示：程序里它们各是什么类型？）
+2. 用户在选择屏幕上"排除 0017 航线"对应 SELECT-OPTIONS 内表里一行什么数据？
+3. 给 Demo 加复选框"只看满员航班"（`p_full AS CHECKBOX`）并让 SQL 生效——把你的 WHERE 写法贴出来。
+4. 校验写在 `AT SELECTION-SCREEN ON p_carrid` 与写在 `START-OF-SELECTION` 开头，用户体验差在哪？
+
+---
+
+下一课：[第8课：数据格式化](08-formatting.md)

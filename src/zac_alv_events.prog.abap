@@ -70,7 +70,7 @@ FORM show_bookings USING p_carrid TYPE s_carr_id
     WHERE carrid = @p_carrid AND connid = @p_connid AND fldate = @p_fldate
     INTO TABLE @DATA(lt_sbook).
   IF lt_sbook IS INITIAL.
-    MESSAGE i000(oo) WITH '该航班暂无预订记录'. RETURN.
+    MESSAGE '该航班暂无预订记录' TYPE 'I'. RETURN.
   ENDIF.
   DATA(lt_fc) = VALUE slis_t_fieldcat_alv(
     ( fieldname = 'BOOKID'     seltext_l = '预订号' )

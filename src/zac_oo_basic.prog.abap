@@ -14,6 +14,9 @@ INTERFACE lif_flight_query.
                       RETURNING VALUE(rs_detail) TYPE sflight.
 ENDINTERFACE.
 
+CLASS lcx_not_found DEFINITION INHERITING FROM cx_static_check.
+ENDCLASS.
+
 CLASS lcl_flight_query DEFINITION.
   PUBLIC SECTION.
     INTERFACES: lif_flight_query.
@@ -39,7 +42,7 @@ CLASS lcl_flight_query IMPLEMENTATION.
       WHERE carrid = @mv_carrid AND connid = @iv_connid AND fldate = @iv_fldate
       INTO @rs_detail.
     IF rs_detail IS INITIAL.
-      RAISE EXCEPTION TYPE cx_sy_open_sql_db.
+      RAISE EXCEPTION TYPE lcx_not_found.
     ENDIF.
   ENDMETHOD.
 ENDCLASS.
@@ -61,6 +64,6 @@ START-OF-SELECTION.
       DATA(ls_detail) = lo_query->lif_flight_query~get_flight_detail(
         iv_connid = '0017' iv_fldate = '20260730' ).
       WRITE: / |详情: 票价 { ls_detail-price }, 座位 { ls_detail-seatsocc }/{ ls_detail-seatsmax }|.
-    CATCH cx_sy_open_sql_db INTO DATA(lx_error).
+    CATCH lcx_not_found INTO DATA(lx_error).
       WRITE: / |未找到航班: { lx_error->get_text( ) }|.
   ENDTRY.

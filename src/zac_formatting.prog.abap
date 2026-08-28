@@ -39,8 +39,10 @@ START-OF-SELECTION.
   WRITE: / lv_result.
 
   " COND 条件表达式
+  DATA(lv_seatsocc) = 180.
+  DATA(lv_seatsmax) = 200.
   DATA(lv_status) = COND string(
-    WHEN 180 >= 200 THEN '已满'
-    WHEN 180 > 160  THEN '紧张'
+    WHEN lv_seatsocc >= lv_seatsmax THEN '已满'
+    WHEN lv_seatsocc > lv_seatsmax * 8 / 10 THEN '紧张'
     ELSE '可订' ).
   WRITE: / |状态: { lv_status }|.

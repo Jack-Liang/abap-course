@@ -6,23 +6,18 @@
 *&---------------------------------------------------------------------*
 REPORT zac_selection_screen.
 
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
-PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA',
-            p_connid TYPE sflight-connid.
-SELECT-OPTIONS: s_date  FOR sy-datum NO-EXTENSION,
-                s_seats FOR sflight-seatsocc.
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE '航班查询条件'.
+PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA'.
+SELECT-OPTIONS: s_connid FOR sflight-connid NO-EXTENSION,
+                s_date   FOR sflight-fldate,
+                s_seats  FOR sflight-seatsocc.
 SELECTION-SCREEN END OF BLOCK b1.
-
-INITIALIZATION.
-  %_p_carrid%_text = '航空公司'.
-  %_p_connid%_text = '航线编号'.
-  %_s_date%_text   = '航班日期'.
 
 AT SELECTION-SCREEN ON p_carrid.
   SELECT SINGLE carrid FROM scarr INTO @DATA(lv_check)
     WHERE carrid = @p_carrid.
   IF sy-subrc <> 0.
-    MESSAGE e001(00) WITH p_carrid.
+    MESSAGE e001(zac_flight_msg) WITH p_carrid.  " 航空公司代码 &1 不存在
   ENDIF.
 
 START-OF-SELECTION.
@@ -31,6 +26,7 @@ START-OF-SELECTION.
     WHERE carrid = @p_carrid
       AND connid IN @s_connid
       AND fldate IN @s_date
+      AND seatsocc IN @s_seats
     INTO TABLE @DATA(lt_sflight).
 
   IF lt_sflight IS INITIAL.

@@ -1,81 +1,48 @@
 ---
-status: draft
+status: beta
 ---
 
 # 第13课：ABAP 面向对象编程（基础）
 
-> 45分钟 | 阶段：核心篇
+> 45分钟 | 阶段：核心篇 | 建议边读边做
 
 ## 前置依赖
 
-- 第9课：了解 Function Module 的封装思想
-- 第5课：了解 Open SQL 查询
+- [第9课](09-function-module.md)：封装思想与 FM 的局限；
+- [第5课](05-open-sql.md)：SELECT。
 
 ## 问题引入
 
-你已经会用 Function Module 封装逻辑了，但 FM 有一个缺点——它的数据是"全局共享"的，多个 FM 之间可能互相干扰。有没有更严格的"封装"方式——数据和方法绑定在一起，外部只能通过规定好的接口访问？面向对象（OO）就是解决这个问题的。
+FM 封装了逻辑，但函数组的全局数据是"裸奔"的——同组 FM 互相踩内存的隐患第9课刚警告过。**面向对象（OO）**把数据和操作数据的方法绑成一个整体，外部只能走公开的接口访问：这是更严格的封装，也是现代 ABAP 的地基——后面的 OO ALV（22课）、CDS 消费、BTP 开发全是类与方法的 世界。本课写出你的第一个类。
 
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
 |------|------|------|
-| 场景引入 | 过程式编程 vs 面向对象的思维转换 | 3 分钟 |
-| Demo 演示 | 创建航班查询工具类，在报表中调用 | 5 分钟 |
-| 代码拆解 | 类/对象/方法/属性/构造函数/接口/异常 | 28 分钟 |
-| 知识总结 | OO 核心概念速查、SE24/SE80 操作要点 | 6 分钟 |
+| 场景引入 | 从 FM 的全局数据之痛到 OO 封装 | 3 分钟 |
+| Demo 跟做 | 运行 zac_oo_basic，过一遍对象的一生 | 8 分钟 |
+| 代码拆解 | 类定义/实现/实例化/接口/异常 | 27 分钟 |
+| 知识总结 | FM vs 方法、SE24 速查 | 4 分钟 |
 | 课后思考 | 练习 | 3 分钟 |
 
 ## 本课目标
 
-理解 ABAP OO 的基本概念，能创建类和方法，理解封装思想，为后续 OO ALV 和设计模式打基础。
+完成本课你将能够：
 
-## Demo
+- 读懂并写出"本地类"的 DEFINITION / IMPLEMENTATION 结构；
+- 用 `NEW` 创建对象、`->` 调用方法、访问 READ-ONLY 属性；
+- 用构造函数做初始化，理解 PUBLIC/PRIVATE 分区；
+- 定义与实现接口（INTERFACE），说出"面向接口"的好处；
+- 用自定义异常类 + TRY/CATCH 处理错误。
 
-用 ABAP Objects 封装一个 "航班查询工具类"，包含方法：按航空公司查航线、按日期查航班、获取航班详情，在报表中实例化使用。
+## Demo：航班查询工具类（分步跟做）
 
-## 知识点
-
-### 1. 面向对象编程概念
-- 类（Class）与对象（Object）
-- 封装（Encapsulation）
-- SE24（Class Builder）界面
-
-### 2. CLASS 定义
-- CLASS ... DEFINITION
-- PUBLIC SECTION / PRIVATE SECTION / PROTECTED SECTION
-- METHODS（方法定义）
-- DATA（属性定义）
-- CONSTRUCTOR（构造函数）
-
-### 3. CLASS 实现
-- CLASS ... IMPLEMENTATION
-- METHOD ... ENDMETHOD
-
-### 4. 对象创建与使用
-- 新语法：NEW 操作符创建对象
-- 方法调用：lo_obj->method( )
-- DATA(lo_obj) = NEW lcl_flight_query( ).
-
-### 5. Interface（接口）
-- INTERFACE ... DEFINITION
-- 类实现接口
-- 接口 vs 类的区别与使用场景
-
-### 6. 异常处理
-- TRY / CATCH / ENDTRY
-- RAISE EXCEPTION TYPE
-- CX_ROOT 异常体系
-
-### 7. 新语法
-- NEW 创建对象
-- CAST 类型转换
-
-## Demo 代码
+SE38 运行 `zac_oo_basic`（已随仓库下发）：
 
 ```abap
 REPORT zac_oo_basic.
 
-" 工具接口定义
+" 接口：只声明"能做什么"，不管"谁来做"
 INTERFACE lif_flight_query.
   METHODS:
     get_flights EXPORTING et_sflight TYPE sflight_tab,
@@ -84,15 +51,18 @@ INTERFACE lif_flight_query.
                       RETURNING VALUE(rs_detail) TYPE sflight.
 ENDINTERFACE.
 
-" 航班查询类
+" 自定义异常：找不着数据不是数据库错误
+CLASS lcx_not_found DEFINITION INHERITING FROM cx_static_check.
+ENDCLASS.
+
 CLASS lcl_flight_query DEFINITION.
   PUBLIC SECTION.
-    INTERFACES: lif_flight_query.
+    INTERFACES: lif_flight_query.                  " 实现接口
     METHODS:
       constructor IMPORTING iv_carrid TYPE s_carr_id OPTIONAL.
-    DATA: mv_carrid TYPE s_carr_id READ-ONLY.
+    DATA: mv_carrid TYPE s_carr_id READ-ONLY.      " 外部只读
   PRIVATE SECTION.
-    DATA: mv_status TYPE string.
+    DATA: mv_status TYPE string.                    " 外部不可见
 ENDCLASS.
 
 CLASS lcl_flight_query IMPLEMENTATION.
@@ -102,65 +72,146 @@ CLASS lcl_flight_query IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD lif_flight_query~get_flights.
-    SELECT * FROM sflight
-      WHERE carrid = @mv_carrid
-      INTO TABLE @et_sflight.
+    SELECT * FROM sflight WHERE carrid = @mv_carrid INTO TABLE @et_sflight.
   ENDMETHOD.
 
   METHOD lif_flight_query~get_flight_detail.
     SELECT SINGLE * FROM sflight
-      WHERE carrid = @mv_carrid
-        AND connid = @iv_connid
-        AND fldate = @iv_fldate
+      WHERE carrid = @mv_carrid AND connid = @iv_connid AND fldate = @iv_fldate
       INTO @rs_detail.
     IF rs_detail IS INITIAL.
-      RAISE EXCEPTION TYPE cx_sy_open_sql_db.
+      RAISE EXCEPTION TYPE lcx_not_found.
     ENDIF.
   ENDMETHOD.
 ENDCLASS.
 
 START-OF-SELECTION.
-  " 创建对象（新语法 NEW）
+  " NEW 创建对象（构造参数直接塞括号）
   DATA(lo_query) = NEW lcl_flight_query( 'AA' ).
-
   WRITE: / |当前航空公司: { lo_query->mv_carrid }|.
 
-  " 调用接口方法
+  " 调用接口方法（实现接口的方法带 接口名~ 前缀）
   DATA(lt_flights) = lo_query->lif_flight_query~get_flights( ).
   WRITE: / |共查询到 { lines( lt_flights ) } 条航班|.
-
   LOOP AT lt_flights INTO @DATA(ls).
     WRITE: / |  { ls-carrid } { ls-connid } { ls-fldate }|.
   ENDLOOP.
 
-  " 获取单条详情（含异常处理）
+  " 异常处理：查一个不存在的日期
   TRY.
       DATA(ls_detail) = lo_query->lif_flight_query~get_flight_detail(
         iv_connid = '0017' iv_fldate = '20260730' ).
       WRITE: / |详情: 票价 { ls_detail-price }, 座位 { ls_detail-seatsocc }/{ ls_detail-seatsmax }|.
-    CATCH cx_sy_open_sql_db INTO DATA(lx_error).
+    CATCH lcx_not_found INTO DATA(lx_error).
       WRITE: / |未找到航班: { lx_error->get_text( ) }|.
   ENDTRY.
 ```
 
-## 代码拆解要点
+**你会看到什么：** AA 的航班列表 + 一条详情（或"未找到航班"——取决于 2026-07-30 有没有数据）。一个对象从创建、调用到异常处理的完整生命周期。
 
-1. INTERFACE 定义与实现
-2. CLASS DEFINITION / IMPLEMENTATION 的结构
-3. CONSTRUCTOR 构造函数的作用
-4. NEW 创建对象 vs CREATE OBJECT 的区别
-5. TRY/CATCH 异常处理模式
-6. READ-ONLY 属性的使用
+**跟做改造：** 把 `NEW lcl_flight_query( 'AA' )` 换成 `'LH'` 再跑；把详情日期换成 `'20991231'`，看异常分支输出——两条路都亲手触发一遍。
+
+## 知识点
+
+### 1. 类的解剖图
+
+```abap
+CLASS lcl_x DEFINITION.          " 声明：长什么样（对外合同）
+  PUBLIC SECTION.                " 公开：外部可用
+  PROTECTED SECTION.             " 保护：本类+子类（第22课后你会遇到）
+  PRIVATE SECTION.               " 私有：仅本类
+ENDCLASS.
+
+CLASS lcl_x IMPLEMENTATION.      " 实现：怎么做（内部细节）
+ENDCLASS.
+```
+
+- **DEFINITION 与 IMPLEMENTATION 分离**：声明是合同，实现是履约——调用方只看合同，重构实现不影响调用方（SE24 里对应两个编辑页）；
+- **三个可见区分区**：默认一切放 PRIVATE，需要暴露的才上 PUBLIC——封装的纪律是"最小暴露"；
+- **本地类 vs 全局类**：写在报表里的叫本地类（`lcl_` 前缀，随程序生灭）；SE24 建的是全局类（课程仓库的 `zcl_ac_flight_query`，跨程序复用）。语法一致，先本地练手。
+
+### 2. 对象的创建与使用
+
+```abap
+DATA(lo_query) = NEW lcl_flight_query( 'AA' ).   " 现代写法
+" 等价旧写法：CREATE OBJECT lo_query EXPORTING iv_carrid = 'AA'.
+
+lo_query->mv_carrid.                             " -> 访问成员
+lo_query->lif_flight_query~get_flights( ).       " 调方法
+```
+
+- **类是图纸，对象是实例**：`NEW` 一次造一个，各实例属性互不干扰；
+- 构造函数 `constructor` 在 NEW 时自动执行——参数直接写进括号；
+- **`NEW` + 内联声明**是现代三连：声明、创建、类型推导一步完成。
+
+### 3. 接口：面向"能做什么"编程
+
+```abap
+INTERFACE lif_flight_query.
+  METHODS get_flights ...
+ENDCLASS.
+
+CLASS lcl_flight_query DEFINITION.
+  PUBLIC SECTION.
+    INTERFACES: lif_flight_query.     " 签合同：这些方法我实现
+```
+
+- 接口只有声明没有实现；类通过 `INTERFACES` 接入并逐个实现（方法名带 `接口名~` 前缀）；
+- **价值**：调用方面向 `lif_flight_query` 编程，今天是 `lcl_flight_query`、明天换成查缓存的实现类，调用代码一行不改——这就是第24课 MVC 分层的地基。
+
+### 4. 异常：对象化的错误
+
+```abap
+CLASS lcx_not_found DEFINITION INHERITING FROM cx_static_check.
+ENDCLASS.
+
+RAISE EXCEPTION TYPE lcx_not_found.       " 抛出
+CATCH lcx_not_found INTO DATA(lx_error).  " 捕获 → lx_error 是异常对象
+  lx_error->get_text( )                    " 人类可读的描述
+```
+
+- 自定义异常 = 继承 `cx_static_check` 的类（可加属性携带上下文，如"哪个航班没找到"）；
+- 对比 FM 的经典 EXCEPTIONS（一个 sy-subrc 数字）：异常对象能**分类**（继承体系）、**携带信息**（get_text/属性）、**强制处理**（可检查异常不 catch 会语法警告）；
+- 第9课埋的伏笔在此兑现：`RAISING` 声明 + TRY/CATCH 是 FM 与类的共通语言。
+
+### 5. 方法参数的三种出参
+
+| 形式 | 写法 | 用途 |
+|------|------|------|
+| IMPORTING | `METHODS m IMPORTING iv_x TYPE ...` | 入参 |
+| RETURNING | `RETURNING VALUE(rv_x) TYPE ...` | **函数式**：可内联 `DATA(x) = obj->m( )` |
+| EXPORTING | `EXPORTING et_x TYPE ...` | 多返回值或大数据量（避免 RETURNING 拷贝） |
+
+新方法优先 RETURNING（可链式、可表达式）；大数据内表用 EXPORTING 少拷贝。
 
 ## 💡 实战经验
 
-- **全局类 vs 局部类**：在 SE24 中创建的类是"全局类"，整个系统都能调用。在程序内部用 `CLASS lcl_xxx DEFINITION` 定义的是局部类——只在当前程序有效。新项目推荐全局类
-- **属性的可见性**：PRIVATE 是默认也是最安全的。公开属性（PUBLIC）意味着任何程序都能修改——破坏封装。推荐所有属性设为 PRIVATE，通过 GETTER/SETTER 方法访问
-- **异常处理不要吞掉错误**：`TRY ... CATCH cx_root` 捕获所有异常但不做处理，会让 Bug 隐藏得更深。至少要在 CATCH 中记录日志或提示用户
-- **OO 的性能**：ABAP OO 和过程式编程的性能差异微乎其微（<1%），不要因为"性能"而拒绝使用 OO。代码的可维护性更重要
+!!! tip "全局类建 SE24，本地类练手用"
+
+    需要跨程序复用/单测/被别类引用的类，放 SE24 全局类（仓库里的 `zcl_ac_flight_query` 就是）；只在单个报表内部用的，本地类即可，省对象编号。
+
+!!! tip "READ-ONLY 是好东西"
+
+    `DATA mv_carrid READ-ONLY` 让外部能读不能改——比全 PRIVATE 再写 getter 省事，比全 PUBLIC 安全。属性暴露的默认选择。
+
+!!! warning "cx_sy_open_sql_db 不是业务异常"
+
+    系统 DB 异常类表示"数据库层面出错"，"业务上没查到"要抛自己的异常类（本课 `lcx_not_found`）。catch 一堆系统异常当业务逻辑用，是可读性灾难。
+
+## 📖 延伸阅读
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——ABAP Objects 章节（CLASS / INTERFACE / RAISE）；
+- 全局类范例：仓库 `zcl_ac_flight_query`（第13课配套，命名见[第0课矩阵](00-getting-started.md#四命名规范与对象对照)）。
 
 ## 课后思考
 
-1. 类和接口的区别是什么？什么场景下用接口？
-2. 如果一个方法可能抛异常，调用方有几种处理方式？
-3. 尝试为 lcl_flight_query 增加一个"计算平均票价"的方法。
+> 把你的回答写在**页面底部评论区**，注明题号，一起讨论。
+
+1. DEFINITION/IMPLEMENTATION 分离的价值是什么？和"接口与实现分离"是一回事吗？
+2. 给 `lcx_not_found` 加一个属性 `mv_flight_key`（存"公司-航线-日期"），抛出时赋值、捕获后输出——把代码贴出来。
+3. RETURNING 和 EXPORTING 各适合什么场景？大数据内表为什么倾向 EXPORTING？
+4. 对比第9课 FM：把 `zac_calc_flight_duration` 改写成静态方法（`CLASS-METHODS`）的类，各有什么优劣？
+
+---
+
+下一课：[第14课：BAPI 调用](14-bapi.md)——核心篇收官，进入高级篇。
