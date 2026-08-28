@@ -1,188 +1,211 @@
 ---
-status: draft
+status: beta
 ---
 
-# 第16课：调用外部接口 —— REST / SOAP
+# 第16课：调用外部接口 —— REST / SOAP / PO / CPI
 
-> 45分钟 | 阶段：高级篇
+> 45分钟 | 阶段：高级篇 | 建议边读边做
 
 ## 前置依赖
 
-- 第9课：了解 Function Module 和 RFC 概念
-- 第13课：了解 ABAP OO 基础（理解类的调用方式）
+- [第9课](09-function-module.md)：RFC 概念；
+- [第13课](13-oo-basic.md)：类与方法的调用；
+- [第8课](08-formatting.md)：字符串处理。
 
 ## 问题引入
 
-你的 SAP 系统需要"查一下外部航空公司的实时航班信息"——但这个信息在另一个公司的系统里，通过 REST API 提供。SAP 怎么调用外部 HTTP 接口？返回的 JSON 数据怎么解析？如果调用失败了怎么处理重试？
+SAP 不是孤岛：汇率在第三方 API 上、物流状态在合作方系统里、公众号推送要走微信接口。ABAP 怎么伸手到 HTTP 世界？返回的 JSON 怎么变成 ABAP 结构？这节课把 **REST 调用五步法**打通，并鸟瞰 SOAP / PO / CPI 三位"老大哥"的位置——知道每类集成该选哪条路。
+
+!!! warning "环境差异：外网与 SSL 是前置条件"
+
+    Demo 调用公网汇率 API（`open.er-api.com`）。要求：① 试用容器所在主机能访问外网；② STRUST 里已导入目标站点的 SSL 证书（或先用 `ssl_id = 'ANONYMOUS'` 试，证书报错时按第0课的 STRUST 方法导入 `open.er-api.com` 证书链）；③ 公司内网需代理。跑不通不影响学习——代码与流程讲解完整，环境问题本身就是本课知识点。
 
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
 |------|------|------|
-| 场景引入 | SAP 不是孤岛——需要与外部系统交互 | 3 分钟 |
-| Demo 演示 | 调用模拟的航班信息 REST API | 5 分钟 |
-| 代码拆解 | CL_HTTP_CLIENT、JSON 解析（/UI2/CL_JSON）、错误处理、超时设置 | 28 分钟 |
-| 知识总结 | REST 调用流程图、JSON 解析方法、常见错误处理 | 6 分钟 |
+| 场景引入 | 集成版图：四条路各管什么 | 3 分钟 |
+| Demo 跟做 | 实时汇率换算票价全流程 | 8 分钟 |
+| 代码拆解 | HTTP 五步 / JSON 解析 / 异常与超时 | 26 分钟 |
+| 知识总结 | 集成选型表、排查清单 | 5 分钟 |
 | 课后思考 | 练习 | 3 分钟 |
 
 ## 本课目标
 
-掌握 SAP 调用外部 REST API 的方法，能处理 JSON 响应，理解异常处理和超时机制。
+完成本课你将能够：
 
-## Demo
+- 用 `cl_http_client` 完成 GET 请求的五步流程（创建→组装→发送→接收→关闭）；
+- 用 `/ui2/cl_json` 把 JSON 反序列化进自定结构；
+- 说清 REST / SOAP / PO / CPI 的定位与选型；
+- 按清单排查外部调用失败（网络/证书/代理/超时）。
 
-通过 ABAP 程序调用一个模拟的航班信息 REST API，解析 JSON 响应并将结果展示在 ALV 报表中。
+## Demo：实时汇率换算票价（分步跟做）
 
-## 知识点
-
-### 1. SAP 外部集成概述
-- REST API / SOAP WebService / SAP PO / SAP CPI 各自定位
-- 选型建议
-
-### 2. REST API 调用（重点，约 25 分钟）
-- CL_HTTP_CLIENT 类
-  - CREATE_BY_URL 创建连接
-  - SET_HEADER 设置 HTTP Header
-  - SEND / RECEIVE 发送接收
-  - GET_CDATA 获取响应
-  - CLOSE 关闭连接
-- HTTP Header 设置（Content-Type / Authorization）
-- GET vs POST 请求
-
-### 3. JSON 解析
-- /UI2/CL_JSON 工具类
-  - DESERIALIZE（反序列化：JSON → ABAP）
-  - SERIALIZE（序列化：ABAP → JSON）
-- 结构体映射
-
-### 4. SOAP WebService 概览（约 5 分钟）
-- SOAMANAGER 创建与发布
-- WSDL 概念
-- 消费外部 WebService（简要）
-
-### 5. SAP PO 概览（约 5 分钟）
-- Process Orchestration 架构
-- Integration Engine / AEX / BPM
-- IDoc 消息收发流程
-- WE05/WE07 监控
-
-### 6. SAP CPI 概览（约 5 分钟）
-- Cloud Platform Integration
-- iFlow 概念
-- 与传统 PO 的对比
-
-### 7. 异常处理
-- HTTP 错误码处理
-- CX_HTTP_WEB_PROXY / CX_ROOT
-
-## Demo 代码
+SE38 运行 `zac_rest_api`（已随仓库下发）：
 
 ```abap
 REPORT zac_rest_api.
 
 START-OF-SELECTION.
   DATA: lo_http TYPE REF TO if_http_client,
-        lv_url  TYPE string,
         lv_json TYPE string.
 
-  " 1. 创建 HTTP 连接
-  lv_url = 'https://api.exchangerate-api.com/v4/latest/USD'.
-
+  " 1. 创建 HTTP 客户端
   cl_http_client=>create_by_url(
     EXPORTING
-      url                = lv_url
-      ssl_id             = 'ANONYMOUS'
+      url    = 'https://open.er-api.com/v6/latest/USD'
+      ssl_id = 'ANONYMOUS'
     IMPORTING
-      client             = lo_http
-    EXCEPTIONS
-      argument_not_found = 1
-      plugin_not_active  = 2
-      internal_error     = 3
-      OTHERS             = 4 ).
-
+      client = lo_http
+    EXCEPTIONS OTHERS = 4 ).
   IF sy-subrc <> 0.
-    WRITE: / 'HTTP 连接创建失败'.
-    EXIT.
+    WRITE: / 'HTTP 连接创建失败（检查网络/SM59/SSL）'. EXIT.
   ENDIF.
 
-  " 2. 设置请求
+  " 2. 组装 GET 请求
   lo_http->request->set_method( 'GET' ).
   lo_http->request->set_header_field(
-    name  = 'Content-Type'
-    value = 'application/json' ).
+    name  = 'Accept' value = 'application/json' ).
 
   " 3. 发送与接收
   lo_http->send( EXCEPTIONS OTHERS = 1 ).
   IF sy-subrc <> 0.
-    WRITE: / '请求发送失败'.
-    lo_http->close( ).
-    EXIT.
+    WRITE: / '请求发送失败'. lo_http->close( ). EXIT.
   ENDIF.
-
   lo_http->receive( EXCEPTIONS OTHERS = 1 ).
   IF sy-subrc <> 0.
-    WRITE: / '响应接收失败'.
-    lo_http->close( ).
-    EXIT.
+    WRITE: / '响应接收失败（外网/防火墙/SSL 证书，见课文环境提示）'.
+    lo_http->close( ). EXIT.
   ENDIF.
 
   lv_json = lo_http->response->get_cdata( ).
   lo_http->close( ).
 
-  " 4. JSON 解析
+  WRITE: / |响应前 200 字: {
+    COND string( WHEN strlen( lv_json ) > 200
+                 THEN substring( val = lv_json len = 200 )
+                 ELSE lv_json ) }|.
+
+  " 4. JSON 解析：按需声明字段，工具类按名自动映射
   TYPES: BEGIN OF ty_rates,
-           rates TYPE SORTED TABLE OF string WITH UNIQUE KEY table_line,
+           cny TYPE string,
+           jpy TYPE string,
          END OF ty_rates.
   TYPES: BEGIN OF ty_result,
-           base  TYPE string,
-           rates TYPE SORTED TABLE OF string WITH UNIQUE KEY table_line,
+           result    TYPE string,
+           base_code TYPE string,
+           rates     TYPE ty_rates,
          END OF ty_result.
 
   DATA(ls_result) = VALUE ty_result( ).
-
   /ui2/cl_json=>deserialize(
     EXPORTING
-      json = lv_json
-      pretty_name = /ui2/cl_json=>pretty_mode-camel_case
+      json        = lv_json
+      pretty_name = /ui2/cl_json=>pretty_mode-none
     CHANGING
-      data = ls_result ).
+      data        = ls_result ).
 
-  " 5. 获取汇率并换算
-  DATA(lv_cny_rate) = 0.0.
-  READ TABLE ls_result-rates INTO DATA(lv_rate_line)
-    WITH KEY table_line = 'CNY'.
-  " 实际需根据 JSON 结构映射解析
-
+  " 5. 查票价并换算
   SELECT SINGLE price FROM sflight
     WHERE carrid = 'AA' AND connid = '0017'
     INTO @DATA(lv_price_usd).
 
-  IF lv_price_usd > 0 AND lv_cny_rate > 0.
-    DATA(lv_price_cny) = lv_price_usd * lv_cny_rate.
+  IF ls_result-rates-cny IS NOT INITIAL.
+    DATA(lv_rate) = CONV f( ls_result-rates-cny ).
     WRITE: / |原始票价: { lv_price_usd } USD|.
-    WRITE: / |汇率: 1 USD = { lv_cny_rate } CNY|.
-    WRITE: / |换算票价: { lv_price_cny } CNY|.
+    WRITE: / |实时汇率: 1 USD = { lv_rate } CNY|.
+    WRITE: / |换算票价: { lv_price_usd * lv_rate NUMBER = USER } CNY|.
+  ELSE.
+    WRITE: / '未能解析到 CNY 汇率（检查网络与 JSON 结构）'.
   ENDIF.
 ```
 
-## 代码拆解要点
+**你会看到什么：** 成功时先打印一段原始 JSON（亲眼看看接口返回长什么样），随后三行输出 USD 原价、实时汇率、换算价。失败时按提示排查——每条失败提示对应"环境提示"框里的一个原因。
 
-1. CL_HTTP_CLIENT 的完整调用流程
-2. HTTP Header 的设置方法
-3. /UI2/CL_JSON 反序列化的用法
-4. SSL / TLS 的配置注意
-5. 异常处理和连接关闭的重要性
+## 知识点
+
+### 1. 集成版图：四条路各管什么
+
+| 通路 | 定位 | 什么时候用 |
+|------|------|-----------|
+| **REST（本课）** | ABAP 直连 HTTP API | 轻量、点对点、自己可控两端 |
+| **SOAP WebService** | XML 协议 + WSDL 契约 | 对接老系统/银行，契约先行 |
+| **SAP PO** | 本地集成中间件（ES/BPM） | 大企业内部多系统总线、IDoc/代理混跑 |
+| **SAP CPI** | 云端集成（iFlow 流程） | BTP 时代的 PO，云到云/云到地 |
+
+**选型直觉：** 简单直连走 REST；对方只给 WSDL 就 SOAP；需要监控/映射/重试的中间层治理就上 PO/CPI（集成平台不是开发偷懒，是运维治理）。
+
+### 2. HTTP 五步法（背下来）
+
+```mermaid
+flowchart LR
+    A["① create_by_url<br/>创建客户端"] --> B["② set_method /<br/>set_header_field 组装"]
+    B --> C["③ send( )"]
+    C --> D["④ receive( ) →<br/>get_cdata( ) 拿响应"]
+    D --> E["⑤ close( )<br/>释放连接"]
+```
+
+- **GET vs POST**：GET 参数在 URL、取数据；POST 带请求体（`set_cdata` 放 JSON）、交数据。本课 GET；POST 差异只在②多一步设 body 和 Content-Type；
+- **认证**：API Key / Bearer Token 都是加一个 Header：`set_header_field( name = 'Authorization' value = |Bearer { lv_token }| )`；
+- **SM59 的角色**：`create_by_url` 适合临时/简单场景；生产更常用 `create_by_destination`（SM59 里配 G 类型目标）——URL/代理/证书集中管理，改配置不改代码。
+
+### 3. JSON ↔ ABAP：/ui2/cl_json
+
+```abap
+/ui2/cl_json=>deserialize(          " JSON → ABAP
+  EXPORTING json = lv_json
+             pretty_name = /ui2/cl_json=>pretty_mode-none
+  CHANGING  data = ls_result ).
+
+/ui2/cl_json=>serialize(            " ABAP → JSON（POST 出参用）
+  EXPORTING data = ls_request compress = abap_true
+  RECEIVING r_json = lv_json_out ).
+```
+
+- **按需建结构**：你关心哪些字段就在 `TYPES` 里声明哪些——工具类按字段名匹配填充，多余 JSON 字段自动忽略；
+- `pretty_name` 决定命名风格转换（camelCase 接口常用 `pretty_mode-camel_case`；本例 JSON 键带下划线，用 `none` 精确匹配）；
+- 数据源侧还有 `xco`（ABAP Cloud）/ `cl_sxml` 等新工具，7.52 时代 `/ui2/cl_json` 是最顺手的通用件。
+
+### 4. 失败排查清单（按命中率排序）
+
+1. **容器/主机没外网**：公司代理或防火墙——Basis 配代理（SM59 目标或 icman 参数）；
+2. **SSL 证书**：报 `SSL unknown`/证书错——STRUST 导入目标站证书链（第0课同样操作）；
+3. **HTTP 状态码**：`lo_http->response->get_status( )` 拿 code：401 认证、404 路径、5xx 对方故障——**看状态码再谈别的**；
+4. **超时**：`lo_http->send` 前可设 `PROPERTYTYPE_LOGON_TIMEOUT` / 在 SM59 目标里配——外部挂了不能拖死你的工作进程；
+5. **JSON 结构变了**：打印原始响应前 200 字（Demo 里有）再对照解析结构。
+
+### 5. SOAP 一分钟
+
+SOAMANAGER 发布/消费 WebService：消费侧本质是"按 WSDL 生成代理类 → 调代理方法"，XML 的组装解析全部由框架代劳。SOAP 项目里你几乎不碰 XML 字符串——那是它对比手工 HTTP 的最大优点；缺点是重、慢、调试绕。
 
 ## 💡 实战经验
 
-- **SM59 先配置好**：调用外部 API 前必须在 SM59 中配置 RFC 目标（Destination）。这是 Basis 团队的工作，但开发人员需要知道配置的参数名和类型
-- **JSON 解析用 /UI2/CL_JSON**：这是 SAP 官方的 JSON 工具类，比手动 SPLIT/REPLACE 解析可靠得多。传入 ABAP 结构体，JSON 字段自动映射到对应字段名
-- **超时设置很重要**：默认 HTTP 超时可能太长（60秒），建议设为 10-30 秒。外部接口挂了不能让你的程序一直等
-- **HTTPS 证书问题**：调用 HTTPS 接口时，如果 SAP 服务器没有导入对方的 SSL 证书，会报证书错误。需要 Basis 团队用 STRUST 导入证书
-- **生产环境用 PO/CPI**：直接在 ABAP 中调用外部接口适合开发和测试。生产环境建议通过 SAP PO（Process Orchestration）或 SAP CPI（Cloud Platform Integration）做中间层——更好的监控、重试和错误处理
+!!! tip "生产环境走 SM59 Destination"
+
+    URL 硬编码在代码里 = 改环境要改代码。`create_by_destination` + SM59 配置，DEV/QAS/PROD 各自指向，代码零改动。
+
+!!! tip "外部调用要设超时 + 兜底"
+
+    外部接口的平均可用性远低于你的想象。默认超时、失败降级（用上次缓存汇率 + 提示"汇率非实时"）是负责任的写法。
+
+!!! tip "调接口前先打印原始响应"
+
+    解析为空九成是结构与 JSON 对不上。Demo 里那行"响应前 200 字"请保留习惯——十秒定位映射问题。
+
+## 📖 延伸阅读
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——`IF_HTTP_CLIENT` / JSON 章节；
+- [SAP Help Portal](https://help.sap.com) 搜 "CPI" / "Process Orchestration"——两位中间件的官方文档。
 
 ## 课后思考
 
-1. 如果外部 API 返回 HTTP 500 错误，如何排查？
-2. 如何发送带认证的 HTTP 请求（如 Bearer Token）？
-3. REST 和 SOAP 各自的优缺点是什么？
+> 把你的回答写在**页面底部评论区**，注明题号，一起讨论。
+
+1. 五步法里 `close( )` 忘了会怎样？（提示：连接是系统资源）
+2. 把 Demo 改成 POST：请求体 `{"base":"USD"}` 发给一个你找得到的公开 POST 接口（或本地 mock）——`set_cdata` 之外还需要设哪个 Header？
+3. 汇率解析用 `pretty_mode-none` 精确匹配——如果接口字段是 `baseCode`（驼峰），ABAP 结构字段该怎么声明、pretty_name 用哪个模式？
+4. 你负责的接口要同时给三个系统用，选 REST 直连还是 PO/CPI 中间层？列出你的判断依据。
+
+---
+
+下一课：[第17课：Transport Request（请求与传输）](17-transport.md)

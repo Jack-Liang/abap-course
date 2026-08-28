@@ -1,76 +1,52 @@
 ---
-status: draft
+status: beta
 ---
 
-# 第14课：BAPI 调用 —— SAP 标准接口
+# 第14课：BAPI 调用 —— SAP 标准业务接口
 
-> 45分钟 | 阶段：高级篇
+> 45分钟 | 阶段：高级篇 | 建议边读边做
 
 ## 前置依赖
 
-- 第9课：了解 Function Module 的创建和调用
-- 第5课：了解 Open SQL（理解事务提交）
+- [第9课](09-function-module.md)：CALL FUNCTION 与 RFC 概念（BAPI 的谜底）；
+- [第5课](05-open-sql.md)：COMMIT WORK 与 LUW。
 
 ## 问题引入
 
-你需要让程序"自动创建一条航班预订"——但创建预订的复杂逻辑（检查座位、计算价格、锁定库存）不可能自己从头写。SAP 已经把这套逻辑封装好了，以 BAPI 的形式对外开放。怎么找到合适的 BAPI？怎么调用它？调用失败了怎么回滚？
+程序要"自动创建一条航班预订"——座位检查、价格计算、库存锁定这套逻辑自己写？SAP 早已封装好，以 **BAPI**（Business Application Programming Interface）对外开放：它是 RFC-enabled 的 FM + 严格的接口规范（RET2 返回表、独立事务控制）。掌握 BAPI，你就能安全地驱动 SAP 的全部标准业务，而不是绕过它直接捅表。
+
+!!! warning "环境差异：Flight BAPI 的齐备度"
+
+    不同系统镜像包含的 Flight BAPI 不完全一致。跑 Demo 前先 SE37 搜索 `BAPI_SBOOK*` / `BAPI_FLIGHT*` 确认存在；如果你的镜像缺某个，跟着课文学调用模式即可——**RETURN 检查 + COMMIT/ROLLBACK 的范式适用于所有 BAPI**，第24课综合实战会用课程自建的 `zcl_ac_flight_service` 封装同样的模式。
 
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
 |------|------|------|
-| 场景引入 | "不要重复造轮子"——SAP 已有大量标准业务逻辑 | 3 分钟 |
-| Demo 演示 | 通过 BAPI 创建和查询航班预订 | 5 分钟 |
-| 代码拆解 | BAPI 查找方法、参数结构、RETURN 表处理、BAPI_TRANSACTION_COMMIT | 28 分钟 |
-| 知识总结 | BAPI 调用模板、常见 BAPI 速查表 | 6 分钟 |
+| 场景引入 | 为什么绝不直接 UPDATE 标准表 | 3 分钟 |
+| Demo 跟做 | BAPI 创建预订 → 查 RETURN → COMMIT | 10 分钟 |
+| 代码拆解 | 查找 BAPI / RET2 / 事务控制 / 封装 | 24 分钟 |
+| 知识总结 | BAPI 调用模板 | 5 分钟 |
 | 课后思考 | 练习 | 3 分钟 |
 
 ## 本课目标
 
-掌握 BAPI 的查找和调用方法，理解 BAPI 的事务控制机制，能调用标准 BAPI 完成业务操作。
+完成本课你将能够：
 
-## Demo
+- 用 BAPI Explorer（事务码 `BAPI`）和 SE37 搜索定位业务 BAPI；
+- 按标准范式调用 BAPI：填参数 → 调用 → 查 BAPIRET2 → COMMIT/ROLLBACK；
+- 读懂 RET2 的 TYPE/ID/NUMBER/MESSAGE 四件套；
+- 解释 WAIT 参数、批量调用的错误收集模式。
 
-通过 BAPI 创建一条 SBOOK 航班预订，查询预订状态，失败时回滚事务。
+## Demo：创建一条航班预订（分步跟做）
 
-## 知识点
-
-### 1. BAPI 概述
-- 什么是 BAPI（Business Application Programming Interface）
-- BAPI vs Function Module
-- BAPI Explorer（BAPI 事务码）
-- 命名规范：BAPI_* / BAPIFLBOOK*
-
-### 2. BAPI 调用模式
-- 通过 CALL FUNCTION 调用
-- Import 参数传入业务数据
-- Export 参数获取结果
-- Tables 参数处理行项目
-
-### 3. BAPI_RETURN_INFO 处理
-- TYPE / ID / NUMBER / MESSAGE / LOG_NO / MESSAGE_V1~V4
-- 判断成功/失败：TYPE = 'S' / 'E' / 'W'
-- 消息拼接展示
-
-### 4. BAPI 事务控制
-- BAPI_TRANSACTION_COMMIT（提交）
-- BAPI_TRANSACTION_ROLLBACK（回滚）
-- WAIT 参数
-
-### 5. 常用 BAPI 示例
-- 创建/修改/查询航班预订
-- BAPI 查询技巧（按业务对象搜索）
-
-### 6. 封装为类的静态方法
-- 新语法：将 BAPI 调用封装为类的静态方法
-
-## Demo 代码
+SE38 运行 `zac_bapi`（已随仓库下发）：
 
 ```abap
 REPORT zac_bapi.
 
 START-OF-SELECTION.
-  " 1. 创建航班预订
+  " 1. 组装预订数据（结构来自 BAPI 自带的参数类型）
   DATA: lt_booking TYPE TABLE OF bapisbook,
         ls_booking TYPE bapisbook,
         lt_return  TYPE TABLE OF bapiret2,
@@ -84,6 +60,7 @@ START-OF-SELECTION.
   ls_booking-class    = 'Y'.
   APPEND ls_booking TO lt_booking.
 
+  " 2. 调用 BAPI
   CALL FUNCTION 'BAPI_SBOOK_CREATE'
     IMPORTING
       booking_number = DATA(lv_bookid)
@@ -91,51 +68,101 @@ START-OF-SELECTION.
       booking_data   = lt_booking
       return         = lt_return.
 
-  " 2. 检查返回消息
+  " 3. 检查 RETURN 表（不是只看出参！）
   LOOP AT lt_return INTO ls_return WHERE type = 'E' OR type = 'A'.
     WRITE: / |错误: { ls_return-message }|.
   ENDLOOP.
 
-  " 3. 提交事务
+  " 4. 成功才提交，失败即回滚——BAPI 的事务铁律
   IF lv_bookid IS NOT INITIAL.
     CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
       EXPORTING wait = 'X'.
     WRITE: / |预订创建成功! 预订号: { lv_bookid }|.
   ELSE.
-    WRITE: / '预订创建失败'.
+    CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'.
+    WRITE: / '预订创建失败，已回滚'.
   ENDIF.
-
-  " 4. 查询预订详情
-  CALL FUNCTION 'BAPI_SBOOK_GETDETAIL'
-    EXPORTING
-      booking_number    = lv_bookid
-    IMPORTING
-      return            = ls_return
-    TABLES
-      booking_detail    = lt_booking.
-
-  LOOP AT lt_booking INTO ls_booking.
-    WRITE: / |预订详情: { ls_booking-carrid }-{ ls_booking-connid }-{ ls_booking-fldate }|.
-  ENDLOOP.
 ```
 
-## 代码拆解要点
+**你会看到什么：** 成功路径输出预订号；把 `customid` 改成不存在的客户再跑，走错误分支回滚——**两条路径都要亲手跑一遍**，体感"提交/回滚的分水岭"。
 
-1. BAPI 的标准调用模式（填充参数 → 调用 → 检查返回 → 提交）
-2. BAPI_RETURN_INFO 的字段含义
-3. BAPI_TRANSACTION_COMMIT 的 WAIT 参数作用
-4. 批量操作中的错误收集模式
-5. 在 BAPI Explorer 中查找相关 BAPI
+<!-- 配图（待截图后启用）：![BAPI Explorer 按层级浏览](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/14-bapi/bapi-explorer.png) -->
+
+## 知识点
+
+### 1. BAPI 是什么：规范化的 FM
+
+| 维度 | 普通 FM | BAPI |
+|------|---------|------|
+| 本质 | Function Module | RFC-enabled 的 FM |
+| 命名 | 任意 | `BAPI_<对象>_<动作>` |
+| 返回 | 各式各样 | 统一 **BAPIRET2** |
+| 事务 | 内部不定 | **从不自行 COMMIT**，由调用方决定 |
+| 发布 | 随意 | SAP 官方保证跨版本兼容 |
+
+一句话：**BAPI 是 SAP 承诺"按这个合同调用，升级不坑你"的标准接口**。改标准业务数据的唯一正道。
+
+### 2. 找 BAPI 的三条路
+
+1. **事务码 BAPI**（BAPI Explorer）：按业务对象层级浏览（Flight→Booking→Create）——最系统；
+2. **SE37 模糊搜索**：`BAPI_SBOOK*`、`BAPI_FLIGHT*`；
+3. **Where-Used 反查**：在标准程序里看 SAP 自己怎么调（第1课 Where-Used 技能复用）。
+
+### 3. BAPIRET2：唯一可信的结果来源
+
+| 字段 | 含义 |
+|------|------|
+| TYPE | **S** 成功 / **W** 警告 / **E** 错误 / **A** 中断 |
+| ID / NUMBER | 消息类与编号（第18课消息体系） |
+| MESSAGE | 拼好的消息文本（V1~V4 是占位变量） |
+| ROW / FIELD | 出错的行/字段（批量场景定位用） |
+
+**判据纪律：成功与否看 RET2 的 TYPE，不要拿"出参非空"当成功**——有的 BAPI 失败也回填出参。批量调用时收集全部 E/A 再统一决定提交或回滚。
+
+### 4. 事务控制：COMMIT 与 WAIT
+
+```abap
+CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
+  EXPORTING wait = 'X'.        " 同步等待落库再返回
+CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'.
+```
+
+- BAPI 是"SAP LUW"的一环：**调用后数据处于待提交状态**，COMMIT 生效、ROLLBACK 全撤（第5课 LUW 概念的高层封装）；
+- `WAIT = 'X'`：等数据库更新线程完成再返回——**提交后立刻查询/后续 BAPI 依赖刚写的数据时必须加**，否则可能读到旧状态；
+- 忘 COMMIT 的后果：程序看着成功了，对话结束数据被回滚——"幽灵数据"事故第一名。
+
+### 5. 封装：把 BAPI 藏进类里
+
+课程仓库的全局类 `zcl_ac_flight_service`（第13课全局类范例）就是范例：`create_booking( )` 内部完成"调 BAPI → 查 RET2 → 决定 COMMIT/ROLLBACK"，把范式固化成一行调用——第24课综合实战直接复用它。**范式写一次，业务处只表达意图。**
 
 ## 💡 实战经验
 
-- **如何找到合适的 BAPI？** 在 SE37 中用 `BAPI_*` 模糊搜索，或在 SAP 的 BAPI Explorer（事务码 BAPI）中按业务对象浏览。也可以 Google “SAP BAPI + 业务场景”
-- **RETURN 表比 RETURN 参数更重要**：很多 BAPI 的 RETURN 参数只返回一条消息，但 RETURN 表（BAPIRET2）会返回所有消息（成功/警告/错误）——务必检查 RETURN 表的 TYPE 字段
-- **BAPI_TRANSACTION_COMMIT 必须单独调用**：BAPI 修改数据后不会自动提交。必须调用 `BAPI_TRANSACTION_COMMIT`（或 `BAPI_TRANSACTION_ROLLBACK`）来完成或回滚事务
-- **BAPI 不能在 UPDATE TASK 中调用**：有些同学想在用户出口中调用 BAPI，但用户出口运行在 UPDATE TASK 中，BAPI 不支持——需要用 `CALL FUNCTION ... IN BACKGROUND TASK` 的方式处理
+!!! warning "直接 UPDATE 标准表是死罪"
+
+    `UPDATE sbook SET ...` 绕过了全部业务检查（座位、价格、凭证流），数据一致性当场崩坏，且升级必出问题。改标准业务数据的路径只有一条：BAPI/BDC。这条红线在任何项目规范里都排第一。
+
+!!! tip "批量 BAPI 的两种姿势"
+
+    有 xxxMULTI 版本的 BAPI 优先（一次传内表）；没有就循环调用——但**只 COMMIT 一次**：循环里逐条 COMMIT 既慢又破坏"整批原子性"。
+
+!!! tip "A 类型消息要当异常处理"
+
+    RET2 的 TYPE = 'A'（Abort）意味着调用半途被终止，后续状态不可预期——见到 A 与 E 同罪，立即回滚。
+
+## 📖 延伸阅读
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——BAPI 与 `BAPI_TRANSACTION_COMMIT` 条目；
+- [SAP Help Portal](https://help.sap.com) 搜 "BAPI"——各业务模块的 BAPI 清单。
 
 ## 课后思考
 
-1. BAPI 调用后忘记 COMMIT WORK 会怎样？
-2. 如何在 BAPI Explorer 中找到”修改航班预订”的 BAPI？
-3. 尝试将 BAPI 调用封装为类的静态方法（提示：CLASS-METHODS）。
+> 把你的回答写在**页面底部评论区**，注明题号，一起讨论。
+
+1. 调 BAPI 后忘 COMMIT，程序内看数据"在"、换个会话看"不在"——用 LUW 概念解释这个现象（第5课埋的线）。
+2. `WAIT = 'X'` 解决什么问题？不加的典型翻车场景是什么？
+3. 批量创建 100 条预订，其中第 37 条 RET2 报 E——你的处理流程是什么？（整批回滚 vs 跳过错行提交其余，两种策略各适合什么业务？）
+4. 动手：把 Demo 改成"失败也输出完整 RET2 明细（含 W 警告）"——把你的 LOOP 写出来。
+
+---
+
+下一课：[第15课：增强（Enhancement）](15-enhancement.md)

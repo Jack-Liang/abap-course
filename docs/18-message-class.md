@@ -1,85 +1,59 @@
 ---
-status: draft
+status: beta
 ---
 
-# 第18课：消息类（Message Class）与用户提示
+# 第18课：消息处理（Message Class）
 
-> 45分钟 | 阶段：高级篇
+> 45分钟 | 阶段：高级篇 | 建议边读边做
 
 ## 前置依赖
 
-- 第7课：了解选择屏幕事件（在 AT SELECTION-SCREEN 中使用过 MESSAGE）
-- 第5课：了解 sy-subrc 检查
+- [第7课](07-selection-screen.md)：`AT SELECTION-SCREEN` 校验里已经用过 MESSAGE；
+- [第3课](03-data-dictionary.md)：知道 SE91 是数据字典家族的一员。
 
 ## 问题引入
 
-你的报表用 WRITE 输出提示信息，但这些信息是"硬编码"在代码里的——"请输入航空公司代码"直接写在程序中。如果客户要求把所有提示改成英文呢？要改多少个地方？消息类就是把提示文本"集中管理"的机制——修改一处，全局生效，还支持多语言。
+提示文字硬编码在程序里："请输入航空公司代码"散落 30 处，客户说要中英双语——改到吐血。**消息类**把提示文本集中管理：一条消息 = 消息类 + 编号，文本住在 SE91 里可多语言维护，代码只引用编号。这也是第7课校验、第14课 BAPI RET2 背后共同的"消息体系"——今天把它收编。
 
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
 |------|------|------|
-| 场景引入 | 硬编码提示 vs 消息类的维护成本对比 | 3 分钟 |
-| Demo 演示 | 创建消息类，在程序中使用多语言消息 | 5 分钟 |
-| 代码拆解 | SE91 创建消息类、MESSAGE 语句、消息类型（E/W/I/S/A/X） | 28 分钟 |
-| 知识总结 | 消息类型速查表、多语言处理要点 | 6 分钟 |
+| 场景引入 | 硬编码提示的维护成本 | 3 分钟 |
+| Demo 跟做 | 建消息类（仓库已带）→ 三种场景用消息 | 10 分钟 |
+| 代码拆解 | 消息五类型 / WITH 占位 / INTO 内联 / RAISING | 24 分钟 |
+| 知识总结 | 消息类型行为表 | 5 分钟 |
 | 课后思考 | 练习 | 3 分钟 |
 
 ## 本课目标
 
-掌握消息类的创建和使用方法，理解不同消息类型的行为差异，能在程序中使用消息进行用户提示和错误处理。
+完成本课你将能够：
 
-## Demo
+- 在 SE91 创建消息类、维护消息（占位符 &1~&4）与翻译；
+- 按场景选对消息类型（S/E/W/I/A/X）并预判其行为；
+- 用 `WITH` 填占位、`MESSAGE ... INTO` 内联接文本；
+- 在 FM 里用 `RAISING` 把消息变成异常出口。
 
-创建航班系统消息类 ZAC_FLIGHT_MSG，定义常用消息（如"航班不存在"、"座位已满"等），在报表中选择屏幕校验、SQL 操作等场景中使用这些消息。
+## Demo：三种消息场景（分步跟做）
 
-## 知识点
+消息类 `zac_flight_msg`（含 5 条消息）已随仓库下发，SE91 打开对照：
 
-### 1. SAP 消息体系概述
-- 消息类型：S（Success）/ E（Error）/ W（Warning）/ I（Information）/ A（Abend）
-- 消息 ID 与消息编号
-- 消息在 SAP 体系中的作用
+| 编号 | 文本 |
+|------|------|
+| 001 | 航空公司代码 &1 不存在 |
+| 002 | 航班已满，无法预订 |
+| 003 | 预订成功：&1-&2-&3 |
+| 004 | 查询完成，共 &1 条记录 |
+| 005 | 数据已导出至 &1 |
 
-### 2. 消息类（Message Class）
-- SE91 创建消息类
-- 消息编号（3位数字：000-999）
-- 消息文本（最长 80 字符）
-- 占位符 &1 &2 &3 &4
-- 多语言维护
-
-### 3. 消息使用方式
-- MESSAGE id msgid TYPE msgty NUMBER msgnr WITH var1 var2 ...
-- 简写：MESSAGE e000(zac_flight_msg)
-- MESSAGE i... WITH（带变量）
-- RAISING 消息（在 Function Module 中）
-- MESSAGE INTO @DATA(lv_msg)（新语法：内联接收）
-
-### 4. 消息在 Function Module 中的使用
-- Exception 与消息的配合
-- RAISING 模式 vs 内联模式
-
-### 5. 消息在 BADI / 增强中的使用
-
-### 6. 实际场景
-- 输入校验时发出错误消息
-- 操作成功后提示成功消息
-- 批量处理中收集消息并汇总展示
-
-## Demo 代码
+SE38 运行 `zac_message`：
 
 ```abap
 REPORT zac_message.
 
-" 消息类 ZAC_FLIGHT_MSG 示例消息：
-" 001 航空公司代码 &1 不存在
-" 002 航班已满，无法预订
-" 003 预订成功：&1-&2-&3 座位 &4
-" 004 查询完成，共 &1 条记录
-" 005 数据已导出至 &1
+PARAMETERS: p_carrid TYPE s_carr_id OBLIGATORY.
 
-PARAMETERS: p_carrid TYPE s_carr_id OBLIGATORY,
-            p_connid TYPE sflight-connid.
-
+" 场景①：输入校验——E 类型拦截
 AT SELECTION-SCREEN ON p_carrid.
   SELECT SINGLE carrid FROM scarr INTO @DATA(lv_check)
     WHERE carrid = @p_carrid.
@@ -88,52 +62,128 @@ AT SELECTION-SCREEN ON p_carrid.
   ENDIF.
 
 START-OF-SELECTION.
+  " 场景②：成功提示——S 类型状态栏轻提示
   SELECT COUNT(*) FROM sflight
     WHERE carrid = @p_carrid
     INTO @DATA(lv_count).
-
-  " 成功消息
   MESSAGE s004(zac_flight_msg) WITH lv_count.
 
-  " 获取单条详情
+  " 场景③：文本内联接收——不弹出、拿字符串自己用
   SELECT SINGLE * FROM sflight INTO @DATA(ls_f)
-    WHERE carrid = @p_carrid AND connid = @p_connid.
-
+    WHERE carrid = @p_carrid AND connid = '0017'.
   IF sy-subrc <> 0.
-    " 新语法：消息内联接收
     MESSAGE e002(zac_flight_msg) INTO @DATA(lv_msg).
     WRITE: / lv_msg.
   ELSE.
-    " 判断是否已满
-    IF ls_f-seatsocc >= ls_f-seatsmax.
-      MESSAGE w002(zac_flight_msg).
-    ELSE.
-      WRITE: / |航班 { ls_f-carrid }-{ ls_f-connid }|.
-      WRITE: / |已占/最大: { ls_f-seatsocc }/{ ls_f-seatsmax }|.
-      WRITE: / |票价: { ls_f-price }|.
-    ENDIF.
+    WRITE: / |航班 { ls_f-carrid }-{ ls_f-connid }|.
+    WRITE: / |已占/最大: { ls_f-seatsocc }/{ ls_f-seatsmax }|.
+    WRITE: / |票价: { ls_f-price }|.
   ENDIF.
 ```
 
-## 代码拆解要点
+**跟做三步：**
 
-1. SE91 中创建消息类的操作步骤
-2. 消息占位符 &1 ~ &4 的使用
-3. MESSAGE ... WITH 的参数传递
-4. 消息类型（E/W/S/I/A）的区别
-5. MESSAGE INTO @DATA 的新语法用法
-6. 消息在输入校验中的使用
+1. 输入 `ZZ` 执行 → 字段旁红字"航空公司代码 ZZ 不存在"，弹回选择屏幕（E 的拦截行为）；
+2. 输入 `AA` 执行 → 状态栏绿字"查询完成，共 N 条记录"（S 的轻提示行为）；
+3. 看列表输出：若 0017 无数据，"航班已满，无法预订"以**普通文本**出现在列表里——`INTO` 把消息变成字符串，不弹不拦。
+
+## 知识点
+
+### 1. 消息体系三层
+
+```mermaid
+flowchart LR
+    A["消息类（SE91）<br/>zac_flight_msg"] --> B["消息编号<br/>001~999"]
+    B --> C["代码引用<br/>MESSAGE e001(zac_flight_msg)"]
+```
+
+- 每条消息文本 ≤ 约 70 字符，占位符最多 4 个（`&1`~`&4`）；
+- **多语言**：SE91 里维护译文（登录语言决定显示哪套）——硬编码永远做不到；
+- 消息类是可传输对象（第17课的货物之一）。
+
+### 2. 六种消息类型的行为差异（重点）
+
+| 类型 | 视觉 | 行为 | 典型场景 |
+|------|------|------|---------|
+| **S** | 状态栏 | 不中断，继续执行 | 成功/完成提示 |
+| **I** | 弹窗 | **暂停**，用户确认后继续 | 需要用户知晓的重要信息 |
+| **W** | 弹窗 | 暂停，可回车继续（再次执行不再拦） | 数据异常警告 |
+| **E** | 状态栏红字 | **中断当前处理**，返回上一屏 | 校验失败（第7课主用） |
+| **A** | 弹窗 | **终止**当前 LUW，回登录/初始 | 严重不一致 |
+| **X** | 无 | **产生 SHORT DUMP** | 程序员级错误（调试用） |
+
+**选型直觉：** 校验用 E、成功用 S、确认用 I、警告用 W；A/X 面向致命场景，业务代码罕见。
+
+!!! tip "E 在不同上下文的行为差异"
+
+    同一条 E：在选择屏幕校验里=弹回改输入（第7课）；在报表逻辑里=中断并回显；在 `MESSAGE ... INTO` 里=只取文本不中断。**类型决定行为，上下文决定表现形式**——理解这句，消息体系就通了。
+
+### 3. 占位与内联
+
+```abap
+MESSAGE e001(zac_flight_msg) WITH p_carrid.            " &1 = p_carrid
+MESSAGE s003(zac_flight_msg) WITH 'AA' '0017' '20260730'.  " &1&2&3
+
+MESSAGE e002(zac_flight_msg) INTO DATA(lv_msg).        " 文本进变量：
+" 不显示、不中断——用于拼日志、喂给 BAL、收集批量错误
+```
+
+`INTO` 是"消息的静音模式"：批量处理收集错误文本（第12课导入日志的正规做法）全靠它。
+
+### 4. 通用形式与动态消息
+
+```abap
+" 完整形式（能看到四个系统变量的真身——第14课 RET2 的 ID/NUMBER 就是它们）
+MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+        WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+
+" 自由文本消息（不需要消息类，原型期用；正式代码回到消息类）
+MESSAGE '该航班暂无预订记录' TYPE 'I'.
+```
+
+任何 FM/BAPI 执行后，系统消息都留在 `sy-msg*` 四件套里——RET2 的本质就是"把这套东西对象化打包"。
+
+### 5. FM 里的 RAISING：消息即异常出口
+
+```abap
+FUNCTION zac_xxx.
+  ...
+  IF lv_not_found = abap_true.
+    MESSAGE e001(zac_flight_msg) WITH iv_carrid RAISING not_found.
+  ENDIF.
+ENDFUNCTION.
+```
+
+一条语句同时完成"触发消息 + 抛经典异常"——调用方 `EXCEPTIONS not_found = 1` 接住（第9课闭环）。这是老 FM 代码里最常见的信息出口写法。
 
 ## 💡 实战经验
 
-- **消息号从 001 开始**：SAP 建议消息号从 001 开始连续编号，中间不要留空——方便后续查找和维护
-- **& 占位符的妙用**：消息文本中最多可以有 4 个 `&` 占位符，调用时用 `MESSAGE msgid TYPE 'E' WITH lv_var1 lv_var2` 替换。比字符串拼接更规范
-- **TYPE 'E' 会中断程序**：消息类型 E（Error）会弹出错误对话框并中断当前处理流程。在 INITIALIZATION 中不要用 TYPE 'E'——会导致选择屏幕无法加载
-- **消息类支持多语言**：登录 SAP 时选择的语言不同，同一条消息可以显示不同文本。在 SE91 中可以维护多语言版本的翻译
-- **WITH TITLE 的用法**：`MESSAGE ... WITH ... DISPLAY LIKE 'W'` 可以改变消息的显示方式——比如用 E 类型存储但以 W 类型展示，给用户"警告"而不是"阻断"
+!!! tip "消息文本也是"配置"，也要走传输"
+
+    改 SE91 文本 = 改可传输对象，进 Customizing/Workbench 请求。别在 QAS/PRD 上"顺手改一下"——环境漂移从一条改过的提示开始。
+
+!!! tip "占位符别超过 4 个，文本别塞业务逻辑"
+
+    一条消息表达一件事；把整段报错细节塞消息文本的，翻译和检索都会痛不欲生。细节走日志（BAL），消息只留人话。
+
+!!! warning "W 类型的"回车继续"会骗人"
+
+    W 按回车后第二次同样操作不再拦——用户习惯性回车连按，警告形同虚设。真正要拦的用 E，W 只用于"知情后放行"。
+
+## 📖 延伸阅读
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——`MESSAGE` 条目（六种类型的完整语义表）；
+- 消息类对象见仓库 `src/zac_flight_msg.msag.xml`——abapGit 视角的消息类形态。
 
 ## 课后思考
 
-1. 消息类型 E 和 A 有什么区别？在什么场景用哪个？
-2. 如何在 Function Module 中将消息传递给调用方？
-3. 试着在消息文本中使用所有 4 个占位符。
+> 把你的回答写在**页面底部评论区**，注明题号，一起讨论。
+
+1. S/I/W/E 四种类型各自"中断吗？弹哪？回哪？"——不看表格复述一遍。
+2. `MESSAGE ... INTO` 解决什么问题？给第12课导入程序的错误日志用上它（贴代码）。
+3. 把消息 003（预订成功）补上第 4 个占位符 `&4`（座位号）——SE91 里怎么改、代码里怎么传？
+4. `sy-msgid/msgty/msgno/msgv1~v4` 与 BAPIRET2（第14课）是什么关系？
+
+---
+
+下一课：[第19课：新语法专题](19-new-syntax.md)
