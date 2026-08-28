@@ -1,106 +1,69 @@
 ---
-status: draft
+status: beta
 ---
 
 # 第4课：内表与结构体操作
 
-> 45分钟 | 阶段：基础篇
+> 45分钟 | 阶段：基础篇 | 建议边读边做
 
 ## 前置依赖
 
-- 第2课：了解 ABAP 基本数据类型和 DATA 声明
-- 第3课：了解 SFLIGHT 表结构（知道有哪些字段）
+- [第2课](02-hello-world.md)：会创建/激活/运行程序，了解基本类型；
+- [第3课](03-data-dictionary.md)：了解 SFLIGHT 表结构。
 
 ## 问题引入
 
-SFLIGHT 有几千条数据，你用 `SELECT SINGLE` 一次只能取一条——怎么把所有数据一次性"装起来"，然后按航空公司分组、排序、查找特定航线？手动数显然不现实。内表就是 ABAP 的"容器"，专门用来批量处理数据。
+SFLIGHT 有几千行，`SELECT SINGLE` 一次取一条显然不现实。怎么把数据一次性"装起来"，再分组、排序、查找？答案就是**内表（Internal Table）**——ABAP 的内存容器，也是这门语言几十年来的核心数据结构。本课同时引入一批现代写法（`FOR` / `GROUP BY` / `REDUCE`），它们会让你的内表代码从"过程式循环"进化为"表达式"。
 
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
 |------|------|------|
-| 场景引入 | 一条一条查数据 vs 批量处理的效率对比 | 3 分钟 |
-| Demo 演示 | 批量查询航班数据，分组排序查找 | 5 分钟 |
-| 代码拆解 | 内表声明/操作/新语法 FOR/CORRESPONDING/REDUCE | 30 分钟 |
-| 知识总结 | 三种内表类型对比表、常用操作速查 | 5 分钟 |
+| 场景引入 | 逐条查 vs 批量处理 | 3 分钟 |
+| Demo 跟做 | 运行 zac_internal_table，看四段输出 | 5 分钟 |
+| 代码拆解 | 结构体/内表类型/常用操作/新语法 | 29 分钟 |
+| 知识总结 | 三种内表选型表、操作速查 | 6 分钟 |
 | 课后思考 | 练习 | 2 分钟 |
 
 ## 本课目标
 
-掌握内表的声明与操作方法，理解不同内表类型的适用场景，熟练使用内表常用操作。
+完成本课你将能够：
 
-## Demo
+- 用 `TYPES ... BEGIN OF` 定义自己的结构体和表类型；
+- 说出 STANDARD / SORTED / HASHED 三种内表的差异并正确选型；
+- 熟练使用 APPEND / SORT / LOOP / READ / MODIFY / DELETE；
+- 用 `FOR`、`FOR GROUPS`、`REDUCE`、`CORRESPONDING` 写现代内表代码。
 
-将 SFLIGHT 数据读入内表，按航空公司分组排序，筛选出指定航空公司的航班，查找某条航线信息并输出。
+## Demo：批量处理航班数据（分步跟做）
 
-## 知识点
-
-### 1. 结构体声明
-- TYPES BEGIN OF ty_structure.
-- TYPES: field1 TYPE c, field2 TYPE i.
-- TYPES END OF ty_structure.
-- DATA ls_struct TYPE ty_structure.
-
-### 2. 内表声明方式
-- TYPE TABLE OF（标准写法）
-- TYPE STANDARD TABLE（标准表，无排序）
-- TYPE SORTED TABLE（排序表，定义唯一键，自动排序）
-- TYPE HASHED TABLE（哈希表，定义唯一键，查找最快）
-- 带表头行（WITH HEADER LINE）vs 不带——推荐不带的现代写法
-
-### 3. 内表操作
-- APPEND：追加到末尾
-- INSERT：插入到指定位置
-- COLLECT：按汇总字段累加（旧语法，了解即可）
-- SORT BY：排序（升序 ASCENDING / 降序 DESCENDING）
-- LOOP AT ... WHERE：条件循环
-- READ TABLE ... WITH KEY：按字段值查找
-- READ TABLE ... WITH TABLE KEY：按表键查找
-- READ TABLE ... INDEX：按索引查找
-- BINARY SEARCH：二分查找（需先 SORT）
-- MODIFY ... TRANSPORTING：只更新指定字段
-- DELETE ... WHERE：条件删除
-- DESCRIBE TABLE：获取行数
-
-### 4. 新语法
-- FOR ... IN 循环表达式
-- CORRESPONDING #( ... ) 赋值操作符
-- LOOP AT ... INTO @DATA(ls)
-- LOOP AT ... GROUP BY 分组循环
-- REDUCE 累加（简单介绍）
-
-## Demo 代码
+程序 `zac_internal_table` 已随仓库下发，SE38 直接运行。它做四件事，输出对照着看：
 
 ```abap
 REPORT zac_internal_table.
 
 START-OF-SELECTION.
-  " 读取航班数据
+  " ① 批量读取：一次 SELECT 把 SFLIGHT 全部装进内存
   SELECT * FROM sflight INTO TABLE @DATA(lt_sflight).
 
-  " 新语法 FOR 循环 —— 提取不重复的航空公司代码
+  " ② FOR 表达式——提取不重复的航空公司（SORTED TABLE 自动去重）
   DATA(lt_carrids) = VALUE SORTED TABLE OF s_carr_id(
     FOR ls IN lt_sflight
     NEXT ( ls-carrid )
   ).
+  WRITE: / |航空公司数量: { lines( lt_carrids ) }|.
 
-  " CORRESPONDING 赋值 —— 将结构转换为另一种结构
-  TYPES: BEGIN OF ty_summary,
-           carrid TYPE s_carr_id,
-           count  TYPE i,
-         END OF ty_summary.
-  DATA(lt_result) = VALUE ty_summary_tab(
+  " ③ FOR GROUPS——按航空公司分组统计航班数
+  DATA(lt_summary) = VALUE SORTED TABLE OF sflight(
     FOR GROUPS grp OF ls IN lt_sflight
-    GROUP BY ( carrid = ls-carrid )
-    ( carrid = grp-carrid count = COUNT( * ) )
+      GROUP BY ( carrid = ls-carrid )
+      LET cnt = COUNT( * ) IN
+      ( carrid = grp-carrid seatsocc = cnt )
   ).
-
-  " LOOP + INTO @DATA
-  LOOP AT lt_sflight INTO @DATA(ls_f) WHERE carrid = 'AA'.
-    WRITE: / |航班: { ls_f-carrid } { ls_f-connid } { ls_f-fldate }|.
+  LOOP AT lt_summary INTO @DATA(ls_grp).
+    WRITE: / |{ ls_grp-carrid }: { ls_grp-seatsocc } 条航班|.
   ENDLOOP.
 
-  " REDUCE 累加 —— 统计总已占座位
+  " ④ REDUCE——全表累加总已占座位
   DATA(lv_total) = REDUCE i(
     INIT sum = 0
     FOR ls IN lt_sflight
@@ -109,23 +72,170 @@ START-OF-SELECTION.
   WRITE: / |总已占座位: { lv_total }|.
 ```
 
+**你会看到什么：** 第一行是航空公司数量（十几家）；随后每家航空公司一行"xx: N 条航班"；最后一行是全表座位占用总数。第⑤节逐段拆解。
+
+## 知识点
+
+### 1. 结构体：内表里的"一行"
+
+```abap
+TYPES: BEGIN OF ty_summary,
+         carrid TYPE s_carr_id,
+         count  TYPE i,
+       END OF ty_summary.
+
+DATA ls_summary TYPE ty_summary.                     " 一行
+DATA lt_summary TYPE STANDARD TABLE OF ty_summary    " 一容器行
+                   WITH EMPTY KEY.
+```
+
+- 结构体 = 若干字段的组合；内表 = 结构体的可重复集合；
+- **现代写法别忘了 `WITH EMPTY KEY`**——不带键的标准表在严格语法检查下要求显式声明键，`EMPTY KEY` 表示"这表没键，随便排"；
+- DDIC 表也可以直接当结构体/表类型用：`TYPE sflight`、`TYPE STANDARD TABLE OF sflight`。
+
+### 2. 三种内表类型：选型是本课的灵魂
+
+| 类型 | 排序 | 键 | READ 性能 | 适用场景 |
+|------|------|----|----------|---------|
+| `STANDARD TABLE` | 保持插入序 | 可无键 | 线性 O(n) | 顺序遍历、临时收集、结果集 |
+| `SORTED TABLE` | 自动按键排序 | 唯一/非唯一 | 二分 O(log n) | 需要**有序**或按键频繁查 |
+| `HASHED TABLE` | 无序 | 仅唯一键 | 哈希 O(1) | 大表按键精确查找 |
+
+```abap
+DATA lt_std    TYPE STANDARD TABLE OF sflight WITH EMPTY KEY.
+DATA lt_srt    TYPE SORTED TABLE OF sflight WITH NON-UNIQUE KEY carrid.
+DATA lt_hash   TYPE HASHED TABLE OF sflight  WITH UNIQUE KEY carrid connid fldate.
+```
+
+**选型直觉：** 拿来就遍历 → STANDARD；边插边要求有序/按键二分 → SORTED；几万行按键随机查 → HASHED。（查找复杂度背后的数据结构原理，感兴趣的同学可延伸阅读资料库里 Hello 算法——数组/有序表/哈希表三连。）
+
+!!! warning "WITH HEADER LINE 已死"
+
+    `DATA lt TYPE ... WITH HEADER LINE`（表名既是表又是工作区）是上个时代的写法，官方已不推荐且在 OO 上下文中不可用。新代码一律：表 + 显式工作区（`ls_`）或 `FIELD-SYMBOLS`。
+
+### 3. 常用操作速查
+
+```abap
+" 装载与追加
+APPEND ls TO lt.                    " 标准表尾部追加
+INSERT ls INTO TABLE lt.            " 通用（排序/哈希表按键定位）
+COLLECT ls INTO lt.                 " 数值字段按键累加（旧式汇总）
+
+" 排序与统计
+SORT lt BY carrid ASCENDING seatsocc DESCENDING.
+DATA(lv_lines) = lines( lt ).       " 行数（现代写法，替代 DESCRIBE TABLE）
+
+" 循环
+LOOP AT lt INTO DATA(ls) WHERE carrid = 'AA'.      " 只读遍历
+LOOP AT lt ASSIGNING FIELD-SYMBOL(<fs>).            " 就地修改（见下）
+ENDLOOP.
+
+" 查找
+READ TABLE lt INTO ls INDEX 1.                    " 按行号
+READ TABLE lt INTO ls WITH KEY carrid = 'AA'.     " 按内容（线性）
+READ TABLE lt INTO ls WITH TABLE KEY carrid = 'AA'. " 按表键（SORTED/HASHED 走算法）
+IF sy-subrc = 0. ... ENDIF.
+
+" 修改与删除
+MODIFY lt FROM ls INDEX 5 TRANSPORTING seatsocc.  " 只搬指定字段
+DELETE lt WHERE carrid = 'AA'.
+CLEAR lt.                                          " 清空（保留内存）
+FREE lt.                                           " 清空并释放内存
+```
+
+!!! warning "BINARY SEARCH 的隐形炸弹"
+
+    `READ TABLE ... BINARY SEARCH` 要求表**已按查找字段排序**。不排序它照样"认真"二分——返回**随机错误行且无任何警告**。要么先 SORT，要么直接用 SORTED/HASHED 表 + `WITH TABLE KEY`，把正确性交给类型系统。
+
+### 4. 循环中改数据：ASSIGNING vs INTO
+
+```abap
+" INTO：拷贝一行到 ls，改 ls 不影响原表，需要 MODIFY 回写
+LOOP AT lt INTO ls.
+  ls-seatsocc = ls-seatsocc + 1.
+  MODIFY lt FROM ls TRANSPORTING seatsocc.   " 又一步，啰嗦
+ENDLOOP.
+
+" ASSIGNING：FIELD-SYMBOL 直接指向原表行，改了就是改了
+LOOP AT lt ASSIGNING FIELD-SYMBOL(<fs>).
+  <fs>-seatsocc = <fs>-seatsocc + 1.
+ENDLOOP.
+```
+
+大数据量表循环修改，`ASSIGNING` 少一次行拷贝，是默认选择。
+
+### 5. 新语法四件套（Demo 逐段拆解）
+
+**① `FOR ... IN`：把循环变成表达式**
+
+```abap
+DATA(lt_carrids) = VALUE SORTED TABLE OF s_carr_id(
+  FOR ls IN lt_sflight
+  NEXT ( ls-carrid ) ).
+```
+
+左边是 `VALUE 目标类型( 内容 )`，内容由 FOR 逐行投喂——一个表达式完成"遍历+投影+装载"，SORTED 类型顺手把重复值去掉了。
+
+**② `FOR GROUPS`：ABAP 层的分组统计**
+
+```abap
+FOR GROUPS grp OF ls IN lt_sflight
+  GROUP BY ( carrid = ls-carrid )
+  LET cnt = COUNT( * ) IN
+  ( carrid = grp-carrid seatsocc = cnt )
+```
+
+- `GROUP BY` 定义分组键，`grp` 代表组键、组内成员可再 `FOR IN GROUP grp` 展开；
+- `LET ... IN` 在表达式里声明临时变量（这里是组内行数 `COUNT(*)`）；
+- 对应 SQL 的 `GROUP BY`——数据已在内存时用它，别再倒回数据库。
+
+**③ `REDUCE`：折叠成单值**
+
+```abap
+DATA(lv_total) = REDUCE i(
+  INIT sum = 0                 " 折叠起点
+  FOR ls IN lt_sflight         " 逐行
+  NEXT sum = sum + ls-seatsocc ).  " 折叠动作
+```
+
+**④ `CORRESPONDING`：同名字段自动搬运**
+
+```abap
+DATA ls_flight TYPE sflight.
+DATA ls_sum    TYPE ty_summary.
+ls_sum = CORRESPONDING #( ls_flight ).   " 只搬两边同名的字段（carrid）
+```
+
+结构不同但有公共字段时免掉逐字段赋值；进阶参数 `MAPPING`/`EXCEPT` 第19课专题展开。
+
 ## 💡 实战经验
 
-- **带表头行 vs 不带表头行**：`WITH HEADER LINE` 是老语法，SAP 官方已不推荐。新项目统一使用不带表头行的内表，用 `FIELD-SYMBOLS` 或 `@DATA` 访问当前行
-- **READ TABLE 加 BINARY SEARCH 的前提**：内表必须先按查找字段 SORT 排序！不排序直接用 BINARY SEARCH 结果会错，且 ABAP 不报警告
-- **LOOP 中修改内表**：用 `LOOP AT lt INTO ls WHERE ...` 只能读取，要修改用 `LOOP AT lt ASSIGNING FIELD-SYMBOL(<fs>) WHERE ...`，直接改 `<fs>-field = xxx`，不需要再 MODIFY
-- **REDUCE 的性能**：对于大数据量内表，REDUCE 和 LOOP + 累加变量性能差异不大，但 REDUCE 的代码可读性更好——推荐使用
+!!! tip "大数据量表先想键，再想循环"
 
-## 代码拆解要点
+    几万行内表要在循环里按键查另一张内表？把被查表建成 `HASHED TABLE WITH UNIQUE KEY`，O(1) 命中——嵌套双层 STANDARD 循环是性能杀手排行榜第一名。
 
-1. 内表的三种类型及适用场景
-2. @DATA 在 LOOP 中的作用域
-3. FOR ... IN 表达式的语法结构
-4. GROUP BY 在 ABAP 层的分组方式
-5. REDUCE 的 INIT / NEXT 结构
+!!! tip "lines( ) 替代 DESCRIBE TABLE"
+
+    取行数用内置函数 `lines( lt )`，可内联进表达式：`IF lines( lt ) > 0.`，比 `DESCRIBE TABLE lt LINES lv_n` 干净得多。
+
+!!! tip "REDUCE vs LOOP 累加：性能等价，选可读性"
+
+    两者编译后差别可忽略；REDUCE 让"折叠意图"一目了然。团队规范二选一统一即可。
+
+## 📖 延伸阅读
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——`VALUE / FOR / REDUCE / CORRESPONDING` 各条目；
+- 标准表/排序表/哈希表的查找复杂度差异，本质是数据结构问题，延伸理解见参考资料库背景资料区。
 
 ## 课后思考
 
-1. STANDARD TABLE / SORTED TABLE / HASHED TABLE 三种内表分别适合什么场景？
-2. READ TABLE 加 BINARY SEARCH 的前提条件是什么？
-3. 用新语法重构一个你熟悉的内表操作。
+> 把你的回答写在**页面底部评论区**，注明题号，一起讨论。
+
+1. 三种内表各适合什么场景？给 SFLIGHT 做"按 carrid+connid+fldate 查一个航班"的内存缓存，你选哪种？
+2. `READ TABLE ... BINARY SEARCH` 的前提是什么？违反了会发生什么（为什么说它是"隐形炸弹"）？
+3. 用 `FOR GROUPS` 改写：统计每家航空公司的**平均**票价（提示：组内再 REDUCE 或两次分组）。
+4. `LOOP AT ... ASSIGNING` 相比 `INTO` 的优势在哪？什么情况下必须小心 `<fs>` 的生命周期？
+
+---
+
+下一课：[第5课：Open SQL——增删改查](05-open-sql.md)

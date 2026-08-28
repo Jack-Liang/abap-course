@@ -1,93 +1,49 @@
 ---
-status: draft
+status: beta
 ---
 
 # 第5课：Open SQL —— 增删改查
 
-> 45分钟 | 阶段：基础篇
+> 45分钟 | 阶段：基础篇 | 建议边读边做
 
 ## 前置依赖
 
-- 第4课：会使用内表存储数据
-- 第3课：了解 SFLIGHT / SCARR / SPFLI 表结构
+- [第4课](04-internal-table.md)：会用内表承接批量数据；
+- [第3课](03-data-dictionary.md)：了解 SFLIGHT / SCARR / SPFLI 结构与主外键。
 
 ## 问题引入
 
-前几课我们学会了在内表里处理数据——排序、分组、查找。但内表里的数据从哪来？答案是数据库。真实业务中，数据持久化存储在数据库表里，ABAP 程序需要一套标准语法来与数据库交互：查询、新增、修改、删除。Open SQL 就是 ABAP 提供的数据库操作语言，它屏蔽了底层差异，让开发者用统一的语法操作 SAP 数据库。
+内表里的数据从哪来？数据库。写进数据库的数据怎么改、怎么删？ABAP 给的答案是 **Open SQL**：一套内嵌在 ABAP 里的数据库操作语法——不用拼 SQL 字符串、自动处理 Client 隔离、同一套写法跑在任意 SAP 支持的数据库上。本课把增删改查一次打齐，并建立起"事务"的概念。
 
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
 |------|------|------|
-| 场景引入 | 为什么需要 Open SQL？SQL 与内表的关系 | 3 分钟 |
-| Demo 演示 | 对 SFLIGHT 执行查询、新增、修改、删除 | 5 分钟 |
-| 代码拆解 | SELECT / INSERT / UPDATE / DELETE 语法详解、JOIN、聚合、新语法 | 30 分钟 |
-| 知识总结 | Open SQL 操作速查表、事务概念 | 5 分钟 |
+| 场景引入 | Open SQL 与内表的分工 | 3 分钟 |
+| Demo 跟做 | 七连操作：查×4 + 增 + 改 + 删 | 10 分钟 |
+| 代码拆解 | SELECT 家族 / JOIN / 聚合 / 写操作 / LUW | 25 分钟 |
+| 知识总结 | 语句速查表、事务检查单 | 5 分钟 |
 | 课后思考 | 练习 | 2 分钟 |
 
 ## 本课目标
 
-全面掌握 Open SQL 的 SELECT / INSERT / UPDATE / DELETE 操作，理解不同查询方式的区别和适用场景。
+完成本课你将能够：
 
-## Demo
+- 用 SELECT SINGLE / INTO TABLE / UP TO n ROWS / WHERE / ORDER BY 完成日常查询；
+- 写多表 INNER/LEFT JOIN 并知道连接字段为什么要走索引；
+- 用 GROUP BY + 聚合函数做统计；
+- 用 `@变量` 占位符和 `@DATA(...)` 内联接收写"现代风格"的 SQL；
+- 安全地执行 INSERT / UPDATE / DELETE / MODIFY，并理解 COMMIT / ROLLBACK 背后的 LUW。
 
-对 SFLIGHT 执行多种查询（单行、多行、JOIN），新增一条航班记录，修改已占座位数，删除一条记录。
+## Demo：SFLIGHT 七连操作（分步跟做）
 
-## 知识点
-
-### 1. SELECT 语句详解
-- SELECT SINGLE ... INTO vs SELECT ... INTO TABLE
-- SELECT ... UP TO n ROWS
-- WHERE 条件、LIKE、IN、BETWEEN、IS NULL/NOT NULL
-- ORDER BY
-- DISTINCT
-
-### 2. JOIN 查询
-- INNER JOIN / LEFT OUTER JOIN
-- 多表 JOIN 的注意事项（性能、数据量）
-
-### 3. 聚合函数
-- COUNT / SUM / AVG / MIN / MAX
-- GROUP BY / HAVING
-
-### 4. 新语法
-- `@` 占位符在 WHERE 条件中的使用
-- `@DATA` 内联声明结果（INTO @DATA / INTO TABLE @DATA(lt)）
-- `%_HINTS` 性能提示（简要提及）
-
-### 5. INSERT 语句
-- 单行插入（INSERT dbtab FROM wa）
-- 内表批量插入（INSERT dbtab FROM TABLE lt_itab）
-
-### 6. UPDATE 语句
-- SET ... WHERE 条件更新
-- 内表批量更新
-
-### 7. MODIFY 语句
-- 新增或修改，自动判断（存在则改，不存在则增）
-
-### 8. DELETE 语句
-- WHERE 条件删除
-- 内表批量删除
-
-### 9. 数据库事务与 LUW 概念
-- COMMIT WORK：提交事务
-- ROLLBACK WORK：回滚事务
-- SAP LUW 与数据库 LUW 的区别（简要介绍，第14课深化）
-
-## Demo 代码
+运行 `zac_sql_crud`（已随仓库下发），对照下面七段看输出：
 
 ```abap
-*&---------------------------------------------------------------------*
-*& Report ZAC_SQL_CRUD
-*&---------------------------------------------------------------------*
-*& 第5课：Open SQL —— 增删改查
-*& 演示 SELECT/INSERT/UPDATE/DELETE、JOIN、聚合、@占位符
-*&---------------------------------------------------------------------*
 REPORT zac_sql_crud.
 
 START-OF-SELECTION.
-  " 1. 单行查询
+  " 1. 单行查询：按键取一条
   SELECT SINGLE * FROM sflight
     WHERE carrid = 'AA' AND connid = '0017'
     INTO @DATA(ls_sflight).
@@ -95,7 +51,7 @@ START-OF-SELECTION.
     WRITE: / |找到航班: { ls_sflight-carrid }-{ ls_sflight-connid }|.
   ENDIF.
 
-  " 2. 多行查询 + @占位符
+  " 2. 多行查询 + @占位符 + 限量
   DATA(lv_rows) = 10.
   SELECT * FROM sflight
     WHERE fldate >= '20260101'
@@ -103,7 +59,7 @@ START-OF-SELECTION.
     UP TO @lv_rows ROWS.
   WRITE: / |查询到 { lines( lt_sflight ) } 条记录|.
 
-  " 3. JOIN 查询
+  " 3. 三表 JOIN
   SELECT f~carrid, f~connid, f~fldate, c~carrname,
          p~cityfrom, p~cityto
     FROM sflight AS f
@@ -116,7 +72,7 @@ START-OF-SELECTION.
     WRITE: / |{ ls_j-carrname } { ls_j-cityfrom } → { ls_j-cityto }|.
   ENDLOOP.
 
-  " 4. 聚合
+  " 4. 聚合统计
   SELECT carrid, COUNT(*) AS cnt, SUM( seatsocc ) AS total
     FROM sflight WHERE carrid = 'AA'
     GROUP BY carrid
@@ -126,17 +82,17 @@ START-OF-SELECTION.
     WRITE: / |AA 航班共 { ls_st-cnt } 条, 总座位 { ls_st-total }|.
   ENDIF.
 
-  " 5. INSERT
+  " 5. 新增一条航班（演示数据，随便编一个日期）
   DATA(ls_new) = VALUE sflight(
     carrid = 'AA' connid = '0017' fldate = '20260730'
     seatsmax = 200 seatsocc = 0 ).
   INSERT sflight FROM @ls_new.
 
-  " 6. UPDATE
+  " 6. 修改：占座 +1
   UPDATE sflight SET seatsocc = seatsocc + 1
     WHERE carrid = 'AA' AND connid = '0017' AND fldate = '20260730'.
 
-  " 7. DELETE
+  " 7. 删除：清理演示数据
   DELETE FROM sflight
     WHERE carrid = 'AA' AND connid = '0017' AND fldate = '20260730'.
 
@@ -144,26 +100,124 @@ START-OF-SELECTION.
   WRITE: / |操作已完成|.
 ```
 
+**你会看到什么：** 依次输出找到的航班、多行查询条数、JOIN 出的城市对列表、AA 的统计行，最后增→改→删一气呵成（第 5-7 步操作的是同一条演示数据，跑完不留痕）。
+
+## 知识点
+
+### 1. SELECT 家族选型
+
+| 写法 | 场景 | 没找到时 |
+|------|------|---------|
+| `SELECT SINGLE ... WHERE 全键` | 按主键取一条 | `sy-subrc = 4` |
+| `SELECT ... INTO TABLE` | 批量取回内表 | `sy-subrc = 4` |
+| `SELECT ... UP TO n ROWS` | 看样本、防大结果集 | — |
+| `SELECT SINGLE ... UP TO 1 ROWS` | 非全键条件取一条（语义更诚实） | 同上 |
+
+- **WHERE 工具箱**：`= <> > <`、`BETWEEN`、`LIKE 'A%'`、`IN @s_option`（选择屏幕区间直接进 SQL，第7课）、`IS NULL`；
+- **ORDER BY** 在数据库端排序（占用排序区，大结果集慎用，能排早排）；
+- **DISTINCT** 去重——`SELECT DISTINCT carrid FROM sflight` 一行拿到全部航空公司。
+
+!!! tip "SELECT * 的罪与罚"
+
+    原型期随便用；生产代码请列出字段——`SELECT *` 会把用不到的长文本/大字段也搬进内存，宽表上代价显著。例外：真要全字段（`INTO TABLE` 接整行结构）时 `*` 反而合理。
+
+### 2. JOIN：把分开的表拼成业务视图
+
+```abap
+FROM sflight AS f
+INNER JOIN scarr AS c ON f~carrid = c~carrid     " 只留两边都有的
+LEFT OUTER JOIN ...                               " 保左全量，右边补空
+```
+
+- SFLIGHT 模型的业务语义天然靠 JOIN 还原：航班（事实）+ 公司/航线（维表）；
+- **性能直觉：ON 的连接字段走索引**（主键自带，第3课建的外键/索引在此刻发挥作用）；
+- 三表以上 JOIN 或 JOIN + 复杂聚合时，想想是不是该做成 CDS 视图（第20课的正主）。
+
+### 3. 聚合与分组
+
+```abap
+SELECT carrid, COUNT(*) AS cnt, SUM( seatsocc ) AS total, AVG( price ) AS avg_price
+  FROM sflight
+  WHERE fldate >= '20260101'
+  GROUP BY carrid
+  HAVING COUNT(*) > 10          " 分组后再过滤
+  INTO TABLE @DATA(lt_stats).
+```
+
+- **WHERE 过滤行（分组前），HAVING 过滤组（分组后）**；
+- SELECT 列表里出现的非聚合字段必须出现在 GROUP BY 里；
+- 聚合在数据库端完成——别把几百万行拉到 ABAP 里再 REDUCE，**能下推就下推**。
+
+### 4. 现代语法三件套
+
+```abap
+WHERE carrid = @lv_carrid          " ① @ 占位符：宿主变量，新旧分界线
+INTO @DATA(ls_flight)              " ② 内联声明接收
+UP TO @lv_rows ROWS                " ③ 动态限量
+```
+
+7.40 之前写 `WHERE carrid = lv_carrid`（靠位置约定），之后必须 `@` 前缀——看到 `@` 就知道这是"ABAP 与 SQL 的交界处"。`%_HINTS` 数据库提示（如 Oracle 的 hints）属于优化末期手段，知道有这东西即可。
+
+### 5. 写操作：INSERT / UPDATE / MODIFY / DELETE
+
+```abap
+" 单行 & 批量（批量性能远好于循环单行）
+INSERT sflight FROM @ls_new.
+INSERT sflight FROM TABLE @lt_new.
+
+UPDATE sflight SET seatsocc = seatsocc + 1 WHERE ...   " 条件更新（也可 FROM @wa 全行覆盖）
+UPDATE sflight FROM TABLE @lt_changes.                  " 批量按主键更新
+
+MODIFY sflight FROM @ls_new.        " 存在则 UPDATE，不存在则 INSERT（省心但有歧义感）
+
+DELETE FROM sflight WHERE ....      " 条件删除
+```
+
+- `sy-dbcnt`：每条写操作影响的**行数**——UPDATE 后检查它比只看 sy-subrc 更能发现"条件写歪了只改了 0 行"；
+- **UPDATE/DELETE 不带 WHERE = 全表操作**，生产环境十大事故榜首。
+
+### 6. 事务与 LUW：写完不 COMMIT = 白写
+
+```abap
+INSERT sflight FROM @ls_new.   " 此时改动只在当前数据库会话可见
+...
+COMMIT WORK.                   " 落盘，对所有人可见
+" 或者反悔：
+ROLLBACK WORK.                 " 撤销本次 LUW 的全部写操作
+```
+
+- **数据库 LUW**：从上一条修改语句到 COMMIT/ROLLBACK 之间的一段；
+- **SAP LUW**：SAP 的逻辑工作单元概念——一个对话步骤/一个 BAPI 事务块，可能横跨多个数据库 LUW，第14课讲 BAPI 时会看到 `BAPI_TRANSACTION_COMMIT` 正是 SAP LUW 的标准收口；
+- 本课记住三条：**写操作默认不自动提交；要么 COMMIT 要么 ROLLBACK，别悬着；一个业务动作的所有写操作放进同一个 LUW**（要么全成，要么全撤）。
+
 ## 💡 实战经验
 
-- **COMMIT WORK 不能忘**：INSERT / UPDATE / DELETE 不会自动提交，必须显式 `COMMIT WORK` 才能将修改写入数据库。忘记 COMMIT 是新手最常见的 bug 之一
-- **避免 SELECT ***：`SELECT *` 会读取所有字段，包括不需要的大文本字段，浪费内存和网络。生产代码应明确列出所需字段，如 `SELECT carrid, connid, fldate FROM sflight`
-- **UPDATE 一定要加 WHERE**：不带 WHERE 的 UPDATE 会修改表中所有行！这在生产环境是灾难性操作。执行前务必确认 WHERE 条件正确
-- **JOIN 性能注意**：多表 JOIN 时，连接字段必须有索引（主键默认有索引）。三张以上表 JOIN 时考虑是否可以用视图替代，或者分步查询后在内表中关联
-- **sy-subrc 检查**：每次数据库操作后都应检查 `sy-subrc`，0 表示成功，4 表示未找到，其他值表示错误
+!!! tip "改生产数据的保命三连"
 
-## 代码拆解要点
+    UPDATE/DELETE 前先跑一遍同条件的 SELECT 看命中范围 → 在开发库演练 → 执行后核对 `sy-dbcnt`。三条都做到，你就能安心下班。
 
-1. SELECT SINGLE vs SELECT ... INTO TABLE 的区别与使用场景
-2. @ 占位符在 WHERE 条件和 UP TO n ROWS 中的作用
-3. INNER JOIN 的 ON 条件写法（表别名 ~ 字段）
-4. 聚合函数 GROUP BY 的字段选择规则
-5. INSERT / UPDATE / DELETE 的基本语法结构
-6. COMMIT WORK 在事务提交中的作用
+!!! tip "sy-subrc 与 sy-dbcnt 一起看"
+
+    `sy-subrc = 0` 只说"语句成功"，`sy-dbcnt = 0` 才告诉你"其实一行都没改到"。写操作后两个都检查。
+
+!!! warning "别在 LOOP 里 SELECT"
+
+    循环里逐行查库（N 次 DB 往返）是 ABAP 性能反模式之首。正确姿势：进循环前 `SELECT ... FOR ALL ENTRIES` 或 JOIN 批量取回内表，循环里 `READ TABLE`（第4课的 HASHED 表）。
+
+## 📖 延伸阅读
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——`SELECT` / `INSERT` / `UPDATE` / `COMMIT` 条目；
+- SFLIGHT 表族关系见[第1课](01-sap-overview.md)与参考资料库的 Flight Model 文档。
 
 ## 课后思考
 
-1. SELECT SINGLE 和 SELECT ... INTO TABLE 分别适用于什么场景？
-2. 为什么 UPDATE 和 DELETE 语句必须加 WHERE 条件？
-3. INNER JOIN 和 LEFT OUTER JOIN 的查询结果有什么区别？
-4. 尝试用 JOIN 查询出所有航班的城市对信息，并按航空公司分组统计航班数量。
+> 把你的回答写在**页面底部评论区**，注明题号，一起讨论。
+
+1. `SELECT SINGLE` 与 `SELECT ... INTO TABLE` 各适合什么场景？非主键条件取一条时为什么推荐 `UP TO 1 ROWS`？
+2. WHERE 与 HAVING 的区别是什么？
+3. 改写 Demo 第 3 段：不用 JOIN，改用两次 `SELECT ... FOR ALL ENTRIES` 实现，比较两者代码量与你的直觉性能判断。
+4. 为什么说"写完不 COMMIT = 白写"？COMMIT 之前这些改动对别的会话可见吗？（可以开两个 `/o` 会话实测——第1课学的 `/o` 正好用上。）
+
+---
+
+下一课：[第6课：ABAP 调试器](06-debugging.md)
