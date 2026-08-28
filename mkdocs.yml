@@ -32,6 +32,13 @@ theme:
     - content.code.copy
     - toc.follow
 
+plugins:
+  - search
+  - git-revision-date-localized:
+      type: date
+      timezone: Asia/Shanghai
+      enable_creation_date: false
+
 markdown_extensions:
   - admonition
   - attr_list
