@@ -1,138 +1,179 @@
 ---
-status: draft
+status: beta
 ---
 
-# 第21课：CDS View（进阶）—— 聚合与注解
+# 第21课：CDS View（进阶）—— 聚合、参数与访问控制
 
-> 45分钟 | 阶段：现代开发篇
+> 45分钟 | 阶段：现代开发篇 | 建议边读边做
 
 ## 前置依赖
 
-- 第20课：能创建基本 CDS View
-- 第5课：了解 SQL 聚合（COUNT / SUM / AVG）
+- [第20课](20-cds-basic.md)：View Entity 基础、ADT Data Preview；
+- [第5课](05-open-sql.md)：GROUP BY / 聚合。
 
 ## 问题引入
 
-基础 CDS 已经能把多张表关联起来了，但管理层需要的是"汇总数据"——每个航空公司的航班数量、平均票价、最繁忙航线排行。怎么在 CDS 中做聚合统计？怎么让 CDS View 在 SAP UI（如 Fiori）中展示时有更友好的标题和格式？CDS 注解就是控制展示元数据的机制。
+明细视图有了，管理层要的是"每家航空公司多少航班、平均票价多少"的**统计口径**——这类口径会被十几个报表/接口反复使用，必须固化成资产。本课给课程库添加**参数化统计视图** `zac_flight_stats`，并揭开上节课留的悬念：`#CHECK` 等待的 **DCL 访问控制**是什么、为什么说它是 CDS 的安全门。
 
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
 |------|------|------|
-| 场景引入 | 从"明细数据"到"统计报表"的需求升级 | 3 分钟 |
-| Demo 演示 | 展示基于 CDS 的航班统计报表 | 5 分钟 |
-| 代码拆解 | GROUP BY、聚合函数、CASE WHEN、CDS 注解、@UI / @EndUserText | 28 分钟 |
-| 知识总结 | CDS 注解速查、聚合最佳实践 | 6 分钟 |
+| 场景引入 | 从明细到统计口径的需求升级 | 3 分钟 |
+| Demo 跟做 | 参数化统计视图 + 带参消费 | 10 分钟 |
+| 代码拆解 | 聚合/参数/Session 变量/DCL | 25 分钟 |
+| 知识总结 | CDS 能力地图 | 4 分钟 |
 | 课后思考 | 练习 | 3 分钟 |
 
 ## 本课目标
 
-掌握 CDS View 的聚合查询和注解机制，能为 CDS 添加 UI 元数据，支持 Fiori 应用开发。
+完成本课你将能够：
 
-## Demo
+- 写带 `WITH PARAMETERS` 的聚合 CDS 并按参数消费；
+- 使用标量函数、`CASE`、`$session` 变量增强视图表达；
+- 说清 DCL 的作用与 `#CHECK`/`#NOT_REQUIRED` 的差别；
+- 用"下推"思维判断逻辑该放 CDS 还是 ABAP。
 
-创建航班统计 CDS View（ZAC_FLIGHT_STATS），按航空公司聚合航班数量和平均票价，使用 CDS 注解定义列标题和格式。
+## Demo：参数化统计视图（分步跟做）
 
-## 知识点
+课程库的 `zac_flight_stats`（`src/zac_flight_stats.ddls.abap`）：
 
-### 1. CDS 函数
-- 聚合：COUNT / SUM / AVG / MIN / MAX
-- 标量：COALESCE / CAST / DIVISION / CONCAT / UPPER / LOWER / SUBSTRING / LENGTH
-- 日期：DATS_DAYS_BETWEEN / DATS_ADD_DAYS
-
-### 2. Session 变量
-- $session.user
-- $session.system_date
-- 在 WHERE 条件中使用
-
-### 3. 访问控制（DCL）
-- @AccessControl.authorizationCheck: #CHECK
-- DEFINE ROLE / DEFINE ROLE WITH CONDITION
-- CDS Role 分配
-
-### 4. View Entity（ABAP 7.55+ 新语法）
-- DEFINE VIEW ENTITY zve_xxx AS SELECT FROM ...
-- View Entity vs CDS View 的区别
-- 更简洁的语法、更多函数支持
-- $self 关键字
-
-### 5. CDS 在报表中的使用模式
-- CDS 做数据源，ABAP 做展示
-- 与 ALV 结合
-
-### 6. 性能考量
-- 下推到数据库执行 vs ABAP 层处理
-- CDS vs ABAP OpenSQL 的性能差异
-
-## Demo 代码
-
-参数化 CDS View：
 ```sql
-@AbapCatalog.sqlViewName: 'ZV_SFLIGHT_STATS'
+@AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: '航班统计视图'
-define view ZAC_FLIGHT_STATS
+define view entity ZAC_FLIGHT_STATS
   with parameters p_carrid : abap.char3
   as select from sflight
 {
     key sflight.carrid,
-    count(*)            as flight_count,
-    sum(sflight.price)  as total_price,
-    avg(sflight.price)  as avg_price,
-    max(sflight.price)  as max_price,
-    sflight.seatsmax    as total_seats,
+    count(*)              as flight_count,
+    sum(sflight.price)    as total_price,
+    avg(sflight.price)    as avg_price,
+    sum(sflight.seatsmax) as total_seats,
     sum(sflight.seatsocc) as total_occupied
 }
 where sflight.carrid = $parameters.p_carrid
-group by sflight.carrid, sflight.seatsmax
+group by sflight.carrid
 ```
 
-DCL 访问控制：
-```sql
-@MappingRole: true
-define role zr_flight_data {
-  grant select on ZAC_FLIGHT_DETAIL
-    where carrid = aspect zcds_flight_auth.carrid;
-}
-```
+**观察三个设计点：**
 
-ABAP 调用参数化 CDS：
+1. `with parameters p_carrid : abap.char3`——视图自带入参，统计口径"按公司"被编码进对象；
+2. WHERE 里 `$parameters.p_carrid` 引用参数——数据库执行时就过滤，不是查回来再筛；
+3. GROUP BY 只留 carrid——上节课 Demo 误把 seatsmax 也分了组（同一公司不同机型会被拆成多行），这是 GROUP BY 的经典陷阱：**分组键多一个，口径就碎一层**。
+
+**消费端**（demo 程序 `zac_cds_advanced` 为待补充对象，可自建体验）：
+
 ```abap
 REPORT zac_cds_advanced.
 
 START-OF-SELECTION.
-  " 使用参数化 CDS View
-  SELECT * FROM ZAC_FLIGHT_STATS( p_carrid = 'AA' )
-    INTO @DATA(lt_stats).
+  " 参数化 CDS：调用时传参，语法像函数
+  SELECT * FROM zac_flight_stats( p_carrid = 'AA' )
+    INTO TABLE @DATA(lt_stats).
 
-  IF lt_stats IS NOT INITIAL.
+  IF lines( lt_stats ) > 0.
     READ TABLE lt_stats INTO @DATA(ls_stats) INDEX 1.
     WRITE: / |航空公司: { ls_stats-carrid }|.
     WRITE: / |航班数量: { ls_stats-flight_count }|.
     WRITE: / |平均票价: { ls_stats-avg_price }|.
-    WRITE: / |最高票价: { ls_stats-max_price }|.
     WRITE: / |总占座/总座位: { ls_stats-total_occupied }/{ ls_stats-total_seats }|.
   ELSE.
     WRITE: / '未找到统计数据'.
   ENDIF.
 ```
 
-## 代码拆解要点
+ADT 里 Data Preview 参数化视图时会弹参数输入框——先在预览里试不同 carrid，再写程序。
 
-1. WITH PARAMETERS 的定义与使用
-2. $parameters 的引用语法
-3. GROUP BY 在 CDS 中的使用
-4. DCL 访问控制的定义方式
-5. View Entity 的语法差异
+## 知识点
+
+### 1. CDS 函数工具箱
+
+| 类别 | 常用 | 示例 |
+|------|------|------|
+| 聚合 | `count(*) / sum / avg / min / max` | `sum(sflight.price) as total_price` |
+| 标量 | `cast / division / coalesce / concat_with / upper / substring` | `division(total_occupied, total_seats, 2) as occupancy` |
+| 日期 | `dats_add_days / dats_days_between` | `dats_days_between(sflight.fldate, $session.system_date)` |
+| 条件 | `case when ... then ... else ... end` | 见下 |
+
+```sql
+case
+  when sflight.seatsocc >= sflight.seatsmax then 'FULL'
+  else 'OPEN'
+end as flight_status
+```
+
+CDS 里没有 IF 语句——条件一律 CASE（第8课 COND 的 SQL 版）。
+
+### 2. Session 变量：数据库层的"sy-"系列
+
+```sql
+where sflight.created_by = $session.user
+  and sflight.fldate >= $session.system_date
+```
+
+`$session.user`（当前用户）、`$session.system_date`（当日）等在**数据库执行时**求值——与 ABAP 的 sy-uname/sy-datum 对应，但求值发生在下推的 SQL 里。用途：行级数据归属过滤、快照口径。
+
+### 3. DCL：CDS 的访问控制（悬念揭晓）
+
+第20课 `@AccessControl.authorizationCheck: #CHECK` 的含义：**有配套 DCL 就执行检查**。DCL（Data Control Language）是独立的一类对象（ADT 里 New → DCL / 事务码无经典对应）：
+
+```sql
+@MappingRole: true
+define role ZAC_FLIGHT_DATA {
+  grant select on ZAC_FLIGHT_DETAIL
+    where (carrid) = aspect pfcg_auth(S_CARRID, CARRID, ACTVT = '03');
+}
+```
+
+- 语义：谁能读这个视图的**哪些行**，由 PFCG 权限对象（S_CARRID）决定——权限不过滤"功能入口"，直接过滤"数据行"；
+- **消费端无法绕过**：ABAP 任何 SELECT 走这个视图，DCL 都在数据库层执行——比"程序里自己查权限再 WHERE"可靠得多；
+- 没有 DCL 时：`#CHECK` 视为放行；`#NOT_REQUIRED` 声明"此视图无需 DCL"（纯技术视图用它，消掉激活警告）。
+
+### 4. View Entity 能力补充
+
+上节课已切换到 View Entity 写法，它相对老 `define view` 的红利：无中间 SQL 视图命名负担、更多函数（如上面部分标量/日期函数）、更好的检查。7.55 以下系统只有老写法——**看到 `@AbapCatalog.sqlViewName` 就知道是老项目**。
+
+### 5. 下推思维：逻辑放哪层
+
+```mermaid
+flowchart TD
+    Q{"这段逻辑是什么性质？"}
+    Q -->|"拼数据/口径/权限"| C["CDS 层<br/>（数据库执行，天然高性能）"]
+    Q -->|"展示格式/交互/流程"| A["ABAP 层<br/>（ALV/消息/屏幕）"]
+    Q -->|"跨行复杂算法"| H["ABAP 层处理<br/>（CDS 不擅长过程式计算）"]
+```
+
+**判断口诀：能下推尽下推，聚合过滤优先 CDS；展示与流程永远 ABAP。**第5课"别把几百万行拉回 ABAP 再 REDUCE"的教训，在这里变成架构原则。
 
 ## 💡 实战经验
 
-- **GROUP BY 必须包含所有非聚合字段**：这是 SQL 的基本规则，CDS 也不例外。SELECT 了哪些非聚合字段，GROUP BY 就要列全——否则会报语法错误
-- **@UI 注解决定 Fiori 展示**：`@UI.lineItem: [ { position: 10 } ]` 控制字段在 Fiori 列表中的位置。position 数字越小越靠前——建议用 10 的倍数（10, 20, 30...），方便后续插入新字段
-- **CASE WHEN 替代 IF**：CDS 中不支持 ABAP 的 IF 语句，条件判断统一用 `CASE WHEN ... THEN ... ELSE ... END`。嵌套超过三层时考虑拆成多个 CDS View
-- **CDS 的性能优化**：CDS 在 HANA 上运行时，确保字段上有合适的索引。如果 CDS 查询很慢，在 HANA Studio 中查看执行计划（Explain Plan），找到瓶颈
+!!! tip "口径资产化"
+
+    "平均票价"这类统计口径一旦被两个以上报表使用，就固化成 CDS——口径只在视图里活一次，月末对不上数的排查范围从 N 个程序缩到 1 个对象。
+
+!!! tip "GROUP BY 前先写业务定义"
+
+    动手前用一句话写清统计口径（"每家航空公司的全部航班"），再决定分组键。分组键凭手感加字段，是统计视图最大的翻车源。
+
+!!! warning "DCL 漏配 = 裸奔"
+
+    `#CHECK` 只在 DCL 存在时生效；上线前清点所有对外暴露的 CDS 是否该配 DCL。涉敏感数据的视图没配 DCL，等于把门禁贴在玻璃门上。
+
+## 📖 延伸阅读
+
+- [ABAP Flight Reference Scenario（/DMO/）](https://help.sap.com/docs/abap-cloud/abap-rap/abap-flight-reference-scenario)——官方场景里 DCL 与参数化视图的成熟样例；
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——ABAP CDS → Data Control Language 章节。
 
 ## 课后思考
 
-1. CDS 的聚合函数和 ABAP OpenSQL 的聚合函数写法有什么不同？
-2. $session.user 在实际场景中有什么用途？
-3. View Entity 在 7.55 以下版本能用吗？
+> 把你的回答写在**页面底部评论区**，注明题号，一起讨论。
+
+1. 参数化视图的参数在什么时机生效（数据库 or 应用层）？这带来什么性能含义？
+2. 把 Demo 的分组键从 carrid 改成 carrid + connid，统计口径变成了什么？哪种更接近"航线维度"的运营报表？
+3. 给 `zac_flight_stats` 加一个 `occupancy`（上座率，两位小数）计算列——用哪个函数？贴出你的 DDL 片段。
+4. DCL 与第7课的 PFCG 权限（VALUE CHECK/MATCHCODE）分别在什么层拦数据？为什么说 DCL 更难被绕过？
+
+---
+
+下一课：[第22课：OO ALV](22-oo-alv.md)
