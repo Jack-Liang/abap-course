@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # 第18课：消息类（Message Class）与用户提示
 
 > 45分钟 | 阶段：高级篇

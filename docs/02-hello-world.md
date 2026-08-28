@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # 第2课：Hello World 与基本数据类型
 
 > 45分钟 | 阶段：基础篇

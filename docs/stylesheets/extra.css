@@ -435,3 +435,38 @@ button:focus-visible {
   border-color: var(--ac-line);
   border-left-color: var(--ac-message);
 }
+
+/* ---------- 页面状态横幅 ---------- */
+.ac-status {
+  margin: 0 0 1.2em;
+  padding: 0.7em 1em;
+  border-radius: 0.5rem;
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.ac-status--draft {
+  border: 1px solid #f5c26b;
+  border-left: 4px solid #f0a500;
+  background: #fffaeb;
+  color: #7a5800;
+}
+
+.ac-status--beta {
+  border: 1px solid #7cc0f5;
+  border-left: 4px solid #1094f0;
+  background: #ecf6fd;
+  color: #0c5a8f;
+}
+
+[data-md-color-scheme="slate"] .ac-status--draft {
+  background: rgba(240, 165, 0, 0.12);
+  color: #ffd479;
+  border-color: rgba(240, 165, 0, 0.5);
+}
+
+[data-md-color-scheme="slate"] .ac-status--beta {
+  background: rgba(16, 148, 240, 0.12);
+  color: #7cc0f5;
+  border-color: rgba(16, 148, 240, 0.5);
+}

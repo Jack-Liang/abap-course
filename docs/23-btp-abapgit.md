@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # 第23课：BTP 环境与 abapGit
 
 > 45分钟 | 阶段：现代开发篇

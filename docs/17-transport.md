@@ -1,3 +1,7 @@
+---
+status: draft
+---
+
 # 第17课：传输请求（Transport Request）
 
 > 45分钟 | 阶段：高级篇
