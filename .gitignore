@@ -13,3 +13,6 @@ Thumbs.db
 
 # Docs build artifacts
 docs/.DS_Store
+
+# MkDocs build output
+site/

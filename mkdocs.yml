@@ -1,0 +1,83 @@
+site_name: ABAP Course
+site_description: 从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能
+site_url: https://jack-liang.github.io/abap-course/
+repo_url: https://github.com/Jack-Liang/abap-course
+repo_name: Jack-Liang/abap-course
+edit_uri: edit/master/docs/
+
+theme:
+  name: material
+  language: zh
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: 切换至深色模式
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: 切换至浅色模式
+  features:
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+nav:
+  - 首页: index.md
+  - 准备篇:
+      - 第0课 环境搭建与仓库导入: 00-getting-started.md
+  - 基础篇:
+      - 第1课 SAP 系统入门与开发环境: 01-sap-overview.md
+      - 第2课 Hello World 与基本数据类型: 02-hello-world.md
+      - 第3课 数据字典——建一张自定义表: 03-data-dictionary.md
+      - 第4课 内表与结构体操作: 04-internal-table.md
+      - 第5课 Open SQL——增删改查: 05-open-sql.md
+      - 第6课 ABAP 调试器: 06-debugging.md
+  - 核心篇:
+      - 第7课 选择屏幕: 07-selection-screen.md
+      - 第8课 数据格式化: 08-formatting.md
+      - 第9课 Function Module: 09-function-module.md
+      - 第10课 ALV 报表（基础）: 10-alv-basic.md
+      - 第11课 ALV 交互事件: 11-alv-events.md
+      - 第12课 Excel 导入导出: 12-excel.md
+      - 第13课 ABAP 面向对象编程（基础）: 13-oo-basic.md
+  - 高级篇:
+      - 第14课 BAPI 调用: 14-bapi.md
+      - 第15课 增强（Enhancement）: 15-enhancement.md
+      - 第16课 调用外部接口: 16-external-api.md
+      - 第17课 Transport Request: 17-transport.md
+      - 第18课 消息处理: 18-message-class.md
+      - 第19课 新语法专题: 19-new-syntax.md
+  - 现代开发篇:
+      - 第20课 CDS View（基础）: 20-cds-basic.md
+      - 第21课 CDS View（进阶）: 21-cds-advanced.md
+      - 第22课 OO ALV: 22-oo-alv.md
+      - 第23课 BTP 概览 + abapGit: 23-btp-abapgit.md
+      - 第24课 综合实战: 24-capstone.md
+  - 附录:
+      - 参考资料库: references.md
