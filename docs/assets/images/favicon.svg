@@ -1,12 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- ABAP Course logo: SAPGUI OK-Code "/n"; 六色渐变全取自 Fiori Horizon 官方色板 -->
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#0070F2"/>
-      <stop offset="1" stop-color="#0064D9"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#256F3A"/>
+      <stop offset="0.22" stop-color="#046C7A"/>
+      <stop offset="0.44" stop-color="#0070F2"/>
+      <stop offset="0.62" stop-color="#552CFF"/>
+      <stop offset="0.8" stop-color="#A100C2"/>
+      <stop offset="1" stop-color="#BA066C"/>
     </linearGradient>
   </defs>
   <rect width="64" height="64" rx="14" fill="url(#bg)"/>
-  <g transform="translate(12,16) scale(1.6)">
-    <path d="M2 21l21-9L2 3v7l15 2-15 2v7z" fill="#FFFFFF"/>
-  </g>
+  <path d="M26 20 L18 45" stroke="#FFFFFF" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+  <path d="M34 45 V30 Q34 24 40 24 H42 Q48 24 48 30 V45" stroke="#FFFFFF" stroke-width="5.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
