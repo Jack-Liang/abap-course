@@ -139,14 +139,15 @@ abap-course/
 
 ## 🖼️ 插图管理
 
-课文插图存储在**外部对象存储**（不进本仓库，避免仓库膨胀），引用规则：
+课文插图存放在专用图片仓库 [abap-course-assets](https://github.com/Jack-Liang/abap-course-assets)（不进本仓库，避免膨胀），通过 jsDelivr CDN 引用：
 
-- **路径结构**：`<bucket>/abap-course/<课文编号>/`（如 `05-open-sql/`），跨课复用图放 `common/`；
-- **文件命名**：英文 `kebab-case`（如 `alv-event-flow-02.png`），语义化、带序号；
-- **引用格式**：Markdown 内使用绝对 https 链接，alt 文本必填：`![说明](https://<bucket>/abap-course/.../xxx.png)`；
-- **存储配置**：HTTPS + Referer 防盗链白名单（github.com、jack-liang.github.io）+ Cache-Control；
-- **原图留底**：对象存储中的原图在本地另行备份（不入库），以便整体迁移；
-- **优先 Mermaid**：ER 图、流程图等结构性图优先用 Mermaid 语法直接写在课文里（版本化、永不失效），截图类才走对象存储。
+- **URL 前缀**：`https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/`（不直连 raw.githubusercontent.com，其大陆访问不稳）；
+- **路径结构**：图片仓库内按课文编号分目录（如 `05-open-sql/`），跨课复用图放 `common/`；
+- **文件命名**：英文 `kebab-case`（如 `alv-event-flow-02.png`），语义化、带序号，入库前压缩至 ≤500KB；
+- **引用格式**：`![说明](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/05-open-sql/join-diagram.png)`，alt 文本必填；
+- **缓存**：jsDelivr 对 `@main` 有约 12 小时缓存，更新同名图后可用 `purge.jsdelivr.net` 强制刷新；
+- **优先 Mermaid**：ER 图、流程图等结构性图优先用 Mermaid 语法直接写在课文里（版本化、永不失效），截图类才走图片仓库；
+- **可迁移**：URL 前缀统一约定，将来如需迁移对象存储/CDN，批量替换前缀即可。
 
 ## 🔧 常用事务码速查
 
