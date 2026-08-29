@@ -22,7 +22,9 @@ FUNCTION zac_calc_flight_duration.
     ev_cityfrom     = ls_spfli-cityfrom.
     ev_cityto       = ls_spfli-cityto.
     ev_distance     = ls_spfli-distance.
-    ev_duration_min = ( ls_spfli-arrtime - ls_spfli-deptime ) / 60.
+    " TIMS 是 HHMMSS 数字串，直接相减会错位——先拆出时分各自换算成分钟
+    ev_duration_min = ( ls_spfli-arrtime(2) * 60 + ls_spfli-arrtime+2(2) )
+                    - ( ls_spfli-deptime(2) * 60 + ls_spfli-deptime+2(2) ).
     ev_found        = abap_true.
   ELSE.
     RAISE not_found.

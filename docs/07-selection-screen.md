@@ -134,19 +134,21 @@ flowchart TD
 
 ### 4. 行级校验：`AT SELECTION-SCREEN ON END OF s_date`
 
-`ON p_carrid` 是**字段级**校验——整个字段填完校验一次。SELECT-OPTIONS 还有更细的一档：用户在**多值选择对话框**（点选择项行尾的箭头按钮）里每确认一行，就触发一次 `ON END OF`：
+`ON p_carrid` 是**字段级**校验——整个字段填完校验一次。SELECT-OPTIONS 还有更细的一档：用户点开**多值选择对话框**（行尾的箭头按钮）维护完规则、**整体确认（Copy）返回时**，触发一次 `ON END OF`——此时选择项内表里装着对话框里的**全部行**，循环体检正合适：
 
 ```abap
 AT SELECTION-SCREEN ON END OF s_date.
-  " 此时 s_date 内表只装着用户刚确认的这一行
-  IF s_date-high IS NOT INITIAL AND s_date-low > s_date-high.
-    MESSAGE '日期区间下限不能大于上限' TYPE 'E'.
-  ENDIF.
+  " 对话框整体确认后触发一次，s_date 里是用户填的全部行
+  LOOP AT s_date INTO DATA(ls_date).
+    IF ls_date-high IS NOT INITIAL AND ls_date-low > ls_date-high.
+      MESSAGE |第 { sy-tabix } 行：日期区间下限不能大于上限| TYPE 'E'.
+    ENDIF.
+  ENDLOOP.
 ```
 
-- 与 `ON field` 的分工：`ON field` 管"整个选择项的最终状态"（用户关掉对话框、点执行时验一遍）；`ON END OF` 管"每一行进内表之前的即时体检"——错误当场拦在当前行，不用等用户填完全部再回头找；
-- 事件里的 `s_date` **只含当前这一行**，别当全表 LOOP；E 消息把用户打回该行重填，体验与 `ON field` 一致；
-- 典型用途：单行 LOW > HIGH、区间跨度过大（如日期区间不许超一年）、单值不许为空等"一行之内就能判定"的规则。
+- 与 `ON field` 的分工：`ON field` 管"整个选择项的最终状态"（用户关掉对话框、点执行时验一遍）；`ON END OF` 在**对话框确认的那一刻**就把全套规则验掉——错误消息带行号，用户当场回对话框改，不用等点执行才回头找；
+- 事件里的 `s_date` 是**全表**（不是刚填的那一行），所以用 LOOP + `sy-tabix` 报出行号；E 消息把用户弹回多值对话框重填；
+- 典型用途：单行 LOW > HIGH、区间跨度过大（如日期区间不许超一年）、包含与排除规则冲突等"扫一遍全部行才能判定"的规则。
 
 ### 5. 布局：BLOCK 分组与文本
 

@@ -9,7 +9,7 @@ status: beta
 ## 前置依赖
 
 - [第7课](07-selection-screen.md)：`AT SELECTION-SCREEN` 校验里已经用过 MESSAGE；
-- [第3课](03-data-dictionary.md)：知道 SE91 是数据字典家族的一员。
+- [第3课](03-data-dictionary.md)：建过表、走过"激活 + 传输"流程——消息类（SE91）同属仓库对象，生命周期一模一样。
 
 ## 问题引入
 

@@ -111,7 +111,9 @@ START-OF-SELECTION.
 | `SELECT SINGLE ... WHERE 全键` | 按主键取一条 | `sy-subrc = 4` |
 | `SELECT ... INTO TABLE` | 批量取回内表 | `sy-subrc = 4` |
 | `SELECT ... UP TO n ROWS` | 看样本、防大结果集 | — |
-| `SELECT SINGLE ... UP TO 1 ROWS` | 非全键条件取一条（语义更诚实） | 同上 |
+| `SELECT ... UP TO 1 ROWS`（配 `ENDSELECT`） | 非全键条件"随便取一条" | `sy-subrc = 4` |
+
+注意 **`SELECT SINGLE` 与 `UP TO 1 ROWS` 不能连用**——那是非法组合。两者语义有别：`SINGLE` 承诺"条件唯一定位一条"（典型是全键）；条件可能命中多条、你只要任意一条时，老实用 `UP TO 1 ROWS` + `ENDSELECT`。
 
 - **WHERE 工具箱**：`= <> > <`、`BETWEEN`、`LIKE 'A%'`、`IN @s_option`（选择屏幕区间直接进 SQL，第7课）、`IS NULL`；
 - **ORDER BY** 在数据库端排序（占用排序区，大结果集慎用，能排早排）；

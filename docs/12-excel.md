@@ -19,7 +19,7 @@ status: beta
 
 !!! warning "环境差异：GUI 文件操作需要 SAP GUI"
 
-    `GUI_UPLOAD/DOWNLOAD` 操作的是**你电脑上的文件**，依赖 SAP GUI 前端——试用镜像 + SAP GUI 环境正常可用；若你在 ADT/WebGUI 等无前端环境运行会失败。第23课会看到服务器端文件的替代方案。
+    `GUI_UPLOAD/DOWNLOAD` 操作的是**你电脑上的文件**，依赖 SAP GUI 前端——试用镜像 + SAP GUI 环境正常可用；若你在 ADT/WebGUI 等无前端环境运行会失败。替代路线是应用服务器文件（`OPEN DATASET`），超出本课范围，知道方向即可。
 
 ## 时间安排
 
@@ -238,7 +238,7 @@ SELECT SINGLE low FROM tvarvc
 
 !!! tip "大文件走后台"
 
-    `GUI_UPLOAD` 是前端同步操作，几十万行会把 SAP GUI 卡死。大数据量：文件放应用服务器（`OPEN DATASET`，第16课后深化）+ 后台作业处理。
+    `GUI_UPLOAD` 是前端同步操作，几十万行会把 SAP GUI 卡死。大数据量：文件放应用服务器（`OPEN DATASET`，服务器端文件读写）+ 后台作业处理。
 
 !!! tip "导出前问一句"给谁看""
 

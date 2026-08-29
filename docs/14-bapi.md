@@ -17,7 +17,7 @@ status: beta
 
 !!! warning "环境差异：Flight BAPI 的齐备度"
 
-    不同系统镜像包含的 Flight BAPI 不完全一致。跑 Demo 前先 SE37 搜索 `BAPI_SBOOK*` / `BAPI_FLIGHT*` 确认存在；如果你的镜像缺某个，跟着课文学调用模式即可——**RETURN 检查 + COMMIT/ROLLBACK 的范式适用于所有 BAPI**，第24课综合实战会用课程自建的 `zcl_ac_flight_service` 封装同样的模式。
+    课程 Demo 用的 `BAPI_FLBOOKING_CREATEFROMDATA` 属 SAP_BASIS 自带的演示 Flight 模型（SAP 官方注明"仅供培训/演示"），试用镜像通常都有。不同镜像包含的 Flight BAPI 不完全一致，跑 Demo 前先 SE37 搜索 `BAPI_FLBOOKING*` / `BAPI_FLIGHT*` 确认；如果你的镜像缺某个，跟着课文学调用模式即可——**RETURN 检查 + COMMIT/ROLLBACK 的范式适用于所有 BAPI**，第24课综合实战还会用课程自建的 `zcl_ac_flight_service` 复用同样的模式。
 
 ## 时间安排
 
@@ -46,35 +46,53 @@ SE38 运行 `zac_bapi`（已随仓库下发）：
 REPORT zac_bapi.
 
 START-OF-SELECTION.
-  " 1. 组装预订数据（结构来自 BAPI 自带的参数类型）
-  DATA: lt_booking TYPE TABLE OF bapisbook,
-        ls_booking TYPE bapisbook,
-        lt_return  TYPE TABLE OF bapiret2,
-        ls_return  TYPE bapiret2.
+  " 1. 取一条真实航班作预订目标——写死的日期在演示数据里未必存在
+  SELECT SINGLE carrid, connid, fldate
+    FROM sflight
+    WHERE carrid = 'AA'
+    INTO @DATA(ls_flight).
 
-  ls_booking-carrid   = 'AA'.
-  ls_booking-connid   = '0017'.
-  ls_booking-fldate   = '20260730'.
-  ls_booking-bookid   = '00000001'.
-  ls_booking-customid = '00000001'.
-  ls_booking-class    = 'Y'.
-  APPEND ls_booking TO lt_booking.
+  IF sy-subrc <> 0.
+    WRITE: / 'SFLIGHT 里没有 AA 的航班，先回第0课生成演示数据'.
+    RETURN.
+  ENDIF.
 
-  " 2. 调用 BAPI
-  CALL FUNCTION 'BAPI_SBOOK_CREATE'
+  " 2. 组装预订数据（BAPISBONEW 是该 BAPI 自带的入参结构）
+  "    客户与旅行社也取真实存在的行，外键校验才过得去
+  SELECT SINGLE id FROM scustom INTO @DATA(lv_customerid).
+  SELECT SINGLE agencynum FROM stravelag INTO @DATA(lv_agencynum).
+
+  DATA ls_bookdata TYPE bapisbonew.
+  ls_bookdata-airlineid  = ls_flight-carrid.
+  ls_bookdata-connectid  = ls_flight-connid.
+  ls_bookdata-flightdate = ls_flight-fldate.
+  ls_bookdata-customerid = lv_customerid.
+  ls_bookdata-agencynum  = lv_agencynum.
+  ls_bookdata-class      = 'Y'.
+  ls_bookdata-passname   = |课程学员 { sy-uname }|.
+
+  " 3. 调用 BAPI：结构化入参 + RET2 返回表 + 出参预订号
+  DATA lt_return TYPE STANDARD TABLE OF bapiret2 WITH EMPTY KEY.
+
+  CALL FUNCTION 'BAPI_FLBOOKING_CREATEFROMDATA'
+    EXPORTING
+      booking_data  = ls_bookdata
     IMPORTING
-      booking_number = DATA(lv_bookid)
+      bookingnumber = DATA(lv_bookid)
     TABLES
-      booking_data   = lt_booking
-      return         = lt_return.
+      return        = lt_return.
 
-  " 3. 检查 RETURN 表（不是只看出参！）
-  LOOP AT lt_return INTO ls_return WHERE type = 'E' OR type = 'A'.
-    WRITE: / |错误: { ls_return-message }|.
+  " 4. 成败只看 RET2 的 TYPE（E/A 同罪）——不是只看出参！
+  DATA(lv_ok) = abap_true.
+  LOOP AT lt_return INTO DATA(ls_return).
+    WRITE: / |RET2[{ ls_return-type }] { ls_return-message }|.
+    IF ls_return-type CA 'EA'.
+      lv_ok = abap_false.
+    ENDIF.
   ENDLOOP.
 
-  " 4. 成功才提交，失败即回滚——BAPI 的事务铁律
-  IF lv_bookid IS NOT INITIAL.
+  " 5. 成功才提交，失败即回滚——BAPI 的事务铁律
+  IF lv_ok = abap_true.
     CALL FUNCTION 'BAPI_TRANSACTION_COMMIT'
       EXPORTING wait = 'X'.
     WRITE: / |预订创建成功! 预订号: { lv_bookid }|.
@@ -84,7 +102,7 @@ START-OF-SELECTION.
   ENDIF.
 ```
 
-**你会看到什么：** 成功路径输出预订号；把 `customid` 改成不存在的客户再跑，走错误分支回滚——**两条路径都要亲手跑一遍**，体感"提交/回滚的分水岭"。
+**你会看到什么：** 成功路径先打出 RET2 里 TYPE 为 S/W 的消息，再打出预订号；把 `customerid` 换成不存在的客户号（如 `'99999999'`）再跑，RET2 出 E 消息、走回滚分支——**两条路径都要亲手跑一遍**，体感"提交/回滚的分水岭"。预订真正落库后，可去 SE16 查 SBOOK 看刚生成的行。
 
 <!-- 配图（待截图后启用）：![BAPI Explorer 按层级浏览](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/14-bapi/bapi-explorer.png) -->
 
@@ -133,7 +151,7 @@ CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'.
 
 ### 5. 封装：把 BAPI 藏进类里
 
-课程仓库的全局类 `zcl_ac_flight_service`（本课引入的全局服务类）就是范例：`create_booking( )` 内部完成"调 BAPI → 查 RET2 → 决定 COMMIT/ROLLBACK"，把范式固化成一行调用——第24课综合实战直接复用它。**范式写一次，业务处只表达意图。**
+课程仓库的全局类 `zcl_ac_flight_service`（本课引入的全局服务类）就是范例：`create_booking( )` 内部完成"取演示数据 → 调 BAPI → 查 RET2 → 决定 COMMIT/ROLLBACK"，成功返回真实预订号、失败返回初值并带出原因——第24课综合实战直接复用它。**范式写一次，业务处只表达意图。**
 
 ## 💡 实战经验
 

@@ -135,11 +135,19 @@ CLASS lcl_flight_app IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    " 业务层：复用第14课封装好的服务类
+    " 业务层：复用第14课封装好的服务类（BAPI + RET2 + COMMIT 全在里面）
+    DATA lv_msg TYPE string.
     DATA(lv_bookid) = zcl_ac_flight_service=>create_booking(
-      iv_carrid = iv_carrid
-      iv_connid = iv_connid
-      iv_fldate = iv_fldate ).
+      EXPORTING
+        iv_carrid  = iv_carrid
+        iv_connid  = iv_connid
+        iv_fldate  = iv_fldate
+      IMPORTING
+        ev_message = lv_msg ).             " 失败原因（成功为空）
+    IF lv_bookid IS INITIAL.
+      MESSAGE lv_msg TYPE 'S' DISPLAY LIKE 'E'.
+      RETURN.                              " 失败：不刷数据，用户重试
+    ENDIF.
     MESSAGE ID 'ZAC_FLIGHT_MSG' TYPE 'S' NUMBER 003
       WITH iv_carrid iv_connid lv_bookid.
 

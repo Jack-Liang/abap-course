@@ -49,6 +49,6 @@
 
 ## 已知限制
 
-- **服务类是教学桩**：`zcl_ac_flight_service=>create_booking` 目前是占位实现（见 `src/zcl_ac_flight_service.clas.abap` 的注释），不真正调 BAPI、只返回固定预订号 `00000001`，并含一句 `WRITE` 演示输出——在 Screen 100 的 PAI 中触发双击预订时，该 `WRITE` 会写入当前列表缓冲，属于桩代码的预期行为，换成真实 BAPI 实现后即消失。
+- **服务类为真实 BAPI 实现**：`zcl_ac_flight_service=>create_booking` 内部调用 `BAPI_FLBOOKING_CREATEFROMDATA` 并完成 RET2 检查与 COMMIT/ROLLBACK（成功返回真实预订号，失败返回初值并把原因放进 `ev_message`，`zac_flight_forms.abap` 里对应有失败分支）。需要系统带 SAP_BASIS 演示 Flight BAPI，且 `SCUSTOM` / `STRAVELAG` 有演示数据。`cancel_booking` 仍是教学占位（课后练习）。
 - **满员判断基于内存快照**：`create_booking` 里的满员校验读的是展示内表 `mt_data` 的当前行，真实项目应在服务类内对 `sflight` 加锁重查。
-- **导出为分号分隔 CSV**：`GUI_DOWNLOAD` 用 `filetype = 'ASC'` + `write_field_separator = 'X'`，字段以分号分隔，Excel 可直接打开；`STATUS`（string）列在不同 GUI 版本下可能被截断，如需精确宽度可改用 `filetype = 'DAT'` 方案。
+- **导出为 TAB 分隔 CSV**：`GUI_DOWNLOAD` 用 `filetype = 'ASC'` + `write_field_separator = 'X'`，字段以制表符分隔，Excel 可直接打开；`STATUS`（string）列在不同 GUI 版本下可能被截断，如需精确宽度可改用 `filetype = 'DAT'` 方案。

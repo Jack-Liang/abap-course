@@ -13,7 +13,7 @@ status: beta
 
 ## 问题引入
 
-"计算航线飞行时长"的逻辑写在一个报表里，另一个报表也要用——复制粘贴？以后逻辑一改就得改两处，迟早漏。ABAP 传统世界的答案叫 **Function Module（FM，函数模块）**：把逻辑封装成可复用的调用单元，全系统唯一命名、参数明确、可单测、可远程调用。SAP 自己的几万个标准 FM（包括下节课的 BAPI）都是这套体系。
+"计算航线飞行时长"的逻辑写在一个报表里，另一个报表也要用——复制粘贴？以后逻辑一改就得改两处，迟早漏。ABAP 传统世界的答案叫 **Function Module（FM，函数模块）**：把逻辑封装成可复用的调用单元，全系统唯一命名、参数明确、可单测、可远程调用。SAP 自己的几万个标准 FM（包括第14课要上手的 BAPI）都是这套体系。
 
 !!! note "本课对象尚未随仓库下发"
 
@@ -98,7 +98,9 @@ FUNCTION zac_calc_flight_duration.
     ev_cityfrom     = ls_spfli-cityfrom.
     ev_cityto       = ls_spfli-cityto.
     ev_distance     = ls_spfli-distance.
-    ev_duration_min = ( ls_spfli-arrtime - ls_spfli-deptime ) / 60.
+    " TIMS 是 HHMMSS 数字串，直接相减会错位——先拆出时分各自换算成分钟
+    ev_duration_min = ( ls_spfli-arrtime(2) * 60 + ls_spfli-arrtime+2(2) )
+                    - ( ls_spfli-deptime(2) * 60 + ls_spfli-deptime+2(2) ).
     ev_found        = abap_true.
   ELSE.
     RAISE not_found.
@@ -112,7 +114,7 @@ ENDFUNCTION.
 
 工具栏 **Test/Execute（F8）**：弹出参数输入屏，IV_CARRID 填 `AA`、IV_CONNID 填 `0017` → 执行。
 
-**你会看到什么：** 返回屏列出所有 Export 值——`EV_CITYFROM = NEW YORK`、`EV_CITYTO = SAN FRANCISCO`、`EV_DURATION_MIN = 361`（分钟数，跨时区按系统语义）等。**改参数再跑，秒级反馈，这就是 FM 的单元测试。**再试 `ZZ/9999`，确认走进 NOT_FOUND 异常。
+**你会看到什么：** 返回屏列出所有 Export 值——`EV_CITYFROM = NEW YORK`、`EV_CITYTO = SAN FRANCISCO`、`EV_DURATION_MIN = 181`（起降时刻 11:00 → 14:01，差 3 小时 01 分 = 181 分钟。注意它不等于 SPFLI 里的计划飞行时长 `FLTIME = 361`——那是官方按跨时区航线另行维护的值，本 FM 算的是起降时刻差，两者不同很正常）。**改参数再跑，秒级反馈，这就是 FM 的单元测试。**再试 `ZZ/9999`，确认走进 NOT_FOUND 异常。
 
 ### 步骤 4：报表调用
 

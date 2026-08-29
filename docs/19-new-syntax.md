@@ -189,8 +189,8 @@ DATA(lt_non_aa) = FILTER #( lt_tab EXCEPT WHERE carrid = 'AA' ). " 补集
 ### 8. CORRESPONDING：同名映射
 
 ```abap
-ls_short = CORRESPONDING #( ls_flight ).        " 同名字段自动搬
-ls_full  = CORRESPONDING #( ls_flight FROM ls_short USING carrid connid fldate ). " 带基表补全
+ls_short = CORRESPONDING #( ls_flight ).                    " 同名字段自动搬
+ls_full  = CORRESPONDING #( BASE ( ls_short ) ls_flight ).   " 以 ls_short 为底、ls_flight 覆盖同名字段
 ```
 
 进阶参数 `MAPPING`/`EXCEPT` 处理异名字段与排除项。第4课已见基础形态，综合实战（第24课）用它做 CDS 行到输出结构的转换。
@@ -236,23 +236,25 @@ DATA(lv_cityfrom) = lo_mesh-flight[ 1 ]\_spfli[ 1 ]-cityfrom.   " 'NEW YORK'
 
 `_flight->\_spfli->cityfrom` 这类路径的本质：把"按外键再 READ 一次表"压缩成一个表达式。**实话**：实际项目里几乎没人用——Open SQL JOIN 和第4课的内表读已经够用，Mesh 概念重、可读性争议大，属 7.50 的实验性探索。遇到它认得即可，新代码不必主动引入。
 
-### 10. CLEANUP：无论成败都要执行的清理段
+### 10. CLEANUP：异常外传前的清理段
 
-TRY 块除了 CATCH 还有第三段（呼应第13课的异常类）：
+TRY 块除了 CATCH 还有第三段（呼应第13课的异常类）。**执行时机最容易讲错，先记住规则：CLEANUP 只在 TRY 里抛了异常、且没有被本层任何 CATCH 接住（异常要继续向外传）时执行**——正常跑完不执行、被本层 CATCH 接住也不执行：
 
 ```abap
 TRY.
-    DATA(lv_exact) = EXACT i( '3.7' ).            " 第 4 节的例子：这里抛异常
+    TRY.
+        DATA(lv_exact) = EXACT i( '3.7' ).       " 第 4 节的例子：这里抛异常
+      CLEANUP.
+        " 走到这里 = 异常没被内层接住、即将外传——先还原状态再放行
+        " 典型动作：关连接、释放锁、还原全局变量
+        WRITE: / '内层清理：还原状态，异常继续外传'.
+    ENDTRY.
   CATCH cx_sy_conversion_no_number INTO DATA(lx).
-    WRITE: / |转换失败: { lx->get_text( ) }|.
-  CLEANUP.
-    " 无论上面抛没抛异常、接没接住，这里一定执行
-    " 典型动作：关连接、释放锁、还原全局状态
-    WRITE: / '资源已清理'.
+    WRITE: / |外层接住: { lx->get_text( ) }|.
 ENDTRY.
 ```
 
-分工一句话：**CATCH 管"出错了怎么办"，CLEANUP 管"无论如何都要做什么"**。申请锁/打开连接之后立刻套上 TRY...CLEANUP，是保证资源不泄漏的固定套路。7.52 起还支持 `CLEANUP INTO DATA(lx)`，在清理时拿到异常对象记日志。
+分工一句话：**CATCH 管"出错了怎么办"，CLEANUP 管"异常逃出去之前必须还原什么"**。申请锁/打开连接之后立刻套上带 CLEANUP 的 TRY，保证异常外传时资源不跟着泄漏。清理时需要异常对象记日志的话，写 `CLEANUP INTO DATA(lx)`（与 CATCH 的 INTO 同款）。
 
 ### 11. 重写取舍：什么时候动老代码
 

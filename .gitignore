@@ -16,3 +16,8 @@ docs/.DS_Store
 
 # MkDocs build output
 site/
+
+# MkDocs local build
+cache/
+.cache/
+site/
