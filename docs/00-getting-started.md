@@ -194,7 +194,7 @@ SE38 运行 `ZAC_HELLO_WORLD`，看到 `Hello ABAP!` 与航空公司信息，环
 | `zac_message` + `zac_flight_msg` | 程序 + 消息类 | 第18课 | 消息处理 |
 | `zac_new_syntax` | 程序 | 第19课 | 新语法专题 |
 | `zac_flight_detail` / `zac_flight_stats` | CDS 视图 | 第20/21课、第24课 | 航班详情/统计视图，综合实战复用 |
-| `zac_cds_basic` / `zac_cds_advanced` | 程序 | 第20/21课（待补充） | CDS 消费端 demo |
+| `zac_cds_basic` / `zac_cds_advanced` | 程序 | 第20/21课 | CDS 视图消费端 demo |
 | `zac_oo_alv` | 程序 | 第22课 | OO ALV |
 | `zac_flight_manager` + 5 个 INCLUDE | 程序 | 第24课（待补充） | 综合实战主程序（`zac_flight_top/sel/pbo/pai/forms`），参考源码已随仓库提供于 `capstone-source/zac_flight_manager/` |
 

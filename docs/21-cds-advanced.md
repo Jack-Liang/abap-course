@@ -62,7 +62,7 @@ group by sflight.carrid
 2. WHERE 里 `$parameters.p_carrid` 引用参数——数据库执行时就过滤，不是查回来再筛；
 3. GROUP BY 只留 carrid——上节课 Demo 误把 seatsmax 也分了组（同一公司不同机型会被拆成多行），这是 GROUP BY 的经典陷阱：**分组键多一个，口径就碎一层**。
 
-**消费端**（demo 程序 `zac_cds_advanced` 为待补充对象，可自建体验）：
+**消费端**（demo 程序 `zac_cds_advanced` 已随仓库下发）：
 
 ```abap
 REPORT zac_cds_advanced.

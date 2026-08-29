@@ -17,7 +17,7 @@ status: beta
 
 !!! note "对象状态"
 
-    CDS 视图 `zac_flight_detail` 已随仓库下发；消费端 demo 程序 `zac_cds_basic` 为**待补充对象**——课文里的用法代码可直接在 SE38/ADT 里自建体验（见[第0课矩阵](00-getting-started.md#四命名规范与对象对照)）。
+    CDS 视图 `zac_flight_detail` 与消费端 demo 程序 `zac_cds_basic` 均已随仓库下发，Pull 后可直接运行。
 
 ## 时间安排
 
@@ -80,7 +80,7 @@ ADT（Eclipse 装 ABAP Development Tools，连接试用镜像）打开 `ZAC_FLIG
 
 ### 步骤 3：程序消费
 
-SE38（或 ADT）建 `zac_cds_basic`：
+SE38 运行 `zac_cds_basic`（或对照源码自建一遍）：
 
 ```abap
 REPORT zac_cds_basic.
