@@ -266,6 +266,7 @@ button:focus-visible {
   width: 100%;
   height: auto;
   display: block;
+  border-radius: 0.5rem;
 }
 
 @media screen and (max-width: 48em) {

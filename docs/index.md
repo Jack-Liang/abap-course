@@ -28,7 +28,7 @@ hide:
 
 <figure class="ac-hero-art">
 
-<img src="assets/images/hero.svg" alt="插画：ABAP 编辑器窗口输出 Hello, ABAP!，一架航班沿虚线航迹起飞" loading="eager">
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/common/hero-wing-above-clouds.jpg" alt="云海之上的机翼与蓝天——SFLIGHT 航班主题" loading="eager">
 
 </figure>
 
