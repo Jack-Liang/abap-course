@@ -476,7 +476,7 @@ button:focus-visible {
   color: inherit;
 }
 
-/* ---------- 左侧目录状态图标（与页内横幅同色系：beta 蓝 / draft 琥珀 / final 不显示） ---------- */
+/* ---------- 左侧目录状态图标（与页内横幅同色系：beta 蓝 / draft 琥珀·书写 / final 不显示） ---------- */
 .md-status--final {
   display: none;
 }
@@ -488,8 +488,8 @@ button:focus-visible {
 }
 
 .md-status--draft:after {
-  -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13,14H11V9H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg>');
-  mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13,14H11V9H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg>');
+  -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,3C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19H5V5H12V3H5M17.78,4C17.61,4 17.44,4.07 17.31,4.2L16.09,5.41L18.59,7.91L19.8,6.7C20.06,6.44 20.06,6 19.8,5.76L18.24,4.2C18.11,4.07 17.95,4 17.78,4M15.06,6.44L8,13.5V16H10.5L17.56,8.94L15.06,6.44Z"/></svg>');
+  mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,3C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19H5V5H12V3H5M17.78,4C17.61,4 17.44,4.07 17.31,4.2L16.09,5.41L18.59,7.91L19.8,6.7C20.06,6.44 20.06,6 19.8,5.76L18.24,4.2C18.11,4.07 17.95,4 17.78,4M15.06,6.44L8,13.5V16H10.5L17.56,8.94L15.06,6.44Z"/></svg>');
   background-color: #f0a500;
 }
 
