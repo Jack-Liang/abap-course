@@ -134,7 +134,21 @@ define role ZAC_FLIGHT_DATA {
 
 上节课已切换到 View Entity 写法，它相对老 `define view` 的红利：无中间 SQL 视图命名负担、更多函数（如上面部分标量/日期函数）、更好的检查。7.55 以下系统只有老写法——**看到 `@AbapCatalog.sqlViewName` 就知道是老项目**。
 
-### 5. 下推思维：逻辑放哪层
+### 5. `$self`：RAP 世界的"自身"（看得懂即可）
+
+大纲把 `$self` 列在 View Entity 名下，严格说它住在隔壁：**`$self` 是 RAP 行为定义（BDL）的关键字**，指代"当前实体自身"——第23课预告的 RAP 世界的词。两个高频现身位置：action 的返回类型 `result [1] $self`（动作执行完把实体自己返回给界面），以及 `side effects` 里 `$self affects ...`（本实体发生增删改后触发前端刷新）。
+
+```sql
+" BDL 片段（行为定义，不是 CDS DDL）——认得出即可
+action ApproveOrder result [1] $self;
+side effects {
+  $self affects field _Item.TotalPrice;
+}
+```
+
+课程终点在 CDS，RAP 只是眺望——遇到 `$self` 知道"这是实体在指自己"就够，不必现在会用。顺带认全 `$` 前缀家族：`$parameters`（本课）、`$session`（第 2 节）、`$node`（CDS 层级视图专用）、`$self`（RAP BDL）——都是框架保留词，认脸即可。
+
+### 6. 下推思维：逻辑放哪层
 
 ```mermaid
 flowchart TD

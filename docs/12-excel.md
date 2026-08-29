@@ -173,6 +173,25 @@ lo_sheet->bind_table( ip_table = lt_sflight ).     " 内表一键入 Sheet
 
 企业里还有 OLE2（`CREATE OBJECT excel 'EXCEL.APPLICATION'`）操纵本地 Excel——**了解即可**：慢、只适合桌面端交互，新项目别再引入。
 
+### 5. 文件路径别硬编码：常量起步，配置收口
+
+Demo 里 `lv_fullpath`、模板路径这类值直接写死在代码里，练手没问题，生产就是事故源：DEV/QAS/PRD 三套环境的共享盘目录、模板位置往往不同，而**代码是随传输请求三系统同步的**——环境差异改不了代码、也不该靠改代码解决。演进路线三步：
+
+1. **起步：CONSTANTS 常量**——至少把路径收到程序顶部一处，改的时候不用全文搜；
+2. **进阶：TVARVC 变式表**（STVARV 维护）——运维不改代码、不传请求就能调整取值，且按系统独立维护；
+3. **复杂场景：自建定制表**（Z 表 + SM30 维护视图）——多路径、多参数、带开关时收口到一张表。
+
+```abap
+" 读 TVARVC 配置（STVARV 里维护的 Z_EXCEL_TEMPLATE 变量）
+SELECT SINGLE low FROM tvarvc
+  WHERE name = 'Z_EXCEL_TEMPLATE' AND type = 'P'
+  INTO @DATA(lv_template).
+```
+
+!!! tip "原则：路径不同改配置，不改代码"
+
+    判断标准很简单：这个值在 PRD 上线后有没有可能变？有可能，就别写死进代码。代码走传输、配置留在本系统——这是 DEV/QAS/PRD 三系统架构的底层默契。
+
 ## 💡 实战经验
 
 !!! tip "导入模板是契约"

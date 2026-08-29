@@ -150,7 +150,25 @@ flowchart TD
 
 字段目录从 `slis_t_fieldcat_alv` 换成 `lvc_t_fcat`——字段名略不同（`cwidth_opt` vs `colwidth_optimize`），语义一致，迁移成本是"改几个字段名"。
 
-### 3. 事件：OO 版的"回调"
+### 3. 字段目录的捷径：LVC_FIELDCATALOG_MERGE
+
+Demo 里手写 `VALUE` 目录是为了看清每个字段的控制项；纯展示 DDIC 表全字段时有一条捷径——让系统照着 DDIC 结构自动铺出整张目录：
+
+```abap
+DATA lt_fcat TYPE lvc_t_fcat.
+
+CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+  EXPORTING  i_structure_name = 'SFLIGHT'   " 或传内表：i_internal_tabname
+  CHANGING   ct_fieldcat      = lt_fcat
+  EXCEPTIONS OTHERS           = 1.
+```
+
+- **自动生成**：列头、数据类型、输出长度全从 DDIC 抄来——字段多、字段常变的表省下一大截维护量；
+- **手写（VALUE）**：自定义列头、计算列（DDIC 里不存在的列）、hotspot / do_sum / edit 逐项精调时，手写，或"先生成再 `LOOP ... MODIFY` 局部改"。
+
+取舍一句话：**快出原型用 MERGE，要精修就手写；混合场景先 MERGE 再补改几行。**
+
+### 4. 事件：OO 版的"回调"
 
 ```abap
 " 类定义里：声明处理方法（签名由事件规定）
@@ -173,7 +191,7 @@ SET HANDLER me->handle_double_click FOR mo_grid.
 | `data_changed` | 可编辑单元格数据变更 | 进阶/实战 |
 | `hotspot_click` | 热点单击 | 与双击同理 |
 
-### 4. 自定义工具栏的两步走
+### 5. 自定义工具栏的两步走
 
 1. `handle_toolbar` 里 `APPEND VALUE stb_button( function = 'ZEXPORT' icon = '@16@' ... ) TO e_object->mt_toolbar`——**在系统生成工具栏时插队追加**；
 2. `handle_user_command` 里 `CASE e_ucomm WHEN 'ZEXPORT'` 响应——功能码自定义（课程规范带 Z 前缀）。

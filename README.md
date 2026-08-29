@@ -45,7 +45,7 @@
 | 课 | 主题 | 核心内容 |
 |----|------|---------|
 | [第7课](docs/07-selection-screen.md) | 选择屏幕 | PARAMETERS、SELECT-OPTIONS、屏幕事件、输入校验 |
-| [第8课](docs/08-formatting.md) | 数据格式化 —— 字符串、日期、货币 | 字符串操作、字符串模板 `|{ }|`、日期函数、货币格式 |
+| [第8课](docs/08-formatting.md) | 数据格式化 —— 字符串、日期、货币 | 字符串操作、字符串模板 `\|{ }\|`、日期函数、货币格式 |
 | [第9课](docs/09-function-module.md) | Function Module（函数模块） | Function Group、Import/Export/Changing、RFC 概念 |
 | [第10课](docs/10-alv-basic.md) | ALV 报表（基础） | REUSE_ALV_GRID_DISPLAY、Field Catalog、Layout |
 | [第11课](docs/11-alv-events.md) | ALV 交互事件 | USER_COMMAND、Hotspot、Top-of-Page、Drill-Down |
@@ -135,7 +135,7 @@ abap-course/
 | CDS 视图 | `zac_<语义名>` | `zac_flight_detail` |
 | 表 / 消息类 | `zac_<语义名>` | `zac_flight_ext` / `zac_flight_msg` |
 
-> **待补充对象：** 第9课函数组 `ZAC_CALC_FLIGHT_DURATION`、第20/21课 `ZAC_CDS_BASIC` / `ZAC_CDS_ADVANCED`、第24课综合实战 `ZAC_FLIGHT_MANAGER` 将随后续课程更新逐步加入，详见[第0课的对象对照矩阵](docs/00-getting-started.md#四命名规范与对象对照)。
+> **待补充对象：** 第9课函数组 `ZAC_FLIGHT_UTILS`（FM `ZAC_CALC_FLIGHT_DURATION` + 调用程序 `ZAC_CALL_FUNCTION`）、第20/21课 `ZAC_CDS_BASIC` / `ZAC_CDS_ADVANCED`、第24课综合实战 `ZAC_FLIGHT_MANAGER` 将随后续课程更新逐步加入，详见[第0课的对象对照矩阵](docs/00-getting-started.md#四命名规范与对象对照)。其中第24课的完整参考源码（含 Screen 100 元素清单）已先行提供在 [`capstone-source/zac_flight_manager/`](capstone-source/zac_flight_manager/README.md)，可手工建对象激活体验。
 
 ## 🖼️ 插图管理
 

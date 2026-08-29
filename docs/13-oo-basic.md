@@ -144,7 +144,29 @@ lo_query->lif_flight_query~get_flights( ).       " 调方法
 - 构造函数 `constructor` 在 NEW 时自动执行——参数直接写进括号；
 - **`NEW` + 内联声明**是现代三连：声明、创建、类型推导一步完成。
 
-### 3. 接口：面向"能做什么"编程
+### 3. CAST #( )：向下转型
+
+`NEW` 造出对象后，引用之间还有一个方向问题。把上例的对象赋给**接口引用**试试：
+
+```abap
+DATA lo_if TYPE REF TO lif_flight_query.
+lo_if = NEW lcl_flight_query( 'AA' ).                " 向上转型：自动、安全
+lo_if->get_flights( IMPORTING et_sflight = DATA(lt2) ). " OK：接口声明过的方法
+
+DATA(lo_class) = CAST lcl_flight_query( lo_if ).      " 向下转型：必须显式 CAST
+WRITE: / lo_class->mv_carrid.                         " mv_carrid 不在接口里，只有类引用能访问
+```
+
+- **向上转型**（实现类 → 接口、子类 → 父类）永远安全，普通赋值即完成，不用写任何东西；
+- **向下转型**（接口/父类引用 → 具体类引用）必须 `CAST #( )`——系统在**运行时**检查引用背后对象的真实类型，对不上就抛 `CX_SY_MOVE_CAST_ERROR`（可 TRY/CATCH 的动态检查异常；不 catch 就是短dump）；
+- 旧写法是 `lo_class ?= lo_if`，与 `CAST #( )` 等价——CAST 能进表达式，是新旧之分而非能力之分；
+- 同族还有 `EXACT #( )`（严格无损转换，第19课细讲）——`NEW / CAST / EXACT` 三个"构造表达式"是同一代语法，写法风格一脉相承。
+
+!!! tip "什么时候真的需要 CAST"
+
+    良好的设计面向接口编程，大多数时候不需要向下转型。典型必须 CAST 的场景：事件回调的 `sender` 参数（通用父类引用，要转回具体类才知道"谁触发的"，第22课 OO ALV 会遇到）、异构内表混存多种子类对象后的分拣。
+
+### 4. 接口：面向"能做什么"编程
 
 ```abap
 INTERFACE lif_flight_query.
@@ -159,7 +181,7 @@ CLASS lcl_flight_query DEFINITION.
 - 接口只有声明没有实现；类通过 `INTERFACES` 接入并逐个实现（方法名带 `接口名~` 前缀）；
 - **价值**：调用方面向 `lif_flight_query` 编程，今天是 `lcl_flight_query`、明天换成查缓存的实现类，调用代码一行不改——这就是第24课 MVC 分层的地基。
 
-### 4. 异常：对象化的错误
+### 5. 异常：对象化的错误
 
 ```abap
 CLASS lcx_not_found DEFINITION INHERITING FROM cx_static_check.
@@ -174,7 +196,7 @@ CATCH lcx_not_found INTO DATA(lx_error).  " 捕获 → lx_error 是异常对象
 - 对比 FM 的经典 EXCEPTIONS（一个 sy-subrc 数字）：异常对象能**分类**（继承体系）、**携带信息**（get_text/属性）、**强制处理**（可检查异常不 catch 会语法警告）；
 - 第9课埋的伏笔在此兑现：`RAISING` 声明 + TRY/CATCH 是 FM 与类的共通语言。
 
-### 5. 方法参数的三种出参
+### 6. 方法参数的三种出参
 
 | 形式 | 写法 | 用途 |
 |------|------|------|

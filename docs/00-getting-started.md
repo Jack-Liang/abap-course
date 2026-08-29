@@ -228,8 +228,9 @@ SAP GUI 登录语言选英文（EN）即可——仓库母语为 E，中文以 U
 - [ ] abapGit 可运行（官方镜像自带），本仓库已 Clone/Pull 到 `ZABAP_COURSE` 包
 - [ ] `ZAC_HELLO_WORLD` 运行成功
 
+四项全部打勾，就可以正式开始下一课了。
+
 ---
 
 下一课：[第1课：SAP 系统入门与开发环境](01-sap-overview.md)——正式走进 SAP 的世界。
 
-四项全部打勾，就可以开始[第1课](01-sap-overview.md)了。

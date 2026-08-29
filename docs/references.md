@@ -36,9 +36,115 @@
 
 ## 四、按课延伸（随课程更新逐课补充）
 
-<!-- 格式：
-### 第N课：课题
-| 主题 | 链接 | 说明 |
--->
+按课次登记各课"📖 延伸阅读"小节中的外部链接；课内交叉引用（如指向其他课文或仓库对象）不在此重复登记。
 
-（待补充——每课打磨时在此登记该课延伸阅读，课次与 docs/ 编号一致）
+### 第0课：环境搭建与仓库导入
+
+（无——本课未设延伸阅读小节；环境类外链见"二、环境与工具"）
+
+### 第1课：SAP 系统入门与开发环境
+
+- [Flight Model——本课程贯穿数据的官方出处](https://help.sap.com/docs/SAP_NETWEAVER_700/12a2d87e6c531014bec0e63ea0208c21/cf21f304446011d189700000e8322d00.html)
+- [SAP Help Portal](https://help.sap.com) / [SAP Community](https://community.sap.com)
+
+### 第2课：Hello World 与基本数据类型
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`DATA`、`WRITE`、`SELECT SINGLE` 条目）
+
+### 第3课：数据字典 —— 建一张自定义表
+
+- [Flight Model 官方文档](https://help.sap.com/docs/SAP_NETWEAVER_700/12a2d87e6c531014bec0e63ea0208c21/cf21f304446011d189700000e8322d00.html)
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（DDIC 对象部分）
+
+### 第4课：内表与结构体操作
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`VALUE / FOR / REDUCE / CORRESPONDING` 各条目）
+
+### 第5课：Open SQL —— 增删改查
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`SELECT` / `INSERT` / `UPDATE` / `COMMIT` 条目）
+
+### 第6课：ABAP 调试器
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`BREAK-POINT` 条目与调试器文档链接）
+
+### 第7课：选择屏幕
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`PARAMETERS` / `SELECT-OPTIONS` / `SELECTION-SCREEN` 条目）
+
+### 第8课：数据格式化 —— 字符串、日期、货币
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（String Templates / String Functions 章节，内置函数全表）
+
+### 第9课：Function Module（函数模块）
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`FUNCTION` / `CALL FUNCTION` / `RAISE` 条目）
+
+### 第10课：ALV 报表（基础）
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（REUSE_ALV_* / SALV 类族文档）
+
+### 第11课：ALV 交互事件
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`slis_selfield` 结构与 REUSE 回调文档）
+
+### 第12课：Excel 导入导出
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`GUI_DOWNLOAD` / `GUI_UPLOAD`）
+- [abapGit 官网](https://abapgit.org)（ABAP2XLSX 安装与文档）
+
+### 第13课：ABAP 面向对象编程（基础）
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（ABAP Objects 章节：CLASS / INTERFACE / RAISE）
+
+### 第14课：BAPI 调用 —— SAP 标准业务接口
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（BAPI 与 `BAPI_TRANSACTION_COMMIT` 条目）
+- [SAP Help Portal](https://help.sap.com)（搜 "BAPI"——各业务模块的 BAPI 清单）
+
+### 第15课：增强（Enhancement）—— 不改标准代码扩展功能
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（Enhancement Framework 章节）
+- [SAP Help Portal](https://help.sap.com)（搜各业务模块的 "Customer Exit" 清单）
+
+### 第16课：调用外部接口 —— REST / SOAP / PO / CPI
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`IF_HTTP_CLIENT` / JSON 章节）
+- [SAP Help Portal](https://help.sap.com)（搜 "CPI" / "Process Orchestration"——两位中间件的官方文档）
+
+### 第17课：Transport Request（请求与传输）
+
+- [SAP Help Portal](https://help.sap.com)（搜 "Transport Management System"——官方传输体系文档）
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（Change & Transport System 章节）
+
+### 第18课：消息处理（Message Class）
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`MESSAGE` 条目，六种类型完整语义表）
+
+### 第19课：新语法专题
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（ABAP Expressions 章节，本课全部操作符的官方定义与更多示例）
+
+### 第20课：CDS View（基础）—— 数据模型新范式
+
+- [ABAP Flight Reference Scenario（/DMO/）](https://help.sap.com/docs/abap-cloud/abap-rap/abap-flight-reference-scenario)（SAP 官方 CDS/RAP 参考实现，课程模型的现代版）
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（ABAP CDS 章节）
+
+### 第21课：CDS View（进阶）—— 聚合、参数与访问控制
+
+- [ABAP Flight Reference Scenario（/DMO/）](https://help.sap.com/docs/abap-cloud/abap-rap/abap-flight-reference-scenario)（官方场景里 DCL 与参数化视图的成熟样例）
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（ABAP CDS → Data Control Language 章节）
+
+### 第22课：OO ALV —— 面向对象的 ALV
+
+- [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`CL_GUI_ALV_GRID` / `CL_GUI_DOCKING_CONTAINER` 类文档）
+
+### 第23课：BTP 概览 + abapGit 代码管理
+
+- [abapGit 官网](https://abapgit.org)（文档与独立版下载）
+- [ABAP Flight Reference Scenario（/DMO/）](https://help.sap.com/docs/abap-cloud/abap-rap/abap-flight-reference-scenario)（RAP 进阶官方路线）
+- [SAP BTP Trial](https://www.sap.com/products/technology-platform/trial.html)（注册体验 Steampunk）
+
+### 第24课：综合实战 —— SFLIGHT 航班管理系统（收官）
+
+- [ABAP Flight Reference Scenario（/DMO/）](https://help.sap.com/docs/abap-cloud/abap-rap/abap-flight-reference-scenario)（课程之后的下一站）

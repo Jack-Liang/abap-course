@@ -26,8 +26,8 @@ SAP 不是孤岛：汇率在第三方 API 上、物流状态在合作方系统�
 |------|------|------|
 | 场景引入 | 集成版图：四条路各管什么 | 3 分钟 |
 | Demo 跟做 | 实时汇率换算票价全流程 | 8 分钟 |
-| 代码拆解 | HTTP 五步 / JSON 解析 / 异常与超时 | 26 分钟 |
-| 知识总结 | 集成选型表、排查清单 | 5 分钟 |
+| 代码拆解 | HTTP 五步 / JSON 解析 / 异常与超时 | 23 分钟 |
+| 知识总结 | PO/CPI 概览、集成选型表、排查清单 | 8 分钟 |
 | 课后思考 | 练习 | 3 分钟 |
 
 ## 本课目标
@@ -178,6 +178,61 @@ flowchart LR
 
 SOAMANAGER 发布/消费 WebService：消费侧本质是"按 WSDL 生成代理类 → 调代理方法"，XML 的组装解析全部由框架代劳。SOAP 项目里你几乎不碰 XML 字符串——那是它对比手工 HTTP 的最大优点；缺点是重、慢、调试绕。
 
+### 6. SAP PO 概览：企业内部的集成总线
+
+PO（Process Orchestration）是 SAP 的**本地部署集成中间件**：当"系统 A 直连系统 B"的点对点接口多到失控，就在中间架一条总线——所有消息经过 PO 做路由、映射、监控、重试。ABAP 开发者在 PO 项目里的典型角色：写被 PO 调用的**代理类（Proxy）**，或收发 **IDoc**——中间件本身由集成团队维护，你负责两头。
+
+**组件地图（记住五个字母）：**
+
+| 组件 | 全称 | 干什么 |
+|------|------|--------|
+| **SLD** | System Landscape Directory | 登记"公司里有哪些系统、装了什么版本"——一切配置的底座 |
+| **ESR** | Enterprise Services Repository | 设计态：定义接口结构（Message Type）与字段映射（Message Mapping） |
+| **ID** | Integration Directory | 配置态：这条消息从哪个系统来、走哪个通道、到哪去 |
+| **IE / AEX** | Integration Engine / Advanced Adapter Engine | 运行态：历史双栈版本里 IE 在 ABAP 栈跑消息、AEX 在 Java 栈跑适配器（File/JDBC/SOAP/IDoc…）；PO 7.5 起为 Java 单栈，运行核心是 AEX + BPM |
+| **BPM** | Business Process Management | 跨系统流程编排（如"订单→校验→审批→发货"跨三个系统串起来） |
+
+```mermaid
+flowchart LR
+    A["发送系统<br/>(ERP / 第三方)"] -->|"适配器出站<br/>IDoc / File / SOAP"| B["PO 集成引擎<br/>路由 + 映射"]
+    B -->|"适配器入站<br/>Proxy / IDoc / REST"| C["接收系统"]
+    B -.->|"全程留痕"| D["Message Monitor<br/>可查、可重发"]
+```
+
+**IDoc 收发流程（ABAP 侧必须会）：** IDoc 是 SAP 自家的标准消息格式，三段结构——控制记录（`EDIDC`：谁发给谁、什么类型）、数据记录（业务字段按段存）、状态记录（走到哪一步）。
+
+1. **出站**：程序/消息控制生成 IDoc → 按 `WE20` 合作伙伴参数找端口（`WE21` 定义，常用 tRFC）→ 状态 `03`（已送出端口）；
+2. **入站**：收到 IDoc → `WE20` 决定处理模块 → 状态 `53`（过账成功）或 `51`（应用错误）；
+3. **排查三件套**：`WE02` 看 IDoc 内容与状态、`BD87` 重处理失败单、`SM58` 看 tRFC 卡在哪。
+
+> 集成项目里最常见的一幕：业务说"单子没过去"，你在 `WE02` 里看到状态 51，双击错误消息，定位到字段映射或主数据缺失——十分钟结案。
+
+### 7. SAP CPI 概览：云时代的 iFlow
+
+CPI（Cloud Platform Integration，现名 **Cloud Integration**，属 BTP Integration Suite）是 PO 思想的云端版本：SAP 托管租户、浏览器里画图开发、免 Basis 运维。核心概念是 **iFlow（Integration Flow）**——一张画布：
+
+```mermaid
+flowchart LR
+    A["Sender<br/>HTTPS / OData / SFTP"] --> B["iFlow 步骤<br/>Content Modifier → Mapping<br/>→ Router → Script"]
+    B --> C["Receiver<br/>S/4HANA / SuccessFactors / 第三方"]
+```
+
+- **步骤积木**：Content Modifier（改报文头/体）、Mapping（图形化字段映射，思路与 PO 一脉相承）、Router（条件分支）、Groovy/JavaScript Script（兜底自由度）；
+- **适配器接两端**：HTTPS、OData、SOAP、IDoc、SFTP、JMS……连 SAP 云产品（SuccessFactors / Ariba / Concur）有大量**官方预打包 iFlow**，从 SAP Business Accelerator Hub 下载、改参数即可上线；
+- **开发即 Web**：设计、部署、监控（Message Monitoring）全在浏览器，没有 SM59 / STRUST 那套——但思想同源：连接、映射、监控、重试。
+
+**PO vs CPI 一表选型：**
+
+| 维度 | SAP PO | SAP CPI |
+|------|--------|---------|
+| 部署 | 客户本地机房（自己运维） | BTP 云租户（SAP 运维） |
+| 开发工具 | ESR / ID 客户端（老牌但重） | 浏览器 Web UI |
+| 典型场景 | 企业内部老系统总线、IDoc / File 密集 | 云 SaaS 集成、云到地混合 |
+| 复用资产 | 历年自建映射 | 官方预打包 iFlow 内容库 |
+| 趋势 | 存量巨大、新增减少 | SAP 官方战略方向 |
+
+**一句话：** 老系统还在机房，PO 就还在跑；新项目只要沾一朵云，默认先看 CPI——而你写的 ABAP（Proxy / OData / IDoc）在两边是同一套接法。
+
 ## 💡 实战经验
 
 !!! tip "生产环境走 SM59 Destination"
@@ -205,6 +260,7 @@ SOAMANAGER 发布/消费 WebService：消费侧本质是"按 WSDL 生成代理�
 2. 把 Demo 改成 POST：请求体 `{"base":"USD"}` 发给一个你找得到的公开 POST 接口（或本地 mock）——`set_cdata` 之外还需要设哪个 Header？
 3. 汇率解析用 `pretty_mode-none` 精确匹配——如果接口字段是 `baseCode`（驼峰），ABAP 结构字段该怎么声明、pretty_name 用哪个模式？
 4. 你负责的接口要同时给三个系统用，选 REST 直连还是 PO/CPI 中间层？列出你的判断依据。
+5. 业务报"单子没过去"，你在 `WE02` 里看到 IDoc 状态 51——接下来的排查顺序是什么？（提示：本课"排查三件套"）
 
 ---
 

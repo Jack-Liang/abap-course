@@ -22,7 +22,7 @@ status: beta
 |------|------|------|
 | 场景引入 | 命令式 → 表达式式的思维转换 | 3 分钟 |
 | Demo 跟做 | 七组新旧对照一口气跑完 | 10 分钟 |
-| 代码拆解 | 构造/条件/循环/折叠/过滤/映射 | 24 分钟 |
+| 代码拆解 | 构造/条件/转换/循环/折叠/过滤/映射 + Mesh 与 CLEANUP | 24 分钟 |
 | 知识总结 | 新语法速查矩阵 | 5 分钟 |
 | 课后思考 | 练习 | 3 分钟 |
 
@@ -34,6 +34,7 @@ status: beta
 - 用 COND/SWITCH 替代多分支 IF，并嵌套进模板；
 - 用 FOR（含 FOR GROUPS）在表达式里遍历与分组；
 - 用 REDUCE 折叠单值、FILTER 按键过滤、CORRESPONDING 映射字段；
+- 说出 @FINAL、EXACT、Mesh Path、CLEANUP 这四个"边角"特性各自解决什么问题；
 - 判断"这段老代码值得重写吗"的取舍标准。
 
 ## Demo：七组对照（分步跟做）
@@ -111,7 +112,20 @@ DATA(ls)  = VALUE sflight( carrid = 'AA' connid = '0017' ).
 DATA(lt2) = VALUE ty_flight_tab( ( ... ) ( ... ) ).   " 每对括号一行
 ```
 
-### 2. 条件表达式：COND vs SWITCH
+### 2. @FINAL：内联声明的"只读版"
+
+```abap
+" 与 @DATA 出现在同样位置，但声明后不可再赋值
+SELECT SINGLE price FROM sflight
+  WHERE carrid = 'AA' AND connid = '0017'
+  INTO @FINAL(lv_price).
+
+" lv_price = lv_price + 100.   " ← 编译期直接报错，根本激活不了
+```
+
+普通声明也有对应写法：`FINAL(lv_threshold) = 100.`。**"算一次、用到底"的量**（汇率、阈值、查出来的配置）用 `@FINAL`，后面任何试图改它的代码连激活都过不了——把"不该变"交给编译器看守，比靠自觉和代码评审靠谱得多。这与第13课"约束能编译期挡住就别留到运行时"是同一个思路。
+
+### 3. 条件表达式：COND vs SWITCH
 
 ```abap
 COND string( WHEN 条件 THEN a WHEN 条件2 THEN b ELSE c )   " 区间/复杂条件
@@ -120,7 +134,19 @@ SWITCH string( lv_code WHEN 'AA' THEN x WHEN 'DL' THEN y ELSE z )  " 单值映�
 
 表达式化后它们能进字符串模板、方法参数、VALUE 内部——IF/ELSE 做不到。选用规则一句话：**条件看大小用 COND，条件看等于用 SWITCH**。
 
-### 3. 循环表达式：FOR 家族
+### 4. EXACT：精确转换，宁可报错不可错数
+
+```abap
+" CONV：转不过去就"凑活"——静默舍入
+DATA(lv_conv) = CONV i( '3.7' ).        " 得到 4，没人告诉你丢了 0.3
+
+" EXACT：丢精度就直接抛异常
+DATA(lv_exact) = EXACT i( '3.7' ).      " 运行时抛 CX_SY_CONVERSION_NO_NUMBER
+```
+
+两者是"宽容"与"严格"的取舍：纯展示类字段用 CONV 无妨；**金额、数量、税率**这类"错一分钱都是事故"的字段，用 EXACT 让错误当场爆炸，而不是悄悄进账。EXACT 抛出的异常是可以 CATCH 的——接住后走对账/告警流程（完整写法见第 10 节的 CLEANUP 示例）。
+
+### 5. 循环表达式：FOR 家族
 
 ```abap
 " FOR ... IN：逐行投喂（第4课）
@@ -140,7 +166,7 @@ DATA(lt_1to5) = VALUE ty_ints(
 
 配合 `LET` 可在表达式内声明临时量（第4课 FOR GROUPS 见过）。
 
-### 4. REDUCE：折叠
+### 6. REDUCE：折叠
 
 ```abap
 DATA(lv_total) = REDUCE i(
@@ -151,7 +177,7 @@ DATA(lv_total) = REDUCE i(
 
 折叠目标不止数字：`INIT text = ` `` `` ` `` 之后 `NEXT text = text && ...` 拼字符串；条件计数 `NEXT cnt = cnt + COND i( WHEN ... THEN 1 ELSE 0 )`——REDUCE 的 NEXT 里还能嵌 COND/LET，表达式的组合性就在这里体现。
 
-### 5. FILTER：按键过滤整表
+### 7. FILTER：按键过滤整表
 
 ```abap
 DATA(lt_aa) = FILTER #( lt_tab WHERE carrid = 'AA' ).            " 主键
@@ -160,7 +186,7 @@ DATA(lt_non_aa) = FILTER #( lt_tab EXCEPT WHERE carrid = 'AA' ). " 补集
 
 **前提：表类型必须有匹配 WHERE 字段的键**（SORTED/HASHED 或标准表的主键）——所以 Demo 的 `lt_tab` 声明成 `SORTED TABLE ... KEY carrid`。这呼应第4课的选型：**类型系统不只是声明，是算法承诺**（第4课复杂度差异的语法体现）。
 
-### 6. CORRESPONDING：同名映射
+### 8. CORRESPONDING：同名映射
 
 ```abap
 ls_short = CORRESPONDING #( ls_flight ).        " 同名字段自动搬
@@ -169,7 +195,66 @@ ls_full  = CORRESPONDING #( ls_flight FROM ls_short USING carrid connid fldate )
 
 进阶参数 `MAPPING`/`EXCEPT` 处理异名字段与排除项。第4课已见基础形态，综合实战（第24课）用它做 CDS 行到输出结构的转换。
 
-### 7. 重写取舍：什么时候动老代码
+### 9. Mesh Path：结构化数据的关联路径（看得懂即可）
+
+ABAP 7.50 引入的实验性特性：**MESH 类型**把几张内表 + 表间关联声明成一个"网状结构"，之后用 **Mesh Path** 沿关联路径直接取值，省去手工再查一次表：
+
+```abap
+TYPES:
+  BEGIN OF ty_flight,
+    carrid TYPE sflight-carrid,
+    connid TYPE sflight-connid,
+    fldate TYPE sflight-fldate,
+  END OF ty_flight,
+  ty_flights TYPE SORTED TABLE OF ty_flight
+             WITH UNIQUE KEY carrid connid fldate,
+  BEGIN OF ty_spfli,
+    carrid   TYPE spfli-carrid,
+    connid   TYPE spfli-connid,
+    cityfrom TYPE spfli-cityfrom,
+  END OF ty_spfli,
+  ty_spflis TYPE SORTED TABLE OF ty_spfli
+            WITH UNIQUE KEY carrid connid.
+
+" ① MESH 类型：两个节点表 + 一条关联 _spfli
+TYPES:
+  BEGIN OF MESH ty_route_mesh,
+    flight TYPE ty_flights
+      ASSOCIATION _spfli TO spfli
+        ON carrid = carrid AND connid = connid,
+    spfli  TYPE ty_spflis,
+  END OF MESH ty_route_mesh.
+
+" ② 填充网状结构
+DATA(lo_mesh) = VALUE ty_route_mesh(
+  flight = VALUE #( ( carrid = 'AA' connid = '0017' fldate = '20260730' ) )
+  spfli  = VALUE #( ( carrid = 'AA' connid = '0017' cityfrom = 'NEW YORK' ) ) ).
+
+" ③ Mesh Path：从航班行沿 _spfli 关联走到航线，取 cityfrom
+DATA(lv_cityfrom) = lo_mesh-flight[ 1 ]\_spfli[ 1 ]-cityfrom.   " 'NEW YORK'
+```
+
+`_flight->\_spfli->cityfrom` 这类路径的本质：把"按外键再 READ 一次表"压缩成一个表达式。**实话**：实际项目里几乎没人用——Open SQL JOIN 和第4课的内表读已经够用，Mesh 概念重、可读性争议大，属 7.50 的实验性探索。遇到它认得即可，新代码不必主动引入。
+
+### 10. CLEANUP：无论成败都要执行的清理段
+
+TRY 块除了 CATCH 还有第三段（呼应第13课的异常类）：
+
+```abap
+TRY.
+    DATA(lv_exact) = EXACT i( '3.7' ).            " 第 4 节的例子：这里抛异常
+  CATCH cx_sy_conversion_no_number INTO DATA(lx).
+    WRITE: / |转换失败: { lx->get_text( ) }|.
+  CLEANUP.
+    " 无论上面抛没抛异常、接没接住，这里一定执行
+    " 典型动作：关连接、释放锁、还原全局状态
+    WRITE: / '资源已清理'.
+ENDTRY.
+```
+
+分工一句话：**CATCH 管"出错了怎么办"，CLEANUP 管"无论如何都要做什么"**。申请锁/打开连接之后立刻套上 TRY...CLEANUP，是保证资源不泄漏的固定套路。7.52 起还支持 `CLEANUP INTO DATA(lx)`，在清理时拿到异常对象记日志。
+
+### 11. 重写取舍：什么时候动老代码
 
 | 场景 | 建议 |
 |------|------|
@@ -205,6 +290,7 @@ ls_full  = CORRESPONDING #( ls_flight FROM ls_short USING carrid connid fldate )
 2. FILTER 的"表必须带键"限制，背后是第4课哪个知识点？EXCEPT 版语义是什么？
 3. 把第5课 Demo 里"传统写法"的 SELECT 段（若有旧式变量声明）整体新语法化，贴出你的版本。
 4. 你在维护一段 800 行的 2010 年老报表，领导让你"顺手升级新语法"——你的专业建议是什么？
+5. EXACT 与 CONV 你各会在什么字段上用？CATCH 与 CLEANUP 的分工，用一句话说清。
 
 ---
 

@@ -133,7 +133,7 @@ CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'.
 
 ### 5. 封装：把 BAPI 藏进类里
 
-课程仓库的全局类 `zcl_ac_flight_service`（第13课全局类范例）就是范例：`create_booking( )` 内部完成"调 BAPI → 查 RET2 → 决定 COMMIT/ROLLBACK"，把范式固化成一行调用——第24课综合实战直接复用它。**范式写一次，业务处只表达意图。**
+课程仓库的全局类 `zcl_ac_flight_service`（本课引入的全局服务类）就是范例：`create_booking( )` 内部完成"调 BAPI → 查 RET2 → 决定 COMMIT/ROLLBACK"，把范式固化成一行调用——第24课综合实战直接复用它。**范式写一次，业务处只表达意图。**
 
 ## 💡 实战经验
 

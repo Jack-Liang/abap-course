@@ -132,7 +132,23 @@ flowchart TD
 - **MESSAGE e** 在校验事件里 = 拦下执行、弹回屏幕；`MESSAGE s` = 状态栏提示不拦截——校验用 E，提示用 S（第18课展开）；
 - `AT SELECTION-SCREEN OUTPUT` 是选择屏幕的 PBO（显示前处理），可动态隐藏/灰化字段。
 
-### 4. 布局：BLOCK 分组与文本
+### 4. 行级校验：`AT SELECTION-SCREEN ON END OF s_date`
+
+`ON p_carrid` 是**字段级**校验——整个字段填完校验一次。SELECT-OPTIONS 还有更细的一档：用户在**多值选择对话框**（点选择项行尾的箭头按钮）里每确认一行，就触发一次 `ON END OF`：
+
+```abap
+AT SELECTION-SCREEN ON END OF s_date.
+  " 此时 s_date 内表只装着用户刚确认的这一行
+  IF s_date-high IS NOT INITIAL AND s_date-low > s_date-high.
+    MESSAGE '日期区间下限不能大于上限' TYPE 'E'.
+  ENDIF.
+```
+
+- 与 `ON field` 的分工：`ON field` 管"整个选择项的最终状态"（用户关掉对话框、点执行时验一遍）；`ON END OF` 管"每一行进内表之前的即时体检"——错误当场拦在当前行，不用等用户填完全部再回头找；
+- 事件里的 `s_date` **只含当前这一行**，别当全表 LOOP；E 消息把用户打回该行重填，体验与 `ON field` 一致；
+- 典型用途：单行 LOW > HIGH、区间跨度过大（如日期区间不许超一年）、单值不许为空等"一行之内就能判定"的规则。
+
+### 5. 布局：BLOCK 分组与文本
 
 ```abap
 SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE '航班查询条件'.
@@ -141,6 +157,14 @@ SELECTION-SCREEN END OF BLOCK b1.
 ```
 
 块 + 框架标题让参数不散架；多组参数（主条件/显示选项/调试开关）分块是报表标配。屏幕元素的中文标签走正道：菜单 **Goto → Text Elements → Selection Texts**（把 `P_CARRID` 显示为"航空公司"）。
+
+### 6. 多值对话框与 %_OPTIONS（简要）
+
+SELECT-OPTIONS 行尾那个箭头按钮（内部功能码 `%_OPTIONS`）点开的就是上一节提到的**多值选择对话框**：四个页签分别维护"单值包含 / 区间包含 / 单值排除 / 区间排除"，每页签可填多行。用户在页签间切换的"包含/排除、单值/区间"，落到程序里就是每行的 SIGN 与 OPTION——第 2 节的四段结构，用户侧的完整操作界面就是它。条件生效后按钮会变绿，一眼看出"这行有附加限制"。
+
+!!! tip "不想要多值就砍掉它"
+
+    `NO-EXTENSION` 会把 `%_OPTIONS` 按钮整个拿掉（Demo 的 `s_connid` 就是这么干的），`NO INTERVALS` 再砍掉 HIGH 列——条件越简单，用户越不容易填错，你也越少写防御代码。
 
 ## 💡 实战经验
 

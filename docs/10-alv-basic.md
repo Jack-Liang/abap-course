@@ -154,6 +154,39 @@ CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
 
 用户调好的列序/隐藏/合计方案可保存为**变式**；`i_save = 'A'` + `is_variant` 报表名让用户"存自己的布局、下次直接选"。报表加 `i_save` 一行，用户满意度+1——性价比极高。
 
+### 6. 两个加分项：可编辑列与页头回显选择条件
+
+**可编辑列（简要提及）**：字段目录里给某列加 `edit = 'X'`，该列就变成可输入框。但先清醒认识两件事：
+
+- 编辑改的只是**屏幕上那份内表副本**——改屏幕 ≠ 改数据库，把值回写 SFLIGHT 是你自己的责任；
+- 想在用户敲键时实时校验，要注册 DATA_CHANGED 事件（REUSE 版：`i_events` 传一行 `name = slis_ev_data_changed` + 对应处理 FORM），复杂度明显上升。
+
+真正的可编辑 ALV 项目通常直接上第22课的 OO ALV——此处点到为止，面试和被追问时知道有这回事即可。
+
+**把选择条件显示到页头**：报表的选择条件（`p_carrid`、`s_date` 之类）在结果屏幕上默认是看不见的，但用户截图、打印时最想带上的恰恰是它。经典 LIST 型 ALV（`REUSE_ALV_LIST_DISPLAY`）的 Layout 里有 `get_selinfos` 选项，可让系统把选择屏幕信息自动带进清单抬头；GRID 型没有这项自动能力，标准做法是自己回调页头画出来：
+
+```abap
+CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+  EXPORTING
+    i_callback_program     = sy-repid
+    i_callback_top_of_page = 'TOP_OF_PAGE'   " 页头回调
+    is_layout              = ls_layout
+    it_fieldcat            = lt_fieldcat
+  TABLES
+    t_outtab               = lt_sflight.
+
+FORM top_of_page.
+  DATA(lt_list) = VALUE slis_t_listheader(
+    ( typ = 'H' info = '航班信息列表' )
+    ( typ = 'S' key = '航空公司' info = p_carrid )
+    ( typ = 'S' key = '日期区间' info = |{ s_date-low } ~ { s_date-high }| ) ).
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+    EXPORTING it_list_commentary = lt_list.
+ENDFORM.
+```
+
+第11课的 Demo 会完整走一遍这个回调——此处先知道"页头画布就是干这个的"即可。
+
 ## 💡 实战经验
 
 !!! tip "ALV 程序里不要 WRITE"

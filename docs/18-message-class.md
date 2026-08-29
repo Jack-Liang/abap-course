@@ -156,6 +156,26 @@ ENDFUNCTION.
 
 一条语句同时完成"触发消息 + 抛经典异常"——调用方 `EXCEPTIONS not_found = 1` 接住（第9课闭环）。这是老 FM 代码里最常见的信息出口写法。
 
+### 6. BADI / 增强 / User Exit 里的消息红线
+
+增强代码运行在标准程序的怀里，这里写消息有一条红线：**不要在流程中间 `MESSAGE ... TYPE 'E'`**。E 会把整条 LUW 拦腰打断——前台是弹模态框挡住用户，后台/接口场景则没人可弹，批量接口直接整批暴毙；而且回滚范围由标准程序的流程决定，你控制不了。推荐姿势是"只产文本、不抢方向盘"：`MESSAGE ... INTO` 收文本，交给日志（BAL）或约定的返回参数（BAPIRET2 风格，第14课）；确实需要拦下时，走增强点预留的异常或出口参数（`RAISING`、`cv_error = 'X'` 这类约定），把"拦不拦"的决定权还给标准流程。
+
+```abap
+" 错误姿势：增强里直接 E——批量接口调用时整条 LUW 暴毙
+IF lv_check_failed = abap_true.
+  MESSAGE e001(zac_flight_msg) WITH lv_carrid.
+ENDIF.
+
+" 推荐姿势：INTO 收文本 → 攒进返回表/日志，由调用方决定如何呈现
+IF lv_check_failed = abap_true.
+  MESSAGE e001(zac_flight_msg) WITH lv_carrid INTO DATA(lv_msg).
+  APPEND VALUE bapiret2( type = 'E' id = 'ZAC_FLIGHT_MSG' number = '001'
+                         message = lv_msg ) TO ct_return.
+ENDIF.
+```
+
+一句话记法：**增强里消息只负责"产生文本"，"呈现与中断"永远交给外层流程。**
+
 ## 💡 实战经验
 
 !!! tip "消息文本也是"配置"，也要走传输"
