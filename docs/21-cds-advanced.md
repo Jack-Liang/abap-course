@@ -50,7 +50,7 @@ define view entity ZAC_FLIGHT_STATS
     count(*)              as flight_count,
     @Semantics.amount.currencyCode: 'currcode'
     sum(sflight.price)    as total_price,
-    avg(sflight.price)    as avg_price,
+    avg( cast( sflight.price as abap.dec( 15, 2 ) ) as abap.dec( 15, 2 ) ) as avg_price,
     sum(sflight.seatsmax) as total_seats,
     sum(sflight.seatsocc) as total_occupied,
     scarr.currcode
@@ -63,7 +63,7 @@ group by sflight.carrid, scarr.currcode
 
 1. `with parameters p_carrid : abap.char(3)`——视图自带入参，统计口径"按公司"被编码进对象；
 2. WHERE 里 `$parameters.p_carrid` 引用参数——数据库执行时就过滤，不是查回来再筛；
-3. GROUP BY 是 `carrid, currcode` 两列——currcode 是 carrid 的函数依赖（同一公司货币唯一），不会把组拆碎；联出它是因为 `sum(price)` 结果仍是 CURR，视图实体要求金额必须带货币参考（`@Semantics.amount.currencyCode`），这是把"合计离开币种无意义"的纪律下沉到了数据模型层；
+3. `sum(price)` 与 `avg(price)` 的待遇不同：sum 的结果仍是 CURR，视图实体要求金额必须带货币参考（`@Semantics.amount.currencyCode`），因此联出 `scarr.currcode` 并入 GROUP BY（carrid 的函数依赖，不拆组）；AVG 的默认结果类型是 FLTP，而 CURR 不允许转 FLTP，必须写成 `avg( cast( price as abap.dec(15,2) ) as abap.dec(15,2) )`——先把参数转 DEC，再让 AVG 返回 DEC；
 4. 上节课 Demo 误把 seatsmax 也分了组（同一公司不同机型会被拆成多行），那是 GROUP BY 的经典陷阱：**分组键多一个，口径就碎一层**。
 
 **消费端**（demo 程序 `zac_cds_advanced` 已随仓库下发）：

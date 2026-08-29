@@ -9,7 +9,7 @@ define view entity ZAC_FLIGHT_STATS
     count(*)              as flight_count,
     @Semantics.amount.currencyCode: 'currcode'
     sum(sflight.price)    as total_price,
-    avg(sflight.price)    as avg_price,
+    avg( cast( sflight.price as abap.dec( 15, 2 ) ) as abap.dec( 15, 2 ) ) as avg_price,
     sum(sflight.seatsmax) as total_seats,
     sum(sflight.seatsocc) as total_occupied,
     scarr.currcode
