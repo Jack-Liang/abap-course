@@ -19,6 +19,8 @@ status: beta
 
     调用程序 `zac_call_function` 已随仓库下发；函数组 `zac_flight_utils` 与 FM `zac_calc_flight_duration` 的完整参考源码见仓库 [`ref-source/zac_flight_utils/`](https://github.com/Jack-Liang/abap-course/tree/master/ref-source/zac_flight_utils)——函数组请按下面步骤在 SE37 手工创建（过程本身就是本课教学内容），对照参考源码粘贴即可。
 
+    这是[第0课第四节](00-getting-started.md#四命名规范与对象对照)说过的例外：这组对象的名字**必须照抄** `zac_`（`zac_call_function` 按名调用 FM），但包照旧放你的个人练习包。
+
 ## 时间安排
 
 | 时段 | 内容 | 时长 |
@@ -45,7 +47,7 @@ status: beta
 
 1. SE37 → 菜单 **Goto → Function Groups → Create Group**；
 2. Group 名 `zac_flight_utils`，Short text `航班工具函数组`；
-3. 保存到课程包并激活。函数组是 FM 的"容器"，本质是一个自动生成的程序（SAPL + 组名），组内 FM 共享它的全局数据区。
+3. 保存到**个人练习包**并激活（练习包放哪不影响调用——FM 按名解析，仓库程序 `zac_call_function` 找的是 FM 的名字，不是它所在的包）。函数组是 FM 的"容器"，本质是一个自动生成的程序（SAPL + 组名），组内 FM 共享它的全局数据区。
 
 ### 步骤 2：创建 Function Module
 

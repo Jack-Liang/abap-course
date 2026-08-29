@@ -42,7 +42,7 @@ status: beta
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: '航班统计视图'
 define view entity ZAC_FLIGHT_STATS
-  with parameters p_carrid : abap.char3
+  with parameters p_carrid : abap.char(3)
   as select from sflight
 {
     key sflight.carrid,
@@ -58,7 +58,7 @@ group by sflight.carrid
 
 **观察三个设计点：**
 
-1. `with parameters p_carrid : abap.char3`——视图自带入参，统计口径"按公司"被编码进对象；
+1. `with parameters p_carrid : abap.char(3)`——视图自带入参，统计口径"按公司"被编码进对象；
 2. WHERE 里 `$parameters.p_carrid` 引用参数——数据库执行时就过滤，不是查回来再筛；
 3. GROUP BY 只留 carrid——上节课 Demo 误把 seatsmax 也分了组（同一公司不同机型会被拆成多行），这是 GROUP BY 的经典陷阱：**分组键多一个，口径就碎一层**。
 

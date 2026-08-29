@@ -1,7 +1,7 @@
 @AccessControl.authorizationCheck: #CHECK
 @EndUserText.label: '航班统计视图'
 define view entity ZAC_FLIGHT_STATS
-  with parameters p_carrid : abap.char3
+  with parameters p_carrid : abap.char(3)
   as select from sflight
 {
     key sflight.carrid,

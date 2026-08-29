@@ -8,13 +8,14 @@ status: beta
 
 ## 前置依赖
 
+- [第3课](03-data-dictionary.md)：已建好 `zac_flight_ext` 表并录入了几行数据；
 - [第4课](04-internal-table.md)：内表操作；
 - [第5课](05-open-sql.md)：写库与 LUW；
 - [第8课](08-formatting.md)：SPLIT/字符串处理。
 
 ## 问题引入
 
-业务每月发来一份几百行的 Excel 要录入 SAP；反过来，SAP 数据也要定期导给业务做透视。两头都绕不开"文件"。ABAP 与桌面文件打交道的主力是 `GUI_UPLOAD` / `GUI_DOWNLOAD`（前端服务器上的文件，走 SAP GUI 通道），进阶玩法是 ABAP2XLSX 开源库处理真正的 .xlsx。本课把"导出→加工→导入回写"整条链走通。
+业务每月发来一份几百行的 Excel 要录入 SAP；反过来，SAP 数据也要定期导给业务做透视。两头都绕不开"文件"。ABAP 与桌面文件打交道的主力是 `GUI_UPLOAD` / `GUI_DOWNLOAD`（前端服务器上的文件，走 SAP GUI 通道），进阶玩法是 ABAP2XLSX 开源库处理真正的 .xlsx。本课以第3课的补充信息表 `zac_flight_ext` 为主角，把"导出→加工→导入回写"整条链走通。
 
 !!! warning "环境差异：GUI 文件操作需要 SAP GUI"
 
@@ -48,11 +49,19 @@ SE38 运行 `zac_excel`（已随仓库下发）。**第一部分：导出**—�
 REPORT zac_excel.
 
 START-OF-SELECTION.
-  " === 第一部分：导出 SFLIGHT 到 CSV ===
-  SELECT * FROM sflight INTO TABLE @DATA(lt_sflight) UP TO 100 ROWS.
+  " === 第一部分：导出 zac_flight_ext 到 CSV（TAB 分隔） ===
+  " 显式列清单不带 MANDT——客户端字段不该进文件
+  SELECT carrid, connid, fldate, remark, priority
+    FROM zac_flight_ext
+    INTO TABLE @DATA(lt_ext).
 
-  DATA(lv_default) = |sflight_{ sy-datum }.csv|.
-  DATA: lv_fullpath TYPE string.
+  IF lines( lt_ext ) = 0.
+    WRITE: / 'zac_flight_ext 无数据——先回第3课在 SE16 录入两三行，再回来导出'.
+    RETURN.
+  ENDIF.
+
+  DATA(lv_default) = |flight_ext_{ sy-datum }.csv|.
+  DATA lv_fullpath TYPE string.
 
   CALL FUNCTION 'GUI_FILE_SAVE_DIALOG'
     EXPORTING
@@ -66,41 +75,67 @@ START-OF-SELECTION.
       EXPORTING
         filename              = lv_fullpath
         filetype              = 'ASC'
-        write_field_separator = 'X'      " 列间加分隔符 → CSV
+        write_field_separator = 'X'      " 列间加 TAB 分隔符
         codepage              = '4110'   " UTF-8，中文必需
       TABLES
-        data_tab              = lt_sflight
+        data_tab              = lt_ext
       EXCEPTIONS
-        file_write_error      = 1.
+        file_write_error      = 1
+        OTHERS                = 2.
     IF sy-subrc = 0.
       WRITE: / |导出成功: { lv_fullpath }|.
     ENDIF.
   ENDIF.
 ```
 
-**跟做：** F8 → 弹保存对话框 → 存到桌面 → 用 Excel/文本编辑器打开看看（注意列分隔符和中文正常）。
+**跟做：** F8 → 弹保存对话框 → 存到桌面 → 用 Excel/文本编辑器打开看看（注意列间是 TAB 分隔、中文正常；表里没数据就先回第3课录入几行）。
 
-**第二部分：导入回写**——先把刚导出的文件改名为 `import_flights.csv` 放到桌面（或改程序里的路径），再跑：
+**第二部分：导入回写**——用 Excel 改刚导出文件里的备注/优先级（或加几行），保存后再跑一次程序，这次在**打开对话框**里选中它：
 
 ```abap
-  " === 第二部分：从 CSV 导入航班数据 ===
+  " === 第二部分：从 CSV 导回（打开对话框选文件 + 逐行校验 + 回写） ===
+  " 不硬编码路径：让用户像导出时一样用对话框选文件
+  DATA: lt_files TYPE filetable,
+        lv_rc    TYPE i.
+
+  cl_gui_frontend_services=>file_open_dialog(
+    EXPORTING
+      window_title            = '选择要导入的 CSV 文件'
+    CHANGING
+      file_table              = lt_files
+      rc                      = lv_rc
+    EXCEPTIONS
+      file_open_dialog_failed = 1
+      cntl_error              = 2
+      OTHERS                  = 4 ).
+  IF sy-subrc <> 0 OR lv_rc = 0.
+    WRITE: / '未选择文件，导入取消'.
+    RETURN.
+  ENDIF.
+  READ TABLE lt_files INTO DATA(ls_file) INDEX 1.
+
   DATA: lt_upload TYPE TABLE OF string.
 
   CALL FUNCTION 'GUI_UPLOAD'
     EXPORTING
-      filename  = 'import_flights.csv'
-      filetype  = 'ASC'
+      filename        = ls_file-filename
+      filetype        = 'ASC'
+      codepage        = '4110'
     TABLES
-      data_tab  = lt_upload
+      data_tab        = lt_upload
     EXCEPTIONS
-      file_open_error = 1.
+      file_open_error = 1
+      OTHERS          = 2.
 
   IF sy-subrc = 0.
-    DATA: lv_success TYPE i, lv_error TYPE i.
-    LOOP AT lt_upload INTO @DATA(lv_line).
-      SPLIT lv_line AT ',' INTO
-        @DATA(lv_carrid) @DATA(lv_connid)
-        @DATA(lv_fldate)  @DATA(lv_price).
+    DATA: lv_success TYPE i,
+          lv_error   TYPE i,
+          ls_ext     TYPE zac_flight_ext.
+    LOOP AT lt_upload INTO DATA(lv_line).
+      " 导出用的 TAB 分隔符，导入端必须用同一个字符拆
+      SPLIT lv_line AT cl_abap_char_utilities=>horizontal_tab INTO
+        DATA(lv_carrid) DATA(lv_connid) DATA(lv_fldate)
+        DATA(lv_remark) DATA(lv_priority).
 
       IF lv_carrid IS INITIAL.
         lv_error = lv_error + 1.
@@ -108,10 +143,13 @@ START-OF-SELECTION.
         CONTINUE.
       ENDIF.
 
-      DATA(ls_flight) = VALUE sflight(
-        carrid = lv_carrid connid = lv_connid
-        fldate = lv_fldate price  = lv_price ).
-      MODIFY sflight FROM @ls_flight.
+      " MODIFY = 存在即更新、不存在即新增；客户端字段 MANDT 由系统自动补当前 Client
+      ls_ext = VALUE #( carrid   = lv_carrid
+                        connid   = lv_connid
+                        fldate   = lv_fldate
+                        remark   = lv_remark
+                        priority = lv_priority ).
+      MODIFY zac_flight_ext FROM @ls_ext.
       IF sy-subrc = 0.
         lv_success = lv_success + 1.
       ENDIF.
@@ -121,7 +159,7 @@ START-OF-SELECTION.
   ENDIF.
 ```
 
-**你会看到什么：** 每行 CSV 被拆成四段、逐行校验后写回 SFLIGHT（MODIFY：存在即更新），最后输出"成功 N，失败 M"汇总——一个最小但完整的批量导入程序。
+**你会看到什么：** 每行 CSV 被拆成五段、逐行校验后写回 `zac_flight_ext`（MODIFY：存在即更新、不存在即新增），最后输出"成功 N，失败 M"汇总——一个最小但完整的批量导入程序。改过的备注在 SE16 里已经变样。
 
 ## 知识点
 
@@ -167,7 +205,7 @@ CSV 满足不了多 Sheet、样式、公式时上 [ABAP2XLSX](https://abapgit.or
 ```abap
 DATA(lo_excel) = NEW zcl_excel( ).
 DATA(lo_sheet) = lo_excel->get_active_worksheet( ).
-lo_sheet->bind_table( ip_table = lt_sflight ).     " 内表一键入 Sheet
+lo_sheet->bind_table( ip_table = lt_ext ).         " 内表一键入 Sheet
 " ... 写文件到服务器/AP 下载 ...
 ```
 

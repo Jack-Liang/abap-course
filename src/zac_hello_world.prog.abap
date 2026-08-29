@@ -13,7 +13,7 @@ START-OF-SELECTION.
   DATA: lv_carrid TYPE scarr-carrid,
         lv_carrname TYPE scarr-carrname.
   SELECT SINGLE carrid, carrname
-    FROM scarr INTO (lv_carrid, lv_carrname).
+    FROM scarr INTO (@lv_carrid, @lv_carrname).
   WRITE: / |航空公司代码: { lv_carrid }|,
          / |名称: { lv_carrname }|.
 

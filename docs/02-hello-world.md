@@ -40,13 +40,13 @@ status: beta
 
 ### 步骤 1：创建程序
 
-1. SE38，Name 字段输入 `zac_hello_world`（自己练习时可用 `zhello_自己的用户名` 避免撞名）；
+1. SE38，Name 字段输入**自己的**程序名，如 `zhello_developer`——仓库版 `zac_hello_world` 已随 abapGit 下发，再敲同名会提示对象已存在（第0课第四节：练习用自己的名字和包）；
 2. 点 **Create**，弹窗中 Title 填 `Hello World 演示`，Type 保持默认 **Executable program**；
-3. 系统要求选择 Package：课程用 `ZABAP_COURSE`（之后会提示关联传输请求，确认即可）；此时进入源代码编辑器。
+3. 系统要求选择 Package：选第0课建好的**个人练习包**（练习代码不进课程包 `ZABAP_COURSE`，免得混进 abapGit 仓库；普通包会提示关联传输请求，确认即可，`$TMP` 本地包则没有这一步）；随后进入源代码编辑器。
 
 ### 步骤 2：敲入代码
 
-把下面这段敲入编辑器（或粘贴，但建议敲一遍找手感）：
+把下面这段敲入编辑器（或粘贴，但建议敲一遍找手感；`REPORT` 行的名字换成你自己在步骤 1 建的）：
 
 ```abap
 REPORT zac_hello_world.
@@ -58,7 +58,7 @@ START-OF-SELECTION.
   DATA: lv_carrid   TYPE scarr-carrid,
         lv_carrname TYPE scarr-carrname.
   SELECT SINGLE carrid, carrname
-    FROM scarr INTO (lv_carrid, lv_carrname).
+    FROM scarr INTO (@lv_carrid, @lv_carrname).
   WRITE: / |航空公司代码: { lv_carrid }|,
          / |名称: { lv_carrname }|.
 
@@ -175,7 +175,7 @@ WRITE: / '名称'   LEFT-JUSTIFIED,
 ```abap
 " 旧：两步走
 DATA ls_carr TYPE scarr.
-SELECT SINGLE carrid, carrname FROM scarr INTO CORRESPONDING FIELDS OF ls_carr.
+SELECT SINGLE carrid, carrname FROM scarr INTO CORRESPONDING FIELDS OF @ls_carr.
 
 " 新：一步到位
 SELECT SINGLE carrid, carrname FROM scarr INTO @DATA(ls_carr).

@@ -91,7 +91,8 @@ START-OF-SELECTION.
   WRITE: / |当前航空公司: { lo_query->mv_carrid }|.
 
   " 调用接口方法（实现接口的方法带 接口名~ 前缀）
-  DATA(lt_flights) = lo_query->lif_flight_query~get_flights( ).
+  " get_flights 是 EXPORTING 方法——用 IMPORTING 接结果，不能函数式赋值
+  lo_query->lif_flight_query~get_flights( IMPORTING et_sflight = DATA(lt_flights) ).
   WRITE: / |共查询到 { lines( lt_flights ) } 条航班|.
   LOOP AT lt_flights INTO @DATA(ls).
     WRITE: / |  { ls-carrid } { ls-connid } { ls-fldate }|.
