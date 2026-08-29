@@ -67,7 +67,7 @@ docker run --stop-timeout 3600 -i --name a4h -h vhcala4hci \
 | `--stop-timeout 3600` | 停容器时给 HANA 留足内存数据落盘时间；停止请用 `docker stop -t 7200 a4h`，**不要直接关机或杀进程** |
 | `-skip-limits-check` | Mac/Windows 无法修改宿主机内核参数（shmmax 等），必须加 |
 | `-agree-to-sap-license` | 预先同意开发者许可，免去每次启动的交互确认 |
-| `--mac-address 02:42:ac:11:00:11` | 硬件 key 变化导致许可失效时，用固定 MAC 地址保持稳定 |
+| `--mac-address 02:42:ac:11:00:11` | 固定容器 MAC，防止重启后硬件 key 变化导致许可失效（官方 Docker Hub 页提示的坑；此为页面示例值，可自定，之后保持不变即可） |
 
 常用端口：`3200` SAP GUI、`3300` RFC、`30213` HANA、`8443` Cloud Connector、`50000/50001` HTTP/HTTPS。注意**不要用大写 `-P`**（随机分配端口会导致 SAP GUI 等客户端连不上）。
 
@@ -77,7 +77,7 @@ docker run --stop-timeout 3600 -i --name a4h -h vhcala4hci \
 
 > **Apple Silicon（M 系列芯片）注意：** 镜像为 x86_64 架构，在 M 系列 Mac 上需通过 Rosetta 模拟运行，参考 Docker Hub 页面链接的社区指南。
 >
-> **许可证：** 仅限学习/演示用途；ABAP 许可证有效期约 3 个月，到期后用 SAP*（客户端 000）进 SLICENSE 取硬件 key，到 minisap 页面选择 A4H 系统下载新许可，并挂载 `/opt/sap/ASABAP_license` 更新。
+> **许可证：** 仅限学习/演示用途；ABAP 许可证有效期约 3 个月，到期后用 SAP*（客户端 000）进 SLICENSE 取硬件 key，到 minisap 页面选择 A4H 系统下载新许可，并挂载 `/opt/sap/ASABAP_license` 更新。**未到期却报许可无效**，多半是容器 MAC 变了、硬件 key 跟着变——启动命令加固定 `--mac-address` 可防（见上方参数表）。
 >
 > **提示：** `DDIC` / `SAP*` 仅用于系统管理（比如 DEVELOPER 密码过期时用 SU01 重置），日常开发请始终用 DEVELOPER 登录。网上流传的旧版社区镜像（如 7.52）已不再维护，建议直接用官方镜像。
 
