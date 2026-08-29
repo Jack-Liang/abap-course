@@ -13,6 +13,7 @@
 |------|------|---------|------|
 | SAP Help Portal | <https://help.sap.com> | 全部 | SAP 官方文档总入口 |
 | SAP Community | <https://community.sap.com> | 全部 | 官方社区，问答与博客（试用系统问题加 #abap_trial 标签） |
+| 作者博客（jack-liang.com） | <https://jack-liang.com> | 全部 | 作者的 ABAP/SAP 实战博客，与课程同根域持续更新；单篇文章按课登记于下方各课延伸区 |
 | ABAP Keyword Documentation（7.52） | <https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm> | 第2-19课 | ABAP 语句与新旧语法权威参考 |
 | abapGit 官网 | <https://abapgit.org> | 第0/23课 | 独立版程序下载（`zabapgit_standalone`）、文档 |
 | abapGit GitHub | <https://github.com/abapGit/abapGit> | 第23课 | abapGit 上游仓库与 Releases |
@@ -82,6 +83,7 @@
 ### 第9课：Function Module（函数模块）
 
 - [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`FUNCTION` / `CALL FUNCTION` / `RAISE` 条目）
+- [abap_fm_json 深度解析——把 ABAP 函数模块暴露成 HTTP 服务](https://jack-liang.com/blog/abap-fm-json-in-depth-analysis/)（作者博客；链接登记于第16课延伸区）
 
 ### 第10课：ALV 报表（基础）
 
@@ -104,6 +106,7 @@
 
 - [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（BAPI 与 `BAPI_TRANSACTION_COMMIT` 条目）
 - [SAP Help Portal](https://help.sap.com)（搜 "BAPI"——各业务模块的 BAPI 清单）
+- [用 Rust 封装 NWRFC SDK：给 SAP 开一扇 HTTP 门](https://jack-liang.com/blog/sap-http-door-for-ai/)（作者博客——BAPI 的另一种调用姿势）
 
 ### 第15课：增强（Enhancement）—— 不改标准代码扩展功能
 
@@ -114,6 +117,7 @@
 
 - [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)（`IF_HTTP_CLIENT` / JSON 章节）
 - [SAP Help Portal](https://help.sap.com)（搜 "CPI" / "Process Orchestration"——两位中间件的官方文档）
+- [abap_fm_json 深度解析——把 ABAP 函数模块暴露成 HTTP 服务](https://jack-liang.com/blog/abap-fm-json-in-depth-analysis/)（作者博客——反向视角：把 FM 提供成 HTTP/JSON 服务）
 
 ### 第17课：Transport Request（请求与传输）
 
@@ -147,6 +151,7 @@
 - [abapGit 官网](https://abapgit.org)（文档与独立版下载）
 - [ABAP Flight Reference Scenario（/DMO/）](https://help.sap.com/docs/abap-cloud/abap-rap/abap-flight-reference-scenario)（RAP 进阶官方路线）
 - [SAP BTP Trial](https://www.sap.com/products/technology-platform/trial.html)（注册体验 Steampunk）
+- [SAP 开发技术雷达（Tech Radar）导读](https://jack-liang.com/blog/sap-dev-tech-radar-introduce/)（作者博客——SAP 官方技术选型风向标）
 
 ### 第24课：综合实战 —— SFLIGHT 航班管理系统（收官）
 

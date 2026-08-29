@@ -152,7 +152,8 @@ CDS（数据模型，第20/21课的延伸）
 
 - [abapGit 官网](https://abapgit.org)——文档与独立版下载（第0课装过）；
 - [ABAP Flight Reference Scenario（/DMO/）](https://help.sap.com/docs/abap-cloud/abap-rap/abap-flight-reference-scenario)——RAP 进阶官方路线；
-- [SAP BTP Trial](https://www.sap.com/products/technology-platform/trial.html)——注册体验 Steampunk。
+- [SAP BTP Trial](https://www.sap.com/products/technology-platform/trial.html)——注册体验 Steampunk；
+- [SAP 开发技术雷达（Tech Radar）导读](https://jack-liang.com/blog/sap-dev-tech-radar-introduce/)（作者博客）——SAP 官方技术选型风向标。
 
 ## 课后思考
 

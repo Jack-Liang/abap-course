@@ -172,7 +172,8 @@ CALL FUNCTION 'BAPI_TRANSACTION_ROLLBACK'.
 ## 📖 延伸阅读
 
 - [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——BAPI 与 `BAPI_TRANSACTION_COMMIT` 条目；
-- [SAP Help Portal](https://help.sap.com) 搜 "BAPI"——各业务模块的 BAPI 清单。
+- [SAP Help Portal](https://help.sap.com) 搜 "BAPI"——各业务模块的 BAPI 清单；
+- [用 Rust 封装 NWRFC SDK：给 SAP 开一扇 HTTP 门](https://jack-liang.com/blog/sap-http-door-for-ai/)（作者博客）——不走 GUI / 常规 RFC SDK 的另一种 BAPI 调用姿势。
 
 ## 课后思考
 

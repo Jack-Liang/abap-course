@@ -221,6 +221,7 @@ CALL FUNCTION 'ZAC_CALC_FLIGHT_DURATION'
 ## 📖 延伸阅读
 
 - [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——`FUNCTION` / `CALL FUNCTION` / `RAISE` 条目；
+- [abap_fm_json 深度解析——把 ABAP 函数模块暴露成 HTTP 服务](https://jack-liang.com/blog/abap-fm-json-in-depth-analysis/)（作者博客）——FM 的实战延伸，调用方向反过来就是第16课；
 - BAPI 与 RFC 的官方资料见[参考资料库](references.md)（第14课延伸区将补充 BAPI Explorer 链接）。
 
 ## 课后思考

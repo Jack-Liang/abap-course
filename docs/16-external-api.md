@@ -254,7 +254,8 @@ flowchart LR
 ## 📖 延伸阅读
 
 - [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——`IF_HTTP_CLIENT` / JSON 章节；
-- [SAP Help Portal](https://help.sap.com) 搜 "CPI" / "Process Orchestration"——两位中间件的官方文档。
+- [SAP Help Portal](https://help.sap.com) 搜 "CPI" / "Process Orchestration"——两位中间件的官方文档；
+- [abap_fm_json 深度解析——把 ABAP 函数模块暴露成 HTTP 服务](https://jack-liang.com/blog/abap-fm-json-in-depth-analysis/)（作者博客）——本课是"调别人的服务"，这篇是反向：把自己的 FM 提供成 HTTP/JSON 服务。
 
 ## 课后思考
 

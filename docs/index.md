@@ -103,3 +103,7 @@ hide:
 ## :material-file-code: 源码与命名
 
 课程代码（`zac_*` 开发对象）与课文稿都在 GitHub 仓库中维护：对象统一 `zac_` 课程前缀，课号不进对象名，命名规范与课↔对象对照矩阵见[第0课第四节](00-getting-started.md#四命名规范与对象对照)。
+
+## :material-account-edit: 关于作者
+
+**Jack Liang**，ABAP 开发者。课程之外，在个人博客 [jack-liang.com](https://jack-liang.com) 持续更新 ABAP/SAP 实战文章（函数模块 HTTP 化、NWRFC SDK 调 BAPI、SAP 技术雷达等），个人经历与联系方式见[关于页](https://jack-liang.com/about)。课程的问题与建议，欢迎在任意一课底部的评论区留言。

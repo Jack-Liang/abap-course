@@ -3,7 +3,7 @@ site_description: 从零开始的 SAP ABAP 开发实战课程，24 课时掌握 
 site_url: https://abap.jack-liang.com/
 repo_url: https://github.com/Jack-Liang/abap-course
 repo_name: Jack-Liang/abap-course
-copyright: © 2026 Jack-Liang · 代码 MIT / 文档 CC BY-NC-SA 4.0 · 本项目与 SAP SE 无关联
+copyright: © 2026 <a href="https://jack-liang.com">Jack-Liang</a> · 代码 MIT / 文档 CC BY-NC-SA 4.0 · 本项目与 SAP SE 无关联
 edit_uri: edit/master/docs/
 
 theme:
@@ -106,6 +106,15 @@ nav:
   - 附录:
       - 参考资料库: references.md
       - 许可与声明: LICENSE.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Jack-Liang
+      name: GitHub
+    - icon: fontawesome/solid/globe
+      link: https://jack-liang.com
+      name: 作者博客 jack-liang.com
 
 extra_css:
   - stylesheets/extra.css
