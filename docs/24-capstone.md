@@ -16,7 +16,7 @@ status: beta
 
 !!! note "对象状态"
 
-    本课的主程序 `zac_flight_manager`（含 5 个 INCLUDE + Screen 100）尚未随 abapGit 入库（见[第0课矩阵](00-getting-started.md#四命名规范与对象对照)），但**完整参考源码已随仓库提供**：[`capstone-source/zac_flight_manager/`](https://github.com/Jack-Liang/abap-course/tree/master/capstone-source/zac_flight_manager) 内含全部可粘贴级 `.abap` 源码与 Screen 100 元素清单，在系统里建好激活后 abapGit pull 即完成入库。数据层的 `zac_flight_detail` / `zac_flight_stats`、业务层的 `zcl_ac_flight_service`、消息类 `zac_flight_msg` **都已在库**——搭积木的材料先到了一大半。
+    本课的主程序 `zac_flight_manager`（含 5 个 INCLUDE 与 Screen 100）已随 abapGit 下发——Pull 即得，直接 F8 运行。数据层的 `zac_flight_detail` / `zac_flight_stats`、业务层的 `zcl_ac_flight_service`、消息类 `zac_flight_msg` 也都已在库。全套对象已在作者实机完成"导入 → 激活 → 运行 → 屏幕回写序列化"全链路验证；若你的 abapGit 版本较旧不传输 Dynpro，Screen 100 按下列要点手工补建：类型 Normal；元素 `CUST_FLIGHT`（Custom Control，拉满、勾双向 Resizing）与 OK 码字段 `OK_CODE`；流逻辑 PBO `MODULE status_0100`、PAI `MODULE user_command_0100`；GUI 状态 `STATUS_100` 绑 F3=BACK、Shift+F3=EXIT、F12=CANC（注意替换掉全功能模板的 `&` 开头占位码，并把 OK 字段命名为 `OK_CODE`）。
 
 ## 时间安排
 
@@ -55,7 +55,7 @@ flowchart LR
 ### 2. 对象清单（对照第0课矩阵）
 
 ```
-ZAC_FLIGHT_MANAGER（主程序，参考源码见 capstone-source/，abapGit 对象待入库）
+ZAC_FLIGHT_MANAGER（主程序，已随仓库下发）
 ├── ZAC_FLIGHT_TOP     → 全局声明：TABLES/类型/对象引用
 ├── ZAC_FLIGHT_SEL     → 选择屏幕（PARAMETERS/SELECT-OPTIONS + 校验）
 ├── ZAC_FLIGHT_PBO     → Screen 100 PBO：容器/Grid 初始化
@@ -71,7 +71,7 @@ ZAC_FLIGHT_MANAGER（主程序，参考源码见 capstone-source/，abapGit 对�
 
 ### 3. 核心代码走读
 
-> 以下代码块是设计走读用的**精简版**；完整可运行源码（含视图类 `lcl_alv_display` 与 Screen 100 配置清单）在仓库 [`capstone-source/zac_flight_manager/`](https://github.com/Jack-Liang/abap-course/tree/master/capstone-source/zac_flight_manager)——边读课文边对照真码，效果最佳。
+> 以下代码块是设计走读用的**精简版**；完整可运行源码在仓库 `src/zac_flight_manager.prog.abap` 与各 INCLUDE（`zac_flight_top/sel/pbo/pai/forms.prog.abap`）——边读课文边对照真码，效果最佳。
 
 **主程序 + TOP（结构骨架）：**
 
@@ -175,7 +175,7 @@ CLASS lcl_flight_app IMPLEMENTATION.
 ENDCLASS.
 ```
 
-**交互（示意）：** ALV 的 `double_click` 事件由视图类 handler 接住 → 读当前行 → 转发 `mo_app->create_booking( )`；工具栏 `ZEXPORT` 按钮 → `mo_app->export_to_csv( )`——事件入口只做"翻译"，业务全部交给控制器（完整实现见 `capstone-source/zac_flight_manager/zac_flight_forms.abap`）。
+**交互（示意）：** ALV 的 `double_click` 事件由视图类 handler 接住 → 读当前行 → 转发 `mo_app->create_booking( )`；工具栏 `ZEXPORT` 按钮 → `mo_app->export_to_csv( )`——事件入口只做"翻译"，业务全部交给控制器（完整实现见仓库 `src/zac_flight_forms.prog.abap`）。
 
 ### 4. 交付流程（课程的最后一公里）
 
@@ -225,7 +225,7 @@ ENDCLASS.
 
 > 完成后把你的答案/作品链接贴到**页面底部评论区**——这里会留下每一届学员的脚印，我也会来点评。
 
-1. **毕业设计**：不看参考，自己实现 `zac_flight_manager` 的展示层（Screen 100 + `lcl_alv_display`），跑通"筛选→展示→双击预订→导出"闭环；卡住或完成后，对照仓库 `capstone-source/zac_flight_manager/` 里的官方参考实现做一次重构复盘——commit 到你的 Fork 并贴出链接；
+1. **毕业设计**：不看参考，自己实现 `zac_flight_manager` 的展示层（Screen 100 + `lcl_alv_display`），跑通"筛选→展示→双击预订→导出"闭环；卡住或完成后，对照仓库 `src/` 里已下发的官方实现做一次重构复盘——commit 到你的 Fork 并贴出链接；
 2. **扩展题**：增加"按月份票价趋势"统计页（提示：CDS 里 `dats_add_days`/日期函数 + 第21课聚合）；
 3. **复盘**：24 课里你最有信心讲给别人听的是哪一课？最容易忘的是哪块？（评论区立个 flag，三个月后回来看看）
 4. **展望**：如果这个系统要上 BTP（RAP 重写），哪些资产可以直接搬走，哪些必须重做？（提示：CDS 的可迁移性正是它存在的意义）

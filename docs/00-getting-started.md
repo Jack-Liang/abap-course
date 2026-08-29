@@ -245,9 +245,9 @@ SE38 运行 `ZAC_HELLO_WORLD`，看到 `Hello ABAP!` 与航空公司信息，环
 | `zac_flight_detail` / `zac_flight_stats` | CDS 视图 | 第20/21课、第24课 | 航班详情/统计视图，综合实战复用 |
 | `zac_cds_basic` / `zac_cds_advanced` | 程序 | 第20/21课 | CDS 视图消费端 demo |
 | `zac_oo_alv` | 程序 | 第22课 | OO ALV |
-| `zac_flight_manager` + 5 个 INCLUDE | 程序 | 第24课 | 综合实战主程序（`zac_flight_top/sel/pbo/pai/forms`），参考源码已随仓库提供于 `capstone-source/zac_flight_manager/` |
+| `zac_flight_manager` + 5 个 INCLUDE | 程序 | 第24课 | 综合实战主程序（`zac_flight_top/sel/pbo/pai/forms`），含 Screen 100，均已入库 |
 
-> 第24课主程序尚未作为正式对象入库（其余对象均可 Pull 获取），完整参考源码（含 Screen 100 元素清单）已先行提供在 `capstone-source/zac_flight_manager/` 目录，可手工建对象激活体验。
+> 全部 24 课的开发对象均可通过 abapGit Pull 获取，且已在作者实机完成导入、激活、运行全链路验证。
 
 ---
 

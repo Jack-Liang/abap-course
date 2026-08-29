@@ -149,7 +149,7 @@ abap-course/
 | CDS 视图 | `zac_<语义名>` | `zac_flight_detail` |
 | 表 / 消息类 | `zac_<语义名>` | `zac_flight_ext` / `zac_flight_msg` |
 
-> **待补充对象：** 第24课综合实战 `ZAC_FLIGHT_MANAGER` 将随后续课程更新加入，详见[第0课的对象对照矩阵](docs/00-getting-started.md#四命名规范与对象对照)；其完整参考源码（含 Screen 100 元素清单）已先行提供在 [`capstone-source/zac_flight_manager/`](capstone-source/zac_flight_manager/README.md)，可手工建对象激活体验。第9课函数组 `ZAC_FLIGHT_UTILS`（FM `ZAC_CALC_FLIGHT_DURATION`）已随仓库下发，Pull 即得。
+> **对象状态（2026-08）：** 全部 24 课的开发对象——含第24课综合实战 `ZAC_FLIGHT_MANAGER`（主程序 + 5 INCLUDE + Screen 100）与第9课函数组 `ZAC_FLIGHT_UTILS`——均已随仓库下发，abapGit Pull 即得；整套对象已在作者实机完成导入、激活、运行全链路验证。
 
 ## 🖼️ 插图管理
 
