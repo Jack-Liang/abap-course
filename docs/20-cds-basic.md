@@ -43,7 +43,7 @@ status: beta
 
 ### 步骤 1：看课程自带的 CDS
 
-仓库 `src/zac_flight_detail.ddls.abap`（ADT 或 SE11 → DDL Sources 可见）：
+仓库 `src/zac_flight_detail.ddls.asddls`（ADT 或 SE11 → DDL Sources 可见）：
 
 ```sql
 @AccessControl.authorizationCheck: #CHECK

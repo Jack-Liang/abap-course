@@ -36,7 +36,7 @@ status: beta
 
 ## Demo：参数化统计视图（分步跟做）
 
-课程库的 `zac_flight_stats`（`src/zac_flight_stats.ddls.abap`）：
+课程库的 `zac_flight_stats`（`src/zac_flight_stats.ddls.asddls`）：
 
 ```sql
 @AccessControl.authorizationCheck: #CHECK

@@ -131,8 +131,8 @@ abap-course/
 │   ├── zcl_ac_flight_query.clas.abap      # Class（源码 + .xml）
 │   ├── zcl_ac_flight_service.clas.abap    # Class（源码 + .xml）
 │   ├── zac_flight_ext.tabl.xml            # 自定义表
-│   ├── zac_flight_detail.ddls.abap   # CDS View（源码 + .xml）
-│   ├── zac_flight_stats.ddls.abap    # CDS View（源码 + .xml）
+│   ├── zac_flight_detail.ddls.asddls   # CDS View（源码 + .xml）
+│   ├── zac_flight_stats.ddls.asddls    # CDS View（源码 + .xml）
 │   └── zac_flight_msg.msag.xml            # 消息类
 └── outline.md             # 完整课程提纲
 ```

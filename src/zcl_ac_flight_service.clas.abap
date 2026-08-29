@@ -48,12 +48,14 @@ CLASS zcl_ac_flight_service IMPLEMENTATION.
 
     DATA: lt_return TYPE STANDARD TABLE OF bapiret2 WITH EMPTY KEY,
           ls_return TYPE bapiret2.
+    " 预订号显式声明——CALL FUNCTION 里的 DATA(...) 内联声明是 7.52+ 语法
+    DATA lv_bookingnumber TYPE s_bookid.
 
     CALL FUNCTION 'BAPI_FLBOOKING_CREATEFROMDATA'
       EXPORTING
         booking_data  = ls_bookdata
       IMPORTING
-        bookingnumber = DATA(lv_bookingnumber)
+        bookingnumber = lv_bookingnumber
       TABLES
         return        = lt_return.
 
