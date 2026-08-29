@@ -45,6 +45,7 @@
        <CONT_TYPE>SCREEN</CONT_TYPE>
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>OKCODE</TYPE>
+       <NAME>OK_CODE</NAME>
        <TEXT>____________________</TEXT>
        <LENGTH>020</LENGTH>
        <VISLENGTH>020</VISLENGTH>
@@ -465,6 +466,26 @@
       <ICON_ID>@DJ@</ICON_ID>
       <FUN_TEXT>Spreadsheet...</FUN_TEXT>
       <PATH>A</PATH>
+     </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>BACK</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <FUN_TEXT>返回</FUN_TEXT>
+     </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>CANC</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <TEXT_NAME>ICON_CANCEL</TEXT_NAME>
+      <ICON_ID>@0W@</ICON_ID>
+      <FUN_TEXT>取消</FUN_TEXT>
+     </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>EXIT</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <FUN_TEXT>退出</FUN_TEXT>
      </RSMPE_FUNT>
     </FUN>
     <MEN>
@@ -1105,7 +1126,7 @@
      <RSMPE_PFK>
       <CODE>000001</CODE>
       <PFNO>03</PFNO>
-      <FUNCODE>&amp;F03</FUNCODE>
+      <FUNCODE>BACK</FUNCODE>
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
      <RSMPE_PFK>
@@ -1141,13 +1162,13 @@
      <RSMPE_PFK>
       <CODE>000001</CODE>
       <PFNO>12</PFNO>
-      <FUNCODE>&amp;F12</FUNCODE>
+      <FUNCODE>CANC</FUNCODE>
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
      <RSMPE_PFK>
       <CODE>000001</CODE>
       <PFNO>15</PFNO>
-      <FUNCODE>&amp;F15</FUNCODE>
+      <FUNCODE>EXIT</FUNCODE>
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
      <RSMPE_PFK>
@@ -1615,6 +1636,10 @@
      <RSMPE_STAF>
       <STATUS>STATUS_100</STATUS>
       <FUNCTION>BEBN</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>STATUS_100</STATUS>
+      <FUNCTION>CANC</FUNCTION>
      </RSMPE_STAF>
      <RSMPE_STAF>
       <STATUS>STATUS_100</STATUS>
