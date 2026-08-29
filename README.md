@@ -10,7 +10,7 @@
 
 ## 🚀 快速开始
 
-1. 准备一套 ABAP 练习系统（推荐官方试用镜像 `sapse/abap-cloud-developer-trial`）；
+1. 准备一套 ABAP 练习系统——推荐 **ABAP Cloud Developer Trial**（SAP 官方免费试用环境，Docker 镜像 `sapse/abap-cloud-developer-trial`）；
 2. 确认 SFLIGHT 演示数据（官方镜像默认预置，为空时跑 `SAPBC_DATA_GENERATOR`）；
 3. 用 abapGit 把本仓库 Clone/Pull 到开发包 `ZABAP_COURSE`。
 
@@ -27,7 +27,7 @@
 
 ## 🧪 开发与验证环境
 
-课程全部 Demo 代码与操作步骤验证于同一套环境：SAP 官方 Docker 试用镜像 [`sapse/abap-cloud-developer-trial:2025`](https://hub.docker.com/r/sapse/abap-cloud-developer-trial)（部署步骤见[第0课](docs/00-getting-started.md)）。
+课程全部 Demo 代码与操作步骤验证于同一套环境：**ABAP Cloud Developer Trial 2025**（SAP 官方免费试用环境，Docker 镜像 [`sapse/abap-cloud-developer-trial`](https://hub.docker.com/r/sapse/abap-cloud-developer-trial)，部署步骤见[第0课](docs/00-getting-started.md)）。
 
 **镜像实测版本**（System → Status → Installed Software，2026-08 验证）：
 

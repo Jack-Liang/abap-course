@@ -16,15 +16,15 @@ status: final
 
 | 方案 | 适合谁 | 课程兼容性 | 成本 |
 |------|--------|-----------|------|
-| **A. ABAP 官方试用镜像**（推荐） | 自学者 | ✅ 24 课全部兼容 | 免费；本机 Docker，需 16GB+ 内存 / 170GB 磁盘 |
+| **A. ABAP Cloud Developer Trial**（官方试用镜像，推荐） | 自学者 | ✅ 24 课全部兼容 | 免费；本机 Docker，需 16GB+ 内存 / 170GB 磁盘 |
 | B. 公司/学校的开发系统 | 有导师带、有开发账号 | ✅ 基本兼容，个别课受权限/网络限制 | 需要申请开发权限 |
 | C. BTP 试用版（ABAP 环境） | 只想体验现代开发 | ⚠️ 仅部分课程适用（见下方说明） | 免费，注册即用 |
 
 > **为什么推荐官方试用镜像：** 本课程以传统 ABAP 开发为主线（SE38/SE11/SE16、经典 ALV、函数模块、BAPI），这些都是 SAP GUI + NetWeaver 技术栈的内容，试用镜像完整支持；而 BTP 上的 ABAP 环境是 ABAP Cloud，没有 SAP GUI，也不放开经典 ALV / 函数模块 / 多数 BAPI。
 
-### 方案 A：ABAP 官方试用镜像（推荐）
+### 方案 A：ABAP Cloud Developer Trial（官方试用镜像，推荐）
 
-SAP 官方发布的免费试用系统 [`sapse/abap-cloud-developer-trial`](https://hub.docker.com/r/sapse/abap-cloud-developer-trial)（Docker Hub），底层是完整的 ABAP Platform + HANA，**同时支持 SAP GUI 经典技术栈与现代 ABAP Cloud 开发**，本课程 24 课全部兼容。
+SAP 官方发布的免费试用环境 **ABAP Cloud Developer Trial**（Docker 镜像 [`sapse/abap-cloud-developer-trial`](https://hub.docker.com/r/sapse/abap-cloud-developer-trial)，按 ABAP Platform 年份发布版本），底层是完整的 ABAP Platform + HANA，**同时支持 SAP GUI 经典技术栈与现代 ABAP Cloud 开发**，本课程 24 课全部兼容。
 
 **硬件要求（以官方 Docker Hub 页面为准，以下为 2025 版数值）：**
 
