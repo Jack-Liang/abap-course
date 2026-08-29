@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第5课：Open SQL —— 增删改查

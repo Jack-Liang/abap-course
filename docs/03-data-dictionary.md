@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第3课：数据字典 —— 建一张自定义表

@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第15课：增强（Enhancement）—— 不改标准代码扩展功能

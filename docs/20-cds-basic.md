@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第20课：CDS View（基础）—— 数据模型新范式

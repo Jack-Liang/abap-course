@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第21课：CDS View（进阶）—— 聚合、参数与访问控制

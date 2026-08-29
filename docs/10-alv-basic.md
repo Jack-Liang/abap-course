@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第10课：ALV 报表（基础）

@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第2课：Hello World 与基本数据类型

@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第4课：内表与结构体操作

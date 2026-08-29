@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第7课：选择屏幕

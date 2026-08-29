@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第6课：ABAP 调试器

@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第13课：ABAP 面向对象编程（基础）

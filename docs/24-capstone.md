@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第24课：综合实战 —— SFLIGHT 航班管理系统（收官）

@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第19课：新语法专题

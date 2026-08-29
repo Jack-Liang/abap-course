@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第22课：OO ALV —— 面向对象的 ALV

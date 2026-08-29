@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第23课：BTP 概览 + abapGit 代码管理

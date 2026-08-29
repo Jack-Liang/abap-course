@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第16课：调用外部接口 —— REST / SOAP / PO / CPI

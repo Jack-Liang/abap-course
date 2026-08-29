@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第8课：数据格式化 —— 字符串、日期、货币

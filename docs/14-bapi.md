@@ -1,5 +1,5 @@
 ---
-status: beta
+status: draft
 ---
 
 # 第14课：BAPI 调用 —— SAP 标准业务接口
