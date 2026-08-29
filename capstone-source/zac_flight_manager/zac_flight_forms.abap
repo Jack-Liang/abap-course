@@ -31,10 +31,12 @@ CLASS lcl_alv_display IMPLEMENTATION.
 
       DATA(ls_layout) = VALUE lvc_s_layo(
         zebra = abap_true cwidth_opt = abap_true ).
+      " CHANGING 形参只能接可写的数据对象（变量），不能传方法调用——先取到本地变量
+      DATA(lt_fcat) = build_fieldcat( ).
       mo_grid->set_table_for_first_display(
         EXPORTING is_layout       = ls_layout
         CHANGING  it_outtab       = mt_data
-                  it_fieldcatalog = build_fieldcat( ) ).
+                  it_fieldcatalog = lt_fcat ).
     ENDIF.
   ENDMETHOD.
 
