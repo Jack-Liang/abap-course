@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>航班工具函数组</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZAC_FLIGHT_UTILSTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZAC_FLIGHT_UTILS</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>ZAC_CALC_FLIGHT_DURATION</FUNCNAME>
+     <SHORT_TEXT>计算航线飞行时长</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_CARRID</PARAMETER>
+       <TYP>S_CARR_ID</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_CONNID</PARAMETER>
+       <TYP>S_CONN_ID</TYP>
+      </RSIMP>
+     </IMPORT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EV_FOUND</PARAMETER>
+       <TYP>ABAP_BOOL</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EV_DURATION_MIN</PARAMETER>
+       <TYP>I</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EV_DISTANCE</PARAMETER>
+       <TYP>S_DISTANCE</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EV_CITYFROM</PARAMETER>
+       <TYP>S_FROM_CIT</TYP>
+      </RSEXP>
+      <RSEXP>
+       <PARAMETER>EV_CITYTO</PARAMETER>
+       <TYP>S_TO_CITY</TYP>
+      </RSEXP>
+     </EXPORT>
+     <EXCEPTION>
+      <RSEXC>
+       <EXCEPTION>NOT_FOUND</EXCEPTION>
+      </RSEXC>
+     </EXCEPTION>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_CARRID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Airline Code</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>IV_CONNID</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Flight Connection Number</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_FOUND</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_DURATION_MIN</PARAMETER>
+       <KIND>P</KIND>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_DISTANCE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Distance</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_CITYFROM</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Departure city</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_CITYTO</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Arrival city</STEXT>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>NOT_FOUND</PARAMETER>
+       <KIND>X</KIND>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
