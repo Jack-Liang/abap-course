@@ -22,6 +22,8 @@
 | 主题 | 链接 | 适用课次 | 说明 |
 |------|------|---------|------|
 | ABAP Cloud Developer Trial（Docker） | <https://hub.docker.com/r/sapse/abap-cloud-developer-trial> | 第0课 | 官方免费试用系统，课程推荐的练习环境；镜像自带 `ZABAPGIT_STANDALONE` 与 SFLIGHT 预置数据 |
+| SAP GUI 家族与版本 | <https://pages.community.sap.com/topics/gui/family> | 第0课 | Windows / Java 版 GUI 的版本、系统要求与发布说明入口（Java 版 7.80 起原生支持 Apple Silicon） |
+| SAP Support Portal 软件下载 | <https://support.sap.com/en/my-support/software-downloads.html> | 第0课 | 桌面版 SAP GUI 的下载位置；需 S-user 授权，无渠道时用浏览器版 SAP GUI for HTML（见第0课） |
 | SAP 开发者许可证（minisap） | <https://www.sap.com/minisap> | 第0课 | 试用系统 ABAP 许可到期后（约 3 个月）在此续期 |
 | SAP BTP Trial | <https://www.sap.com/products/technology-platform/trial.html> | 第23课 | BTP 试用注册；注意其 ABAP 环境为 ABAP Cloud，仅部分课程适用（见第0课兼容性说明） |
 

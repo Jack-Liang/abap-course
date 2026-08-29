@@ -71,8 +71,9 @@ docker run --stop-timeout 3600 -i --name a4h -h vhcala4hci \
 
 常用端口：`3200` SAP GUI、`3300` RFC、`30213` HANA、`8443` Cloud Connector、`50000/50001` HTTP/HTTPS。注意**不要用大写 `-P`**（随机分配端口会导致 SAP GUI 等客户端连不上）。
 
-4. 首次启动：该镜像**未预加载数据（initial load）**，启动后第一次打开事务码和程序会明显偏慢，请等 CPU 负载降下来、内存占用趋于稳定后再登录；
-5. SAP GUI 新建连接：应用服务器 `localhost`、实例号 `00`、系统 ID `A4H`；登录客户端 `001`，用户 **DEVELOPER**，初始密码以镜像页面为准（2025 版为 `ABAPtr2025#SP00`，SAP* 和 DDIC 同密码），首次登录会强制修改。
+4. 首次启动：该镜像**未预加载数据（initial load）**，启动后第一次打开事务码和程序会明显偏慢，请等 CPU 负载降下来、内存占用趋于稳定后再登录。
+
+服务器就绪后，还差最后一步：装客户端、建连接并首次登录——见下方专门小节。
 
 > **Apple Silicon（M 系列芯片）注意：** 镜像为 x86_64 架构，在 M 系列 Mac 上需通过 Rosetta 模拟运行，参考 Docker Hub 页面链接的社区指南。
 >
@@ -80,10 +81,38 @@ docker run --stop-timeout 3600 -i --name a4h -h vhcala4hci \
 >
 > **提示：** `DDIC` / `SAP*` 仅用于系统管理（比如 DEVELOPER 密码过期时用 SU01 重置），日常开发请始终用 DEVELOPER 登录。网上流传的旧版社区镜像（如 7.52）已不再维护，建议直接用官方镜像。
 
+### 安装 SAP GUI 客户端并首次登录（方案 A 必读）
+
+容器只是**服务器**——登录还需要在自己电脑上准备一个客户端。按你的系统三选一：
+
+| 客户端 | 适合系统 | 获取方式 | 说明 |
+|--------|---------|---------|------|
+| SAP GUI for Windows | Windows | [SAP Support Portal 软件下载区](https://support.sap.com/en/my-support/software-downloads.html)（需 S-user 下载权限） | 公司电脑通常已由 IT 预装 |
+| SAP GUI for Java | macOS / Linux | 同上（同一下载区） | 7.80 起原生支持 Apple Silicon（M 系列） |
+| SAP GUI for HTML（浏览器版） | 任何系统，**零安装** | 无需下载，浏览器直接访问 | 界面细节与桌面版略有差异；拿不到桌面版时的兜底路线 |
+
+> **个人自学者注意：** 两款桌面版 GUI 都挂在 SAP Support Portal 的下载区，需要 SAP 客户/合作伙伴的 S-user 授权才能下载——没有公司渠道的自学者常卡在这一步，此时用浏览器版即可完成全部课程（做法见本节末尾）。版本与系统要求以 [SAP GUI 官方页面](https://pages.community.sap.com/topics/gui/family)为准。
+
+**桌面版创建连接（Windows / Java 参数通用）：**
+
+- Windows（SAP Logon）：新建条目 → 用户指定系统 → 应用服务器 `localhost`、系统编号 `00`、系统 ID `A4H`；
+- macOS / Linux（SAP GUI for Java）：新建连接，连接串填 `conn=/H/localhost/S/3200`，描述随意（如 `A4H Trial`）。
+
+**首次登录：** 客户端 `001`，用户 **DEVELOPER**，初始密码以镜像页面为准（2025 版为 `ABAPtr2025#SP00`，`SAP*` 和 `DDIC` 同密码），首次登录会强制修改密码。第1课的"打开 SAP GUI、选中连接"指的就是这里建好的连接。
+
+**浏览器版做法（零安装兜底）：** 先给本机 hosts 文件（Windows：`C:\Windows\System32\drivers\etc\hosts`；macOS / Linux：`/etc/hosts`）加一行 `127.0.0.1 vhcala4hci`，再在浏览器打开：
+
+```
+http://vhcala4hci:50000/sap/bc/gui/sap/its/webgui
+```
+
+> 课程演示与截图均以桌面版 SAP GUI（英文界面）为准；浏览器版事务码与功能一致，个别布局、快捷键有差异。若浏览器版打不开，多半是该服务未启用——仍需想办法装桌面版。
+
 ### 方案 B：公司/学校的开发系统
 
-有导师或账号支持时的首选，省去安装。需要向管理员申请：
+有导师或账号支持时的首选，省去自建服务器。需要向管理员申请：
 
+- SAP GUI 客户端（公司电脑一般由 IT 统一安装，先确认有没有，没有就一并申请）；
 - SE38 / SE80 / SE11 / SE16 / SE16N / SE37 / SE24 / SE91 / SE19 等事务码的开发权限；
 - 一个可以自建对象的**开发包（Package）**和 Workbench 传输请求；
 - 注意：第 16 课调用外部 REST API，公司内网通常需要代理或防火墙放行，请提前确认。
@@ -223,7 +252,7 @@ SAP GUI 登录语言选英文（EN）即可——仓库母语为 E，中文以 U
 
 ## 环境就绪清单
 
-- [ ] 能登录系统，SE38/SE11/SE16/SE80 都能打开
+- [ ] SAP GUI 客户端已就绪并登录成功（客户端 `001` / `DEVELOPER`），SE38/SE11/SE16/SE80 都能打开
 - [ ] SCARR/SFLIGHT/SBOOK 有数据（官方镜像默认预置；为空则跑 `SAPBC_DATA_GENERATOR`）
 - [ ] abapGit 可运行（官方镜像自带），本仓库已 Clone/Pull 到 `ZABAP_COURSE` 包
 - [ ] `ZAC_HELLO_WORLD` 运行成功
