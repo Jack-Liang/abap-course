@@ -196,9 +196,9 @@ SE38 运行 `ZAC_HELLO_WORLD`，看到 `Hello ABAP!` 与航空公司信息，环
 | `zac_flight_detail` / `zac_flight_stats` | CDS 视图 | 第20/21课、第24课 | 航班详情/统计视图，综合实战复用 |
 | `zac_cds_basic` / `zac_cds_advanced` | 程序 | 第20/21课（待补充） | CDS 消费端 demo |
 | `zac_oo_alv` | 程序 | 第22课 | OO ALV |
-| `zac_flight_manager` + 5 个 INCLUDE | 程序 | 第24课（待补充） | 综合实战主程序（`zac_flight_top/sel/pbo/pai/forms`） |
+| `zac_flight_manager` + 5 个 INCLUDE | 程序 | 第24课（待补充） | 综合实战主程序（`zac_flight_top/sel/pbo/pai/forms`），参考源码已随仓库提供于 `capstone-source/zac_flight_manager/` |
 
-> 标注"待补充"的对象（第9/20/21/24课）将随后续课程更新加入仓库，届时 Pull 即可获取。
+> 标注"待补充"的对象（第9/20/21/24课）将随后续课程更新加入仓库，届时 Pull 即可获取。其中第24课的完整参考源码（含 Screen 100 元素清单）已先行提供在 `capstone-source/zac_flight_manager/` 目录，可手工建对象激活体验。
 
 ---
 
@@ -227,5 +227,9 @@ SAP GUI 登录语言选英文（EN）即可——仓库母语为 E，中文以 U
 - [ ] SCARR/SFLIGHT/SBOOK 有数据（官方镜像默认预置；为空则跑 `SAPBC_DATA_GENERATOR`）
 - [ ] abapGit 可运行（官方镜像自带），本仓库已 Clone/Pull 到 `ZABAP_COURSE` 包
 - [ ] `ZAC_HELLO_WORLD` 运行成功
+
+---
+
+下一课：[第1课：SAP 系统入门与开发环境](01-sap-overview.md)——正式走进 SAP 的世界。
 
 四项全部打勾，就可以开始[第1课](01-sap-overview.md)了。
