@@ -21,7 +21,7 @@ START-OF-SELECTION.
     ( fieldname = 'CARRNAME' seltext_l = '航空公司名称' outputlen = 20 )
     ( fieldname = 'SEATSMAX'  seltext_l = '最大座位'     outputlen = 12 do_sum = 'X' )
     ( fieldname = 'SEATSOCC'  seltext_l = '已占座位'     outputlen = 12 do_sum = 'X' )
-    ( fieldname = 'PRICE'     seltext_l = '票价'         outputlen = 15 do_sum = 'X' )
+    ( fieldname = 'PRICE'     seltext_l = '票价'         outputlen = 15 )  " 多币种混列，合计没有意义
   ).
 
   DATA(ls_layout) = VALUE slis_layout_alv(

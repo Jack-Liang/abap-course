@@ -56,7 +56,7 @@ START-OF-SELECTION.
     ( fieldname = 'CARRNAME' seltext_l = '航空公司名称' outputlen = 20 )
     ( fieldname = 'SEATSMAX'  seltext_l = '最大座位'     outputlen = 12 do_sum = 'X' )
     ( fieldname = 'SEATSOCC'  seltext_l = '已占座位'     outputlen = 12 do_sum = 'X' )
-    ( fieldname = 'PRICE'     seltext_l = '票价'         outputlen = 15 do_sum = 'X' )
+    ( fieldname = 'PRICE'     seltext_l = '票价'         outputlen = 15 )  " 多币种混列，合计没有意义
   ).
 
   DATA(ls_layout) = VALUE slis_layout_alv(
@@ -81,7 +81,7 @@ START-OF-SELECTION.
   ENDIF.
 ```
 
-**你会看到什么：** 全屏 ALV 表格——斑马纹、中文列标题、三个数值列底部自动合计。然后体验**工具栏五件套**（用户视角的 ALV 价值全在这）：
+**你会看到什么：** 全屏 ALV 表格——斑马纹、中文列标题、两个座位数值列底部自动合计（票价是多币种混列，不做合计——见字段目录注释）。然后体验**工具栏五件套**（用户视角的 ALV 价值全在这）：
 
 1. **排序**：点列头再点升/降序按钮；
 2. **筛选**：选中某行某列的值 → Filter → 按此值过滤；

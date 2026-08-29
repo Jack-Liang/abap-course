@@ -181,9 +181,11 @@ Field Catalog 里 `hotspot = 'X'` 的列：文字带下划线、鼠标手型、*
 " A. 二级 ALV（本课 Demo）：明细列表再铺一层
 PERFORM show_bookings USING ...
 
-" B. 跳转事务码并带出对象（"跳到 SE16 看这张表"类需求）
+" B. 跳转事务码并带上当前行（"带着数据去别的界面"类需求）
+" 前提：目标事务码的首屏幕字段挂了对应的记忆 ID——F1 帮助 → Technical
+" info 里的 "Parameter ID" 就是它（'CAR' 是航空公司代码的记忆 ID）
 SET PARAMETER ID 'CAR' FIELD ls_sel-carrid.
-CALL TRANSACTION 'SE16' AND SKIP FIRST SCREEN.
+CALL TRANSACTION '<目标事务码>' AND SKIP FIRST SCREEN.  " 填实际存在的目标
 
 " C. 弹窗确认（删除/提交前确认）
 CALL FUNCTION 'POPUP_TO_CONFIRM' ...

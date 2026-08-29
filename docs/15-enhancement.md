@@ -45,7 +45,7 @@ status: beta
 
 ### 步骤 1：找一个注入口
 
-1. SE38 打开任意会展示 SFLIGHT 的标准程序（例如数据浏览相关的报表；也可用 SE16N 界面程序）；
+1. SE38 打开任意会展示 SFLIGHT 的标准程序（例如数据浏览相关的报表）；
 2. 命令栏输入 `/h` 再执行（第6课技能：下一动作进调试器）；
 3. 调试器里看**调用栈**：找到"即将处理航班数据"的标准程序名与位置——这就是候选注入口。
 
@@ -58,6 +58,8 @@ status: beta
 
 ```abap
 " 读取课程自建的补充信息（第3课的表）
+" 注意：ls_sflight 是宿主程序里的工作区——变量名以第 1 步调试器里
+" 看到的为准，这里只是示例名
 DATA: lv_remark TYPE zac_flight_ext-remark.
 
 SELECT SINGLE remark FROM zac_flight_ext

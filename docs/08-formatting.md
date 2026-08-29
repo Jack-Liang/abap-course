@@ -58,9 +58,10 @@ START-OF-SELECTION.
   WRITE: / |ISO: { lv_date DATE = ISO }|.
   WRITE: / |用户格式: { lv_date DATE = USER }|.
 
-  " ④ 货币格式化
+  " ④ 货币格式化——CURR 存的是内部格式，展示必须带币种语义
   DATA(lv_price) = 1500.
-  WRITE: / |票价: { lv_price CURRENCY = 'USD' }|.
+  WRITE: / |票价(USD): { lv_price CURRENCY = 'USD' }|.   " → 15.00
+  WRITE: / |票价(JPY): { lv_price CURRENCY = 'JPY' }|.   " → 1,500
 
   " ⑤ SPLIT 拆分
   SPLIT 'AA,0017,20260730' AT ',' INTO
@@ -98,7 +99,7 @@ START-OF-SELECTION.
 |{ lv_qty UNIT = 'KG' }|                          " 按单位的数量
 |{ lv_text WIDTH = 20 ALIGN = RIGHT PAD = '.' }|  " 定宽右对齐补点
 |{ COND #( WHEN lv_flag = 'X' THEN '是' ELSE '否' ) }|  " 表达式直接进模板
-| 下一站: { lv_city }|                            " 转义：|| 输出竖线
+|下一站 \| { lv_city }|                          " 转义：\| 输出字面量竖线
 ```
 
 **为什么它是首选**：一个表达式完成"拼接 + 格式化 + 对齐"，可直接嵌进 WRITE / 方法参数 / 内表构造。CONCATENATE 没死，但新代码没有理由不先想字符串模板。

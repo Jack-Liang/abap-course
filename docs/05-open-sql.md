@@ -188,8 +188,8 @@ COMMIT WORK.                   " 落盘，对所有人可见
 ROLLBACK WORK.                 " 撤销本次 LUW 的全部写操作
 ```
 
-- **数据库 LUW**：从上一条修改语句到 COMMIT/ROLLBACK 之间的一段；
-- **SAP LUW**：SAP 的逻辑工作单元概念——一个对话步骤/一个 BAPI 事务块，可能横跨多个数据库 LUW，第14课讲 BAPI 时会看到 `BAPI_TRANSACTION_COMMIT` 正是 SAP LUW 的标准收口；
+- **数据库 LUW**：两次 COMMIT/ROLLBACK 之间的全部数据库操作（注意：每轮对话结束 SAP 还会自动隐式提交一次）；
+- **SAP LUW**：SAP 的逻辑工作单元概念——一个业务动作/一个 BAPI 事务块，可能横跨多个数据库 LUW，第14课讲 BAPI 时会看到 `BAPI_TRANSACTION_COMMIT` 正是 SAP LUW 的标准收口；
 - 本课记住三条：**写操作默认不自动提交；要么 COMMIT 要么 ROLLBACK，别悬着；一个业务动作的所有写操作放进同一个 LUW**（要么全成，要么全撤）。
 
 ## 💡 实战经验
@@ -204,7 +204,7 @@ ROLLBACK WORK.                 " 撤销本次 LUW 的全部写操作
 
 !!! warning "别在 LOOP 里 SELECT"
 
-    循环里逐行查库（N 次 DB 往返）是 ABAP 性能反模式之首。正确姿势：进循环前 `SELECT ... FOR ALL ENTRIES` 或 JOIN 批量取回内表，循环里 `READ TABLE`（第4课的 HASHED 表）。
+    循环里逐行查库（N 次 DB 往返）是 ABAP 性能反模式之首。正确姿势：进循环前 JOIN（第 2 节刚学）批量取回内表，循环里 `READ TABLE`（第4课的 HASHED 表）。老代码常见的 `FOR ALL ENTRIES` 是没有 JOIN 条件时的批量替代写法，本课不展开——先记住 JOIN 优先。
 
 ## 📖 延伸阅读
 

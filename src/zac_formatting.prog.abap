@@ -22,9 +22,10 @@ START-OF-SELECTION.
   WRITE: / |ISO: { lv_date DATE = ISO }|.
   WRITE: / |用户格式: { lv_date DATE = USER }|.
 
-  " 数值格式化
+  " 货币格式化——CURR 存的是内部格式，展示必须带币种语义
   DATA(lv_price) = 1500.
-  WRITE: / |票价: { lv_price CURRENCY = 'USD' }|.
+  WRITE: / |票价(USD): { lv_price CURRENCY = 'USD' }|.   " → 15.00
+  WRITE: / |票价(JPY): { lv_price CURRENCY = 'JPY' }|.   " → 1,500
 
   " SPLIT
   SPLIT 'AA,0017,20260730' AT ',' INTO
