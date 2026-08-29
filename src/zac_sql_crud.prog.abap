@@ -32,7 +32,7 @@ START-OF-SELECTION.
                          AND f~connid = p~connid
     WHERE f~carrid = 'AA'
     INTO TABLE @DATA(lt_join).
-  LOOP AT lt_join INTO @DATA(ls_j).
+  LOOP AT lt_join INTO DATA(ls_j).
     WRITE: / |{ ls_j-carrname } { ls_j-cityfrom } → { ls_j-cityto }|.
   ENDLOOP.
 
@@ -41,7 +41,7 @@ START-OF-SELECTION.
     FROM sflight WHERE carrid = 'AA'
     GROUP BY carrid
     INTO TABLE @DATA(lt_stats).
-  READ TABLE lt_stats INTO @DATA(ls_st) INDEX 1.
+  READ TABLE lt_stats INTO DATA(ls_st) INDEX 1.
   IF sy-subrc = 0.
     WRITE: / |AA 航班共 { ls_st-cnt } 条, 总座位 { ls_st-total }|.
   ENDIF.

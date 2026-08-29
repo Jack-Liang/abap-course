@@ -18,7 +18,7 @@ SAP 不是孤岛：汇率在第三方 API 上、物流状态在合作方系统�
 
 !!! warning "环境差异：外网与 SSL 是前置条件"
 
-    Demo 调用公网汇率 API（`open.er-api.com`）。要求：① 试用容器所在主机能访问外网；② STRUST 里已导入目标站点的 SSL 证书（或先用 `ssl_id = 'ANONYMOUS'` 试，证书报错时按第0课的 STRUST 方法导入 `open.er-api.com` 证书链）；③ 公司内网需代理。跑不通不影响学习——代码与流程讲解完整，环境问题本身就是本课知识点。
+    Demo 调用公网汇率 API（`open.er-api.com`）。要求：① 试用容器所在主机能访问外网；② STRUST 里已导入目标站点的 SSL 证书（或先用 `ssl_id = 'ANONYM'` 试，证书报错时按第0课的 STRUST 方法导入 `open.er-api.com` 证书链）；③ 公司内网需代理。跑不通不影响学习——代码与流程讲解完整，环境问题本身就是本课知识点。
 
 ## 时间安排
 
@@ -51,10 +51,14 @@ START-OF-SELECTION.
         lv_json TYPE string.
 
   " 1. 创建 HTTP 客户端
+  " SSL_ID 的类型是 SSFAPPLSSL，直接传字面量部分系统会报 "not type-compatible"；
+  " 'ANONYM' 对应 STRUST 的 "SSL Client Anonymous" PSE（'DFAULT' 则是 Standard PSE）
+  DATA lv_ssl_id TYPE ssfapplssl VALUE 'ANONYM'.
+
   cl_http_client=>create_by_url(
     EXPORTING
       url    = 'https://open.er-api.com/v6/latest/USD'
-      ssl_id = 'ANONYMOUS'
+      ssl_id = lv_ssl_id
     IMPORTING
       client = lo_http
     EXCEPTIONS OTHERS = 4 ).

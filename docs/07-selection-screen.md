@@ -40,7 +40,10 @@ status: beta
 ```abap
 REPORT zac_selection_screen.
 
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE '航班查询条件'.
+" 块标题必须是变量名或文本符号，不接受字面量
+DATA title_b1 TYPE c LENGTH 40 VALUE '航班查询条件'.
+
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE title_b1.
 PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA'.
 SELECT-OPTIONS: s_connid FOR sflight-connid NO-EXTENSION,
                 s_date   FOR sflight-fldate,
@@ -66,7 +69,7 @@ START-OF-SELECTION.
   IF lt_sflight IS INITIAL.
     WRITE: / '未找到符合条件的航班'.
   ELSE.
-    LOOP AT lt_sflight INTO @DATA(ls).
+    LOOP AT lt_sflight INTO DATA(ls).
       WRITE: / |{ ls-carrid } { ls-connid } { ls-fldate } 座位 { ls-seatsocc }/{ ls-seatsmax }|.
     ENDLOOP.
     WRITE: / |共 { lines( lt_sflight ) } 条记录|.
@@ -153,7 +156,9 @@ AT SELECTION-SCREEN ON END OF s_date.
 ### 5. 布局：BLOCK 分组与文本
 
 ```abap
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE '航班查询条件'.
+" 块标题必须是变量名或文本符号（字面量语法检查不过）：
+DATA title_b1 TYPE c LENGTH 40 VALUE '航班查询条件'.
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE title_b1.
   ...
 SELECTION-SCREEN END OF BLOCK b1.
 ```

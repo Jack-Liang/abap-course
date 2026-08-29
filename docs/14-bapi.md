@@ -73,12 +73,14 @@ START-OF-SELECTION.
 
   " 3. 调用 BAPI：结构化入参 + RET2 返回表 + 出参预订号
   DATA lt_return TYPE STANDARD TABLE OF bapiret2 WITH EMPTY KEY.
+  " 预订号显式声明——CALL FUNCTION 里的 DATA(...) 内联声明是 7.52+ 语法
+  DATA lv_bookid TYPE s_book_id.
 
   CALL FUNCTION 'BAPI_FLBOOKING_CREATEFROMDATA'
     EXPORTING
       booking_data  = ls_bookdata
     IMPORTING
-      bookingnumber = DATA(lv_bookid)
+      bookingnumber = lv_bookid
     TABLES
       return        = lt_return.
 

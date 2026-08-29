@@ -6,9 +6,12 @@
 *&---------------------------------------------------------------------*
 REPORT zac_oo_basic.
 
+" SFLIGHT_TAB 表类型并非每个系统都交付，课程统一用本地类型，任何环境可跑
+TYPES ty_sflight_tab TYPE STANDARD TABLE OF sflight WITH EMPTY KEY.
+
 INTERFACE lif_flight_query.
   METHODS:
-    get_flights EXPORTING et_sflight TYPE sflight_tab,
+    get_flights EXPORTING et_sflight TYPE ty_sflight_tab,
     get_flight_detail IMPORTING iv_connid TYPE s_conn_id
                                 iv_fldate TYPE s_date
                       RETURNING VALUE(rs_detail) TYPE sflight.
@@ -55,7 +58,7 @@ START-OF-SELECTION.
   " 调用接口方法（EXPORTING 方法用 IMPORTING 接结果，不能函数式赋值）
   lo_query->lif_flight_query~get_flights( IMPORTING et_sflight = DATA(lt_flights) ).
   WRITE: / |共查询到 { lines( lt_flights ) } 条航班|.
-  LOOP AT lt_flights INTO @DATA(ls).
+  LOOP AT lt_flights INTO DATA(ls).
     WRITE: / |  { ls-carrid } { ls-connid } { ls-fldate }|.
   ENDLOOP.
 

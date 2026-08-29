@@ -52,8 +52,8 @@ START-OF-SELECTION.
     FROM scarr INTO @DATA(ls_carr) WHERE carrid = 'AA'.
   WRITE: / |航空公司: { ls_carr-carrname } 货币: { ls_carr-currcode }|.
 
-  " ③ 日期格式化
-  DATA(lv_date) = '20260730'.
+  " ③ 日期格式化（DATE 格式项只作用于类型 d，字符型会语法报错，CONV 转一下）
+  DATA(lv_date) = CONV d( '20260730' ).
   WRITE: / |原始: { lv_date }|.
   WRITE: / |ISO: { lv_date DATE = ISO }|.
   WRITE: / |用户格式: { lv_date DATE = USER }|.
@@ -179,7 +179,7 @@ DATA(lv_class) = SWITCH string( lv_grade           " 按单值分发
 
 !!! tip "SPLIT 结果未知就拆进内表"
 
-    `SPLIT lv_csv AT ',' INTO TABLE @DATA(lt_parts).` 比声明一堆变量稳——CSV 每行字段数经常不齐，拆进表再按索引取。
+    `SPLIT lv_csv AT ',' INTO TABLE DATA(lt_parts).` 比声明一堆变量稳——CSV 每行字段数经常不齐，拆进表再按索引取。
 
 !!! tip "调试字符串问题先看"隐形字符""
 

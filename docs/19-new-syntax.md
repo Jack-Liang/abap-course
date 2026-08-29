@@ -57,7 +57,7 @@ START-OF-SELECTION.
     ( carrid = 'UA' connid = '0941' fldate = '20260730' seatsmax = 350 ) ).
 
   " 对比3：COND
-  LOOP AT lt_tab INTO @DATA(ls).
+  LOOP AT lt_tab INTO DATA(ls).
     DATA(lv_status) = COND string(
       WHEN ls-seatsocc >= ls-seatsmax THEN '已满'
       WHEN ls-seatsocc > ls-seatsmax * 8 / 10 THEN '紧张'

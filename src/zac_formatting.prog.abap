@@ -17,7 +17,8 @@ START-OF-SELECTION.
   WRITE: / |航空公司: { ls_carr-carrname } 货币: { ls_carr-currcode }|.
 
   " 日期格式化
-  DATA(lv_date) = '20260730'.
+  " DATE 格式项只作用于类型 d（DATE=ISO/USER），字符型 '20260730' 会语法报错，用 CONV 转 d
+  DATA(lv_date) = CONV d( '20260730' ).
   WRITE: / |原始: { lv_date }|.
   WRITE: / |ISO: { lv_date DATE = ISO }|.
   WRITE: / |用户格式: { lv_date DATE = USER }|.
@@ -27,9 +28,9 @@ START-OF-SELECTION.
   WRITE: / |票价(USD): { lv_price CURRENCY = 'USD' }|.   " → 15.00
   WRITE: / |票价(JPY): { lv_price CURRENCY = 'JPY' }|.   " → 1,500
 
-  " SPLIT
+  " SPLIT（@ 转义符只在 ABAP SQL 里用，普通语句直接 DATA(...) 内联）
   SPLIT 'AA,0017,20260730' AT ',' INTO
-    @DATA(lv_a) @DATA(lv_b) @DATA(lv_c).
+    DATA(lv_a) DATA(lv_b) DATA(lv_c).
   WRITE: / |拆分: { lv_a } / { lv_b } / { lv_c }|.
 
   " REPLACE 新语法

@@ -124,16 +124,24 @@ SE38 新建 `zac_call_function`（或等仓库下发）：
 REPORT zac_call_function.
 
 START-OF-SELECTION.
+  " 出参显式声明接收——CALL FUNCTION 里的 DATA(...) 内联声明是 7.52+ 语法，
+  " 7.40/7.50 环境会报 "inline declaration not possible in this position"
+  DATA: lv_found      TYPE abap_bool,
+        lv_minutes    TYPE i,
+        lv_distance   TYPE s_distance,
+        lv_cityfrom   TYPE s_from_cit,
+        lv_cityto     TYPE s_to_cit.
+
   CALL FUNCTION 'ZAC_CALC_FLIGHT_DURATION'
     EXPORTING
       iv_carrid       = 'AA'
       iv_connid       = '0017'
     IMPORTING
-      ev_found        = @DATA(lv_found)
-      ev_duration_min = @DATA(lv_minutes)
-      ev_distance     = @DATA(lv_distance)
-      ev_cityfrom     = @DATA(lv_cityfrom)
-      ev_cityto       = @DATA(lv_cityto)
+      ev_found        = lv_found
+      ev_duration_min = lv_minutes
+      ev_distance     = lv_distance
+      ev_cityfrom     = lv_cityfrom
+      ev_cityto       = lv_cityto
     EXCEPTIONS
       not_found       = 1
       OTHERS          = 2.
@@ -182,7 +190,7 @@ CALL FUNCTION 'ZAC_CALC_FLIGHT_DURATION'
   EXPORTING
     iv_carrid = 'AA'          " 按参数名传值（推荐，顺序无关）
   IMPORTING
-    ev_...    = @DATA(...)    " 内联声明接收（现代）
+    ev_...    = DATA(...)     " 内联声明接收（7.52+；旧版本需先 DATA 显式声明）
   EXCEPTIONS
     not_found = 1
     OTHERS    = 2.            " sy-subrc 映射

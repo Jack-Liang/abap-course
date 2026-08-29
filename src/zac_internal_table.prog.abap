@@ -33,7 +33,7 @@ START-OF-SELECTION.
       GROUP BY ( carrid = ls-carrid cnt = GROUP SIZE )
     ( carrid = grp-carrid cnt = grp-cnt )
   ).
-  LOOP AT lt_summary INTO @DATA(ls_grp).
+  LOOP AT lt_summary INTO DATA(ls_grp).
     WRITE: / |{ ls_grp-carrid }: { ls_grp-cnt } 条航班|.
   ENDLOOP.
 

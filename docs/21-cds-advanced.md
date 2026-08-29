@@ -73,7 +73,7 @@ START-OF-SELECTION.
     INTO TABLE @DATA(lt_stats).
 
   IF lines( lt_stats ) > 0.
-    READ TABLE lt_stats INTO @DATA(ls_stats) INDEX 1.
+    READ TABLE lt_stats INTO DATA(ls_stats) INDEX 1.
     WRITE: / |航空公司: { ls_stats-carrid }|.
     WRITE: / |航班数量: { ls_stats-flight_count }|.
     WRITE: / |平均票价: { ls_stats-avg_price }|.

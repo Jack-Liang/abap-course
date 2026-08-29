@@ -24,8 +24,9 @@ CLASS lcl_alv_display IMPLEMENTATION.
       mo_container = NEW cl_gui_custom_container( container_name = 'CUST_FLIGHT' ).
       mo_grid = NEW cl_gui_alv_grid( i_parent = mo_container ).
 
-      SET HANDLER: me->handle_double_click,
-                   me->handle_toolbar,
+      " 实例事件的每个处理器都必须各带一个 FOR <实例>
+      SET HANDLER: me->handle_double_click FOR mo_grid,
+                   me->handle_toolbar FOR mo_grid,
                    me->handle_user_command FOR mo_grid.
 
       DATA(ls_layout) = VALUE lvc_s_layo(

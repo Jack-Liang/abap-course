@@ -12,7 +12,7 @@ START-OF-SELECTION.
     INTO TABLE @DATA(lt_flights)
     UP TO 20 ROWS.
 
-  LOOP AT lt_flights INTO @DATA(ls).
+  LOOP AT lt_flights INTO DATA(ls).
     WRITE: / |{ ls-carrname } { ls-cityfrom } → { ls-cityto } { ls-price } { ls-currcode }|.
   ENDLOOP.
 

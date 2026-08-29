@@ -32,9 +32,10 @@ CLASS lcl_app IMPLEMENTATION.
                       extension = 200 ).
     mo_grid = NEW cl_gui_alv_grid( i_parent = mo_container ).
     SELECT * FROM sflight INTO TABLE @mt_data UP TO 50 ROWS.
+    " 实例事件的每个处理器都必须各带一个 FOR <实例>，不能共用末尾一个 FOR
     SET HANDLER:
-      me->handle_double_click,
-      me->handle_toolbar,
+      me->handle_double_click FOR mo_grid,
+      me->handle_toolbar      FOR mo_grid,
       me->handle_user_command FOR mo_grid.
   ENDMETHOD.
 

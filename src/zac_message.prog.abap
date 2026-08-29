@@ -31,7 +31,7 @@ START-OF-SELECTION.
   SELECT SINGLE * FROM sflight INTO @DATA(ls_f)
     WHERE carrid = @p_carrid AND connid = '0017'.
   IF sy-subrc <> 0.
-    MESSAGE e002(zac_flight_msg) INTO @DATA(lv_msg).
+    MESSAGE e002(zac_flight_msg) INTO DATA(lv_msg).
     WRITE: / lv_msg.
   ELSE.
     WRITE: / |航班 { ls_f-carrid }-{ ls_f-connid }|.

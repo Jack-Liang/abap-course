@@ -11,10 +11,14 @@ START-OF-SELECTION.
         lv_json TYPE string.
 
   " 1. 创建 HTTP 客户端
+  " SSL_ID 的类型是 SSFAPPLSSL，直接传字面量部分系统会报 "not type-compatible"；
+  " 'ANONYM' 对应 STRUST 的 "SSL Client Anonymous" PSE（'DFAULT' 则是 Standard PSE）
+  DATA lv_ssl_id TYPE ssfapplssl VALUE 'ANONYM'.
+
   cl_http_client=>create_by_url(
     EXPORTING
       url    = 'https://open.er-api.com/v6/latest/USD'
-      ssl_id = 'ANONYMOUS'
+      ssl_id = lv_ssl_id
     IMPORTING
       client = lo_http
     EXCEPTIONS OTHERS = 4 ).
