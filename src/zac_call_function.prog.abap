@@ -10,11 +10,11 @@ REPORT zac_call_function.
 START-OF-SELECTION.
   " 出参显式声明接收——CALL FUNCTION 里的 DATA(...) 内联声明是 7.52+ 语法，
   " 7.40/7.50 环境会报 "inline declaration not possible in this position"
-  DATA: lv_found      TYPE abap_bool,
-        lv_minutes    TYPE i,
-        lv_distance   TYPE s_distance,
-        lv_cityfrom   TYPE s_from_cit,
-        lv_cityto     TYPE s_to_cit.
+  DATA: lv_found    TYPE abap_bool,
+        lv_minutes  TYPE i,
+        lv_distance TYPE s_distance,
+        lv_cityfrom TYPE s_from_cit,
+        lv_cityto   TYPE s_to_city.
 
   CALL FUNCTION 'ZAC_CALC_FLIGHT_DURATION'
     EXPORTING
