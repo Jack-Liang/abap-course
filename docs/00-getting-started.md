@@ -170,7 +170,7 @@ http://vhcala4hci:50000/sap/bc/gui/sap/its/webgui
 若你的系统里没有（公司老系统、旧版镜像等），手动安装一次性完成：
 
 1. 从 [abapgit.org](https://abapgit.org) 下载独立版程序 `zabapgit_standalone.prog.abap`（GitHub 上游：abapGit/abapGit 的 Releases）；
-2. SE38 新建程序 `ZABAPGIT_STANDALONE`，把下载的源码整个粘贴进去，保存并**激活**；
+2. SE38 新建程序 `ZABAPGIT_STANDALONE`，把下载的源码整个粘贴/上传进去，保存并**激活**；
 3. 运行（F8）即可。
 
 ![SE38 上传 abapGit 程序](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/SE38_UPLOAD.png)

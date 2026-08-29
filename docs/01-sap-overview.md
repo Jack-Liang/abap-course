@@ -36,19 +36,22 @@ status: final
 
 ## Demo：第一次走进 SAP（分步跟做）
 
-> 📸 本课配图将在课程录制阶段补充，位置以注释标出；先照文字步骤操作，完全可行。
-
 ### 步骤 1：登录系统
 
-![SAP 登录界面](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/login-screen.png)
+![SAPGUI](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/GUI_LOGON.png)
 
 打开 SAP GUI，选中第0课创建的连接（试用镜像：应用服务器 `localhost`、实例号 `00`、系统 ID `A4H`），输入用户名和密码登录。
+
+Windows 版本的密码栏被黑色圆点遮挡，这是正常现象，无需在意，直接输入密码后回车即可。
+
+![SAP 登录界面](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/login-screen.png)
 
 **你会看到什么：** 登录成功后进入 **SAP Easy Access**——这就是你今后每天面对的"主屏幕"。
 
 ### 步骤 2：认识 SAP Easy Access 界面
 
-<!-- 配图（待截图后启用）：![SAP Easy Access 界面](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/easy-access.png) -->
+![SAP Easy Access 界面](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/easy-access.png)
+不同主题的 Easy Access 界面布局咯有差异，功能是一样的。
 
 从上到下四个区域，认清它们，所有 SAP 屏幕都通用：
 
@@ -67,16 +70,16 @@ status: final
 
 ### 步骤 3：用 SE16 查第一家航空公司
 
-<!-- 配图（待截图后启用）：![SE16 输入表名 SCARR](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/se16-scarr-input.png) -->
+![SE16 输入表名 SCARR](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/se16-scarr-input.png)
 
 1. 在命令栏输入 `SE16` 回车（或 `/nSE16` 强制从任意界面返回初始屏幕再进入）；
 2. Data Browser 界面的 Table 字段输入 `SCARR`，回车；
 3. 界面切换为**选择条件屏幕**——每个字段都是筛选条件，现在全空 = 查全表；
 4. 点左上角**执行按钮（F8）** 或直接按 `F8`。
 
-<!-- 配图（待截图后启用）：![SE16 查询结果列表](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/se16-scarr-result.png) -->
+![SE16 查询结果列表](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/se16-scarr-result.png)
 
-**你会看到什么：** 结果列表列出全部约 15 家航空公司——`AA` 美国航空、`LH` 汉莎航空、`QF` 澳洲航空……这就是第0课生成的 SFLIGHT 数据模型的"航空公司"维表。
+**你会看到什么：** 结果列表列出全部约 18 家航空公司——`AA` 美国航空、`LH` 汉莎航空、`QF` 澳洲航空……这就是第0课生成的 SFLIGHT 数据模型的"航空公司"维表。
 
 **两个立刻要会的小操作：**
 
@@ -89,10 +92,10 @@ SE16 里在命令栏输入 `/nSE16` 重新开始，这次查 `SFLIGHT`（航班�
 
 1. Table 字段填 `SFLIGHT`，回车进入选择屏幕；
 2. 在 `Carrid`（航空公司代码）条件栏填 `AA`；
-3. 在屏幕上方的 **Maximum no. of hits**（最大命中数）填 `10`——查大表前先限量的好习惯；
+3. 在屏幕上方的 **Maximum no. of hits**（最大命中数）默认 `200`——查大表前先限量的好习惯；
 4. F8 执行。
 
-**你会看到什么：** 美国航空 AA 的前 10 个航班记录，每行是一个"某天某航线的一次飞行"，包含日期（FLDATE）、票价（PRICE）、座位数（SEATSMAX/SEATSOCC）等。
+**你会看到什么：** 约6条美国航空 AA 的航班记录，每行是一个"某天某航线的一次飞行"，包含日期（FLDATE）、票价（PRICE）、座位数（SEATSMAX/SEATSOCC）等。
 
 **试试通配符：** 回到选择屏幕，把 Carrid 条件改成 `A*`（以 A 开头的所有航空公司）再执行，对比结果差异。
 
@@ -104,13 +107,13 @@ SE16 里在命令栏输入 `/nSE16` 重新开始，这次查 `SFLIGHT`（航班�
 2. 按 `F1`（或右键 → 帮助），弹出字段级文档；
 3. 点弹窗里的 **技术信息（Technical Information）** 按钮。
 
-<!-- 配图（待截图后启用）：![F1 技术信息弹窗](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/f1-technical-info.png) -->
+![F1 技术信息弹窗](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/f1-technical-info.png)
 
-**你会看到什么：** 一张"身份证"——透明表名（Table）、字段名（Field name）、数据元素（Data element）、域（Domain）一应俱全。以后在业务屏幕上看到任何字段，想知道它存哪，F1 一按就知道。
+**你会看到什么：** 一张"身份证"——透明表名（Table）、字段名（Field name）、数据元素（Data element）一应俱全。以后在业务屏幕上看到任何字段，想知道它存哪，F1 一按就知道。
 
 ### 步骤 6：SE11 阅读表结构
 
-<!-- 配图（待截图后启用）：![SE11 查看 SCARR 表结构](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/se11-scarr-fields.png) -->
+![SE11 查看 SCARR 表结构](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/se11-scarr-fields.png)
 
 1. 命令栏输入 `SE11`，Dictionary 初始屏幕选择 **Database table**，填 `SCARR` 回车；
 2. 展示屏幕分区块：**字段列表（Fields）**、**外键（Foreign Keys）**、**索引（Indexes）**；
@@ -135,7 +138,7 @@ flowchart LR
 
 !!! tip "落地理解"
 
-    第0课部署的 Docker 试用镜像，本质就是**把这三层打包进了一个容器**：容器里同时跑着应用服务器和 HANA 数据库，你的 SAP GUI 是容器外的表示层。公司生产环境则会把三层拆到独立的服务器集群上。
+    第0课部署的 Docker 试用镜像，本质就是**把这三层打包进了一个容器**：容器里同时跑着应用服务器和 HANA 数据库，你的 SAP GUI 是容器外的表示层。大型企业会根据业务需求把三层拆到独立的服务器集群上。
 
 ### 2. Client（客户端）概念
 
@@ -163,10 +166,11 @@ SAP 里每个功能界面都有一个**事务码（Transaction Code）**——�
 
 | 写法 | 效果 |
 |------|------|
-| `SE16` | 在当前窗口进入该事务 |
-| `/nSE16` | 无论当前卡在哪个界面，**强制取消当前事务**、从初始屏幕进入——最稳妥的写法 |
+| `SE16` | 在当前窗口进入该事务，通常在其他事务中无法直接进入 |
+| `/nSE16` | 无论当前在哪个界面，**退出当前事务**、从初始屏幕进入——最稳妥的写法 |
 | `/oSE16` | **新开会话窗口**进入，原窗口保留（最多 6 个会话） |
-| `/*` | 搜索事务码（记不全代号时用） |
+
+更多用法可以在命令栏按 `F1` 查看。
 
 **迷路了怎么知道自己在哪？** 菜单 **系统（System）→ 状态（Status）**，弹窗里的 Tcode（当前事务码）和 Program（当前程序）一目了然——这个弹窗以后调试时还会反复用到。
 
@@ -188,8 +192,6 @@ SAP 里每个功能界面都有一个**事务码（Transaction Code）**——�
 | SE80 | Object Navigator | 按包浏览全部开发对象 | 第3课起常用 |
 | SE37 | Function Builder | 函数模块 | 第9课主场 |
 
-SU01（用户管理）在试用镜像里基本用不到，知道有这回事即可。
-
 !!! warning "环境差异：SE16 与 SE16N"
 
     公司的 ECC/S4 系统里更常用 **SE16N**（新一代数据浏览器，ALV 界面、支持更多操作）；**试用镜像只有 SE16**。本课程统一以 SE16 演示，操作逻辑两者一致，学会一个到哪个环境都能用。
@@ -198,14 +200,13 @@ SU01（用户管理）在试用镜像里基本用不到，知道有这回事即�
 
 - **通配符**：`*` 匹配任意字符串，`+` 匹配单个字符（`A*`、`+A*`）；
 - **最大命中数（Maximum no. of hits）**：默认 200，查未知规模的表保持默认或更低，别清空；
-- **排序**：结果列表双击列标题快速排序；
 - **多条件**：同一字段的多个值分行填写（隐含 OR），不同字段之间是 AND。
 
 ### 6. SE11 的另外三件武器
 
 - **外键（Foreign Keys）**：看字段引用了哪张主表——SFLIGHT 的 CARRID 外键指向 SCARR，这就是表间关系的"合同"；
 - **索引（Indexes）**：主键索引之外的自建索引，决定查询性能（第5课性能话题的基础）；
-- **Where-Used List**：右键字段或表选"使用清单"，看哪些对象在用它——研究标准代码的入口。
+- **Where-Used List**：字段或表选"使用清单"，看哪些对象在用它——研究标准代码的入口。
 
 ### 7. 收藏夹
 
@@ -214,21 +215,17 @@ SU01（用户管理）在试用镜像里基本用不到，知道有这回事即�
 
 ### 8. 开发对象与 Package
 
-SAP 里一切开发产物（程序、表、类……）都必须归属一个**开发包（Package）**，包决定对象存在哪、传输到哪：
+SAP 里一切开发产物（程序、表、类……）都必须归属一个**开发包（Package）**，包是一个逻辑概念，可以理解为文件夹，我们常把相关的功能放到一个包里：
 
 - 本课程的包是 `ZABAP_COURSE`（第0课创建）；
 - 本地对象包 `$TMP` 里的东西**无法传输**——abapGit 也挂不上它（第0课踩过的坑）；
 - 包 → 传输请求 → 传输路径的完整机制是第17课的主场，现在只要建立"对象必有归属"的意识。
 
-## 代码
-
-本课无代码，纯系统操作。
-
 ## 💡 实战经验
 
 !!! tip "事务码记不住怎么办"
 
-    命令栏输入 `/*` 开头可以搜索事务码；更实用的做法是把常用的加进收藏夹，以及——用多了自然就记住了，开发五件套一个星期就刻进肌肉记忆。
+    把常用的加进收藏夹，以及——用多了自然就记住了，开发五件套一个星期就刻进肌肉记忆。
 
 !!! tip "F1 是你最好的老师"
 
@@ -236,11 +233,12 @@ SAP 里一切开发产物（程序、表、类……）都必须归属一个**�
 
 !!! tip "查大表先限量"
 
-    SE16 的最大命中数**默认限制是 200**，这是系统自带的保护，别随手清空。生产系统一张表动辄千万行，全量查询轻则等半天，重则拖垮系统——默认的 200 足够看数据样本，确认量级时再有意识地放宽。
+    SE16 的最大命中数**默认限制是 200**，这是系统自带的保护，别随手清空。生产系统一张表动辄千万行，全量查询效率很低，执行查询前可以先点`Number of Entries` 查看数据量，确认量级时再有意识地放宽。
 
 !!! tip "多会话是刚需"
 
     `/oSE38` 新窗口开编辑器、原窗口留着 SE16 随时核对数据——这是开发者的标准姿势，从今天开始用。
+    通常一个登录账号可以开 6 个会话。
 
 ## 📖 延伸阅读
 
