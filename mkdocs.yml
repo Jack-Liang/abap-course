@@ -38,6 +38,11 @@ plugins:
       type: date
       timezone: Asia/Shanghai
       enable_creation_date: false
+  - social:
+      cards_layout_options:
+        background_color: "#0d47a1"
+        color: "#ffffff"
+        font_family: "Noto Sans SC"
 
 markdown_extensions:
   - admonition
