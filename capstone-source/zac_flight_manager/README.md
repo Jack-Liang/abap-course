@@ -4,7 +4,7 @@
 
 第24课"综合实战 —— SFLIGHT 航班管理系统"主程序 `ZAC_FLIGHT_MANAGER`（含 5 个 INCLUDE + Screen 100）的**可粘贴级完整参考实现**，与 `docs/24-capstone.md` 的设计走读一一对应。
 
-**本目录是过渡产物**：请作者把下列源码逐个粘贴进 SAP 系统、画好 Screen 100、全部激活并自测通过后，用 **abapGit pull** 让系统生成正式的 `src/zac_flight_manager.prog.abap` / `.prog.xml` / dynpro XML 等入库文件——**届时本目录整目录删除**。所以这里只放纯 `.abap` 源码，不手写任何 XML。
+**本目录是过渡产物**：请作者把下列源码逐个粘贴进 SAP 系统、画好 Screen 100、全部激活并自测通过后，用 **abapGit pull** 让系统生成正式的 `src/zac_flight_manager.prog.abap` / `.prog.xml` 入库文件。**注意：abapGit 不传输屏幕**——Screen 100 及其流逻辑永远需要手工创建，届时本目录要保留（Screen 100 元素清单是唯一的画屏依据，`docs/24-capstone.md` 会引用）。
 
 ## 文件清单
 
