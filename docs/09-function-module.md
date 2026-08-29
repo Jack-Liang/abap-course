@@ -17,7 +17,7 @@ status: beta
 
 !!! note "本课对象已随仓库下发"
 
-    `zac_call_function`、函数组 `zac_flight_utils` 与 FM `zac_calc_flight_duration` 均已随 abapGit 下发——Pull 后可直接运行报表看到完整调用链。下面的建组/建 FM 步骤建议在**个人练习包**里用**自己的名字**（如 `zflight_utils`、`zcalc_flight_duration`）从零自建一遍——过程本身就是本课教学内容，建完用自己的名字做 SE37 单测。参考源码见仓库 [`ref-source/zac_flight_utils/`](https://github.com/Jack-Liang/abap-course/tree/master/ref-source/zac_flight_utils)。
+    `zac_call_function`、函数组 `zac_flight_utils` 与 FM `zac_calc_flight_duration` 均已随 abapGit 下发——Pull 后可直接运行报表看到完整调用链。下面的建组/建 FM 步骤建议在**个人练习包**里用**自己的名字**（如 `zflight_utils`、`zcalc_flight_duration`）从零自建一遍——过程本身就是本课教学内容，建完用自己的名字做 SE37 单测；源码可对照 SE37 里打开的仓库版 FM（本课正文也有完整实现）。
 
 ## 时间安排
 
