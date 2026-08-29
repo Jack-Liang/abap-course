@@ -6,6 +6,8 @@ hide:
 
 <div class="ac-hero" markdown>
 
+<div class="ac-hero-body" markdown>
+
 <p class="ac-eyebrow">SAP ABAP · 实战二十四课</p>
 
 # ABAP Course
@@ -21,6 +23,14 @@ hide:
 
 [开始学习 :material-rocket-launch:](00-getting-started.md){ .md-button .md-button--primary }
 [:material-github: GitHub 仓库](https://github.com/Jack-Liang/abap-course){ .md-button }
+
+</div>
+
+<figure class="ac-hero-art">
+
+<img src="assets/images/hero.svg" alt="插画：ABAP 编辑器窗口输出 Hello, ABAP!，一架航班沿虚线航迹起飞" loading="eager">
+
+</figure>
 
 </div>
 
