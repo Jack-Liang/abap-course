@@ -4,6 +4,8 @@ status: draft
 
 # 第2课：Hello World 与基本数据类型
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/02-hello-world/banner.jpg" alt="第2课：Hello World 与基本数据类型 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：基础篇 | 建议边读边做
 
 ## 前置依赖

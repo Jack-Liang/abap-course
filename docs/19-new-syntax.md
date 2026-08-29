@@ -4,6 +4,8 @@ status: draft
 
 # 第19课：新语法专题
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/19-new-syntax/banner.jpg" alt="第19课：新语法专题 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：高级篇 | 建议边读边做
 
 ## 前置依赖

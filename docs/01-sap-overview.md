@@ -4,6 +4,8 @@ status: final
 
 # 第1课：SAP 系统入门与开发环境
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/banner.jpg" alt="第1课：SAP 系统入门与开发环境 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：基础篇 | 建议边读边操作
 
 ## 前置依赖

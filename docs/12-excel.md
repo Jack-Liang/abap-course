@@ -4,6 +4,8 @@ status: draft
 
 # 第12课：Excel 导入导出
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/12-excel/banner.jpg" alt="第12课：Excel 导入导出 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：核心篇 | 建议边读边做
 
 ## 前置依赖

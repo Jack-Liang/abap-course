@@ -280,6 +280,15 @@ button:focus-visible {
   }
 }
 
+/* ---------- 课次横幅（标题下全宽图） ---------- */
+.ac-banner {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 0.2rem 0 1.4rem;
+}
+
 .ac-eyebrow {
   display: flex;
   align-items: center;

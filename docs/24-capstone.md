@@ -4,6 +4,8 @@ status: draft
 
 # 第24课：综合实战 —— SFLIGHT 航班管理系统（收官）
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/24-capstone/banner.jpg" alt="第24课：综合实战 —— SFLIGHT 航班管理系统（收官） 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：现代开发篇 | 毕业设计
 
 ## 前置依赖

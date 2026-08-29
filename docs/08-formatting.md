@@ -4,6 +4,8 @@ status: draft
 
 # 第8课：数据格式化 —— 字符串、日期、货币
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/08-formatting/banner.jpg" alt="第8课：数据格式化 —— 字符串、日期、货币 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：核心篇 | 建议边读边做
 
 ## 前置依赖

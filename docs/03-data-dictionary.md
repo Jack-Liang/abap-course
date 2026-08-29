@@ -4,6 +4,8 @@ status: draft
 
 # 第3课：数据字典 —— 建一张自定义表
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/banner.jpg" alt="第3课：数据字典 —— 建一张自定义表 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：基础篇 | 建议边读边做
 
 ## 前置依赖

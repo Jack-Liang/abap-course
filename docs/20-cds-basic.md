@@ -4,6 +4,8 @@ status: draft
 
 # 第20课：CDS View（基础）—— 数据模型新范式
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/20-cds-basic/banner.jpg" alt="第20课：CDS View（基础）—— 数据模型新范式 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：现代开发篇 | 建议边读边做
 
 ## 前置依赖

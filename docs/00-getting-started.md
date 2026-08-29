@@ -4,6 +4,8 @@ status: final
 
 # 第0课（准备篇）：环境搭建与仓库导入
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/banner.jpg" alt="第0课（准备篇）：环境搭建与仓库导入 章节横幅" class="ac-banner">
+
 > 上课之前，把"教室"准备好：一套带 SFLIGHT 演示数据的 ABAP 系统，并用 abapGit 把本仓库的课程代码拉进去。
 
 **预计耗时：** 2～4 小时（大部分时间在下载 23GB 镜像和等待系统初始化）

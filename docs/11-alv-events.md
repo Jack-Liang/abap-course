@@ -4,6 +4,8 @@ status: draft
 
 # 第11课：ALV 交互事件
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/11-alv-events/banner.jpg" alt="第11课：ALV 交互事件 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：核心篇 | 建议边读边做
 
 ## 前置依赖

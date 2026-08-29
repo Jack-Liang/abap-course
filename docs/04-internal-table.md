@@ -4,6 +4,8 @@ status: draft
 
 # 第4课：内表与结构体操作
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/04-internal-table/banner.jpg" alt="第4课：内表与结构体操作 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：基础篇 | 建议边读边做
 
 ## 前置依赖

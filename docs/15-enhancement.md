@@ -4,6 +4,8 @@ status: draft
 
 # 第15课：增强（Enhancement）—— 不改标准代码扩展功能
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/15-enhancement/banner.jpg" alt="第15课：增强（Enhancement）—— 不改标准代码扩展功能 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：高级篇 | 概念+操作课
 
 ## 前置依赖

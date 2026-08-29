@@ -4,6 +4,8 @@ status: draft
 
 # 第23课：BTP 概览 + abapGit 代码管理
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/23-btp-abapgit/banner.jpg" alt="第23课：BTP 概览 + abapGit 代码管理 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：现代开发篇 | 概念 + 操作课
 
 ## 前置依赖

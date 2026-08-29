@@ -4,6 +4,8 @@ status: draft
 
 # 第17课：Transport Request（请求与传输）
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/17-transport/banner.jpg" alt="第17课：Transport Request（请求与传输） 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：高级篇 | 操作 + 流程课
 
 ## 前置依赖

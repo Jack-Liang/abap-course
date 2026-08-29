@@ -4,6 +4,8 @@ status: draft
 
 # 第6课：ABAP 调试器
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/06-debugging/banner.jpg" alt="第6课：ABAP 调试器 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：基础篇 | 建议边读边做
 
 ## 前置依赖

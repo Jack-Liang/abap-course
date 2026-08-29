@@ -4,6 +4,8 @@ status: draft
 
 # 第18课：消息处理（Message Class）
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/18-message-class/banner.jpg" alt="第18课：消息处理（Message Class） 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：高级篇 | 建议边读边做
 
 ## 前置依赖

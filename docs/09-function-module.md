@@ -4,6 +4,8 @@ status: draft
 
 # 第9课：Function Module（函数模块）
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/09-function-module/banner.jpg" alt="第9课：Function Module（函数模块） 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：核心篇 | 建议边读边做
 
 ## 前置依赖

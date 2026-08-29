@@ -4,6 +4,8 @@ status: draft
 
 # 第13课：ABAP 面向对象编程（基础）
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/13-oo-basic/banner.jpg" alt="第13课：ABAP 面向对象编程（基础） 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：核心篇 | 建议边读边做
 
 ## 前置依赖

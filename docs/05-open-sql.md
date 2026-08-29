@@ -4,6 +4,8 @@ status: draft
 
 # 第5课：Open SQL —— 增删改查
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/05-open-sql/banner.jpg" alt="第5课：Open SQL —— 增删改查 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：基础篇 | 建议边读边做
 
 ## 前置依赖

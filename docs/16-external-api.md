@@ -4,6 +4,8 @@ status: draft
 
 # 第16课：调用外部接口 —— REST / SOAP / PO / CPI
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/16-external-api/banner.jpg" alt="第16课：调用外部接口 —— REST / SOAP / PO / CPI 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：高级篇 | 建议边读边做
 
 ## 前置依赖

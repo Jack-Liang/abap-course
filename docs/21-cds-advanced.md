@@ -4,6 +4,8 @@ status: draft
 
 # 第21课：CDS View（进阶）—— 聚合、参数与访问控制
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/21-cds-advanced/banner.jpg" alt="第21课：CDS View（进阶）—— 聚合、参数与访问控制 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：现代开发篇 | 建议边读边做
 
 ## 前置依赖

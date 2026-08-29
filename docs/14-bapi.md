@@ -4,6 +4,8 @@ status: draft
 
 # 第14课：BAPI 调用 —— SAP 标准业务接口
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/14-bapi/banner.jpg" alt="第14课：BAPI 调用 —— SAP 标准业务接口 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：高级篇 | 建议边读边做
 
 ## 前置依赖

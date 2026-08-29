@@ -4,6 +4,8 @@ status: draft
 
 # 第22课：OO ALV —— 面向对象的 ALV
 
+<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/22-oo-alv/banner.jpg" alt="第22课：OO ALV —— 面向对象的 ALV 章节横幅" class="ac-banner">
+
 > 45分钟 | 阶段：现代开发篇 | 建议边读边做
 
 ## 前置依赖
