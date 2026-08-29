@@ -9,7 +9,7 @@ FUNCTION zac_calc_flight_duration.
 *"     VALUE(EV_DURATION_MIN) TYPE  I
 *"     VALUE(EV_DISTANCE)     TYPE  S_DISTANCE
 *"     VALUE(EV_CITYFROM)     TYPE  S_FROM_CIT
-*"     VALUE(EV_CITYTO)       TYPE  S_TO_CIT
+*"     VALUE(EV_CITYTO)       TYPE  S_TO_CITY
 *"  EXCEPTIONS
 *"      NOT_FOUND
 *"----------------------------------------------------------------------

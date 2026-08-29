@@ -14,7 +14,7 @@ START-OF-SELECTION.
         lv_minutes    TYPE i,
         lv_distance   TYPE s_distance,
         lv_cityfrom   TYPE s_from_cit,
-        lv_cityto     TYPE s_to_cit.
+        lv_cityto     TYPE s_to_city.
 
   CALL FUNCTION 'ZAC_CALC_FLIGHT_DURATION'
     EXPORTING

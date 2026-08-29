@@ -15,11 +15,9 @@ status: beta
 
 "计算航线飞行时长"的逻辑写在一个报表里，另一个报表也要用——复制粘贴？以后逻辑一改就得改两处，迟早漏。ABAP 传统世界的答案叫 **Function Module（FM，函数模块）**：把逻辑封装成可复用的调用单元，全系统唯一命名、参数明确、可单测、可远程调用。SAP 自己的几万个标准 FM（包括第14课要上手的 BAPI）都是这套体系。
 
-!!! note "本课对象尚未随仓库下发"
+!!! note "本课对象已随仓库下发"
 
-    调用程序 `zac_call_function` 已随仓库下发；函数组 `zac_flight_utils` 与 FM `zac_calc_flight_duration` 的完整参考源码见仓库 [`ref-source/zac_flight_utils/`](https://github.com/Jack-Liang/abap-course/tree/master/ref-source/zac_flight_utils)——函数组请按下面步骤在 SE37 手工创建（过程本身就是本课教学内容），对照参考源码粘贴即可。
-
-    这是[第0课第四节](00-getting-started.md#四命名规范与对象对照)说过的例外：这组对象的名字**必须照抄** `zac_`（`zac_call_function` 按名调用 FM），但包照旧放你的个人练习包。
+    `zac_call_function`、函数组 `zac_flight_utils` 与 FM `zac_calc_flight_duration` 均已随 abapGit 下发——Pull 后可直接运行报表看到完整调用链。下面的建组/建 FM 步骤建议在**个人练习包**里用**自己的名字**（如 `zflight_utils`、`zcalc_flight_duration`）从零自建一遍——过程本身就是本课教学内容，建完用自己的名字做 SE37 单测。参考源码见仓库 [`ref-source/zac_flight_utils/`](https://github.com/Jack-Liang/abap-course/tree/master/ref-source/zac_flight_utils)。
 
 ## 时间安排
 
@@ -68,7 +66,7 @@ status: beta
 | EV_DURATION_MIN | `I` |
 | EV_DISTANCE | `S_DISTANCE` |
 | EV_CITYFROM | `S_FROM_CIT` |
-| EV_CITYTO | `S_TO_CIT` |
+| EV_CITYTO | `S_TO_CITY` |
 
 5. **Exceptions 页签**：`NOT_FOUND`；
 6. 源代码区写入实现：
@@ -85,7 +83,7 @@ FUNCTION zac_calc_flight_duration.
 *"     VALUE(EV_DURATION_MIN) TYPE  I
 *"     VALUE(EV_DISTANCE)    TYPE  S_DISTANCE
 *"     VALUE(EV_CITYFROM)    TYPE  S_FROM_CIT
-*"     VALUE(EV_CITYTO)      TYPE  S_TO_CIT
+*"     VALUE(EV_CITYTO)      TYPE  S_TO_CITY
 *"  EXCEPTIONS
 *"      NOT_FOUND
 *"----------------------------------------------------------------------
@@ -118,7 +116,7 @@ ENDFUNCTION.
 
 ### 步骤 4：报表调用
 
-SE38 新建 `zac_call_function`（或等仓库下发）：
+SE38 运行仓库版 `zac_call_function`（已随仓库下发；若在个人包自建了练习 FM，把 `CALL FUNCTION` 的目标换成你自己的 FM 名）：
 
 ```abap
 REPORT zac_call_function.
@@ -130,7 +128,7 @@ START-OF-SELECTION.
         lv_minutes    TYPE i,
         lv_distance   TYPE s_distance,
         lv_cityfrom   TYPE s_from_cit,
-        lv_cityto     TYPE s_to_cit.
+        lv_cityto     TYPE s_to_city.
 
   CALL FUNCTION 'ZAC_CALC_FLIGHT_DURATION'
     EXPORTING
