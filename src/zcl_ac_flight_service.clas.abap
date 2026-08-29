@@ -13,22 +13,27 @@ CLASS zcl_ac_flight_service DEFINITION
                   iv_connid        TYPE s_conn_id
                   iv_fldate        TYPE s_date
         EXPORTING ev_message       TYPE string
-        RETURNING VALUE(rv_bookid) TYPE s_bookid,
+        RETURNING VALUE(rv_bookid) TYPE bapisbokey-bookingid,
       "! 教学占位（课后练习）：真实项目走后续单据流程，这里保持空实现
       cancel_booking
         IMPORTING iv_carrid TYPE s_carr_id
                   iv_connid TYPE s_conn_id
                   iv_fldate TYPE s_date
-                  iv_bookid TYPE s_bookid,
+                  iv_bookid TYPE bapisbokey-bookingid,
       get_flight_info
-        IMPORTING iv_carrid TYPE s_carr_id
-                  iv_connid TYPE s_conn_id
-                  iv_fldate TYPE s_date
+        IMPORTING iv_carrid      TYPE s_carr_id
+                  iv_connid      TYPE s_conn_id
+                  iv_fldate      TYPE s_date
         RETURNING VALUE(rs_info) TYPE sflight.
 
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
-CLASS zcl_ac_flight_service IMPLEMENTATION.
+
+
+CLASS ZCL_AC_FLIGHT_SERVICE IMPLEMENTATION.
+
 
   METHOD create_booking.
     CLEAR: rv_bookid, ev_message.
@@ -49,7 +54,7 @@ CLASS zcl_ac_flight_service IMPLEMENTATION.
     DATA: lt_return TYPE STANDARD TABLE OF bapiret2 WITH EMPTY KEY,
           ls_return TYPE bapiret2.
     " 预订号显式声明——CALL FUNCTION 里的 DATA(...) 内联声明是 7.52+ 语法
-    DATA lv_bookingnumber TYPE s_bookid.
+    DATA lv_bookingnumber TYPE bapisbokey-bookingid.
 
     CALL FUNCTION 'BAPI_FLBOOKING_CREATEFROMDATA'
       EXPORTING
@@ -77,14 +82,15 @@ CLASS zcl_ac_flight_service IMPLEMENTATION.
     rv_bookid = lv_bookingnumber.
   ENDMETHOD.
 
+
   METHOD cancel_booking.
     RETURN.
   ENDMETHOD.
+
 
   METHOD get_flight_info.
     SELECT SINGLE * FROM sflight
       WHERE carrid = @iv_carrid AND connid = @iv_connid AND fldate = @iv_fldate
       INTO @rs_info.
   ENDMETHOD.
-
 ENDCLASS.
