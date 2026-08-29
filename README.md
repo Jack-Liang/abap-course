@@ -25,6 +25,20 @@
 - **方向：** 传统 ABAP → 新语法 → 现代开发（CDS / BTP / abapGit）
 - **练习环境：** 推荐 SAP 官方试用镜像（Docker）或公司开发系统，详见[第0课](docs/00-getting-started.md)
 
+## 🧪 开发与验证环境
+
+课程全部 Demo 代码与操作步骤验证于同一套环境：SAP 官方 Docker 试用镜像 [`sapse/abap-cloud-developer-trial:2025`](https://hub.docker.com/r/sapse/abap-cloud-developer-trial)（部署步骤见[第0课](docs/00-getting-started.md)）。
+
+**镜像实测版本**（System → Status → Installed Software，2026-08 验证）：
+
+| 层 | 版本 |
+|----|------|
+| 产品 | **ABAP Platform 2025**（SP/FP Stack 01，02/2026）；含 S/4HANA Foundation 2025、SAP Fiori FES 2025、SLT for S/4HANA 2.0 |
+| 组件 | SAP_BASIS / SAP_ABA / SAP_GWFND / SAP_UI / SAP_BW **816 SP01**；S4FND 109 SP01 等 |
+| 系统 | SID `A4H`，Client `001`，开发用户 `DEVELOPER`，底座为镜像内置的 SAP HANA |
+
+这个版本位意味着：**SAP GUI 经典技术栈（SE38/SE11、经典 ALV、函数模块、BAPI）与现代 ABAP（7.40+ 新语法、CDS View Entity）都完整可用**，恰好覆盖本课程"传统 → 现代"的全部主线。使用公司系统跟课的话，大部分课次 7.40+ 即可，第20/21课的 CDS View Entity 需 7.55+；个别课次的环境差异（如 SE16N、传输系统）课文中有标注。
+
 ## 📚 课程目录
 
 **[第0课：环境搭建与仓库导入](docs/00-getting-started.md)**（准备篇，开课前完成）
