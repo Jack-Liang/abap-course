@@ -475,3 +475,28 @@ button:focus-visible {
 .md-header__topic a {
   color: inherit;
 }
+
+/* ---------- 左侧目录状态图标（与页内横幅同色系：beta 蓝 / draft 琥珀 / final 不显示） ---------- */
+.md-status--final {
+  display: none;
+}
+
+.md-status--beta:after {
+  -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87L20.71,7.04M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/></svg>');
+  mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87L20.71,7.04M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/></svg>');
+  background-color: #1094f0;
+}
+
+.md-status--draft:after {
+  -webkit-mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13,14H11V9H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg>');
+  mask-image: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13,14H11V9H13M13,18H11V16H13M1,21H23L12,2L1,21Z"/></svg>');
+  background-color: #f0a500;
+}
+
+[data-md-color-scheme="slate"] .md-status--beta:after {
+  background-color: #7cc0f5;
+}
+
+[data-md-color-scheme="slate"] .md-status--draft:after {
+  background-color: #ffd479;
+}
