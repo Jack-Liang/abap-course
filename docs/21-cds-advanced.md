@@ -44,23 +44,27 @@ status: beta
 define view entity ZAC_FLIGHT_STATS
   with parameters p_carrid : abap.char(3)
   as select from sflight
+    inner join scarr on sflight.carrid = scarr.carrid
 {
     key sflight.carrid,
     count(*)              as flight_count,
+    @Semantics.amount.currencyCode: 'currcode'
     sum(sflight.price)    as total_price,
     avg(sflight.price)    as avg_price,
     sum(sflight.seatsmax) as total_seats,
-    sum(sflight.seatsocc) as total_occupied
+    sum(sflight.seatsocc) as total_occupied,
+    scarr.currcode
 }
 where sflight.carrid = $parameters.p_carrid
-group by sflight.carrid
+group by sflight.carrid, scarr.currcode
 ```
 
 **观察三个设计点：**
 
 1. `with parameters p_carrid : abap.char(3)`——视图自带入参，统计口径"按公司"被编码进对象；
 2. WHERE 里 `$parameters.p_carrid` 引用参数——数据库执行时就过滤，不是查回来再筛；
-3. GROUP BY 只留 carrid——上节课 Demo 误把 seatsmax 也分了组（同一公司不同机型会被拆成多行），这是 GROUP BY 的经典陷阱：**分组键多一个，口径就碎一层**。
+3. GROUP BY 是 `carrid, currcode` 两列——currcode 是 carrid 的函数依赖（同一公司货币唯一），不会把组拆碎；联出它是因为 `sum(price)` 结果仍是 CURR，视图实体要求金额必须带货币参考（`@Semantics.amount.currencyCode`），这是把"合计离开币种无意义"的纪律下沉到了数据模型层；
+4. 上节课 Demo 误把 seatsmax 也分了组（同一公司不同机型会被拆成多行），那是 GROUP BY 的经典陷阱：**分组键多一个，口径就碎一层**。
 
 **消费端**（demo 程序 `zac_cds_advanced` 已随仓库下发）：
 

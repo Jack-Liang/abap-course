@@ -58,6 +58,7 @@ define view entity ZAC_FLIGHT_DETAIL
     key sflight.carrid,
     key sflight.connid,
     key sflight.fldate,
+    @Semantics.amount.currencyCode: 'currcode'
     sflight.price,
     sflight.seatsmax,
     sflight.seatsocc,
@@ -66,11 +67,15 @@ define view entity ZAC_FLIGHT_DETAIL
     scarr.currcode,
     spfli.cityfrom,
     spfli.cityto,
+    @Semantics.quantity.unitOfMeasure: 'distid'
     spfli.distance,
+    spfli.distid,
     spfli.deptime,
     spfli.arrtime
 }
 ```
+
+两个注解不是装饰：**CDS 视图实体里 CURR 元素必须带货币参考、QUAN 元素必须带单位参考**，否则激活直接报错（SD_CDS_ENTITY086）——`price` 指向同视图的 CUKY 字段 `currcode`，`distance` 指向单位字段 `distid`（因此把它补进了字段清单）。"金额离开币种就没有意义"这条纪律，在数据模型层就被强制执行了。
 
 这就是第5课 Demo 第 3 段的那个三表 JOIN——现在它是**一个对象**：有名字、有描述、可激活、可传输（第17课的货物）、可被任何程序消费。
 

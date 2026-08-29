@@ -10,6 +10,7 @@ define view entity ZAC_FLIGHT_DETAIL
     key sflight.carrid,
     key sflight.connid,
     key sflight.fldate,
+    @Semantics.amount.currencyCode: 'currcode'
     sflight.price,
     sflight.seatsmax,
     sflight.seatsocc,
@@ -18,7 +19,9 @@ define view entity ZAC_FLIGHT_DETAIL
     scarr.currcode,
     spfli.cityfrom,
     spfli.cityto,
+    @Semantics.quantity.unitOfMeasure: 'distid'
     spfli.distance,
+    spfli.distid,
     spfli.deptime,
     spfli.arrtime
 }
