@@ -470,3 +470,8 @@ button:focus-visible {
   color: #7cc0f5;
   border-color: rgba(16, 148, 240, 0.5);
 }
+
+/* 页眉站名链接：保持页眉文字原色 */
+.md-header__topic a {
+  color: inherit;
+}
