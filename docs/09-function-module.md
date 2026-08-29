@@ -17,7 +17,7 @@ status: beta
 
 !!! note "本课对象尚未随仓库下发"
 
-    本课将创建的函数组 `zac_flight_utils` 与 FM `zac_calc_flight_duration`、调用程序 `zac_call_function` 属于**待补充对象**（见[第0课对象矩阵](00-getting-started.md#四命名规范与对象对照)），随本课代码更新加入仓库；SE37 手工创建的步骤如下，跟着做即可。
+    调用程序 `zac_call_function` 已随仓库下发；函数组 `zac_flight_utils` 与 FM `zac_calc_flight_duration` 的完整参考源码见仓库 [`ref-source/zac_flight_utils/`](https://github.com/Jack-Liang/abap-course/tree/master/ref-source/zac_flight_utils)——函数组请按下面步骤在 SE37 手工创建（过程本身就是本课教学内容），对照参考源码粘贴即可。
 
 ## 时间安排
 

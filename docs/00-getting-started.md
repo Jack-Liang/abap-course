@@ -183,7 +183,7 @@ SE38 运行 `ZAC_HELLO_WORLD`，看到 `Hello ABAP!` 与航空公司信息，环
 | `zac_sql_crud` | 程序 | 第5课 | Open SQL 增删改查 |
 | `zac_selection_screen` | 程序 | 第7课 | 选择屏幕 |
 | `zac_formatting` | 程序 | 第8课 | 字符串/日期/货币格式化 |
-| `zac_call_function` + `zac_calc_flight_duration` | 程序 + FM | 第9课（待补充） | 函数模块调用 |
+| `zac_call_function`（已入库）+ `zac_calc_flight_duration`（FM） | 程序 + FM | 第9课 | 函数模块调用；函数组参考源码见 `ref-source/zac_flight_utils/` |
 | `zac_alv_basic` | 程序 | 第10课 | 经典 ALV 基础 |
 | `zac_alv_events` | 程序 | 第11课 | ALV 交互事件 |
 | `zac_excel` | 程序 | 第12课 | Excel 导入导出 |
