@@ -146,6 +146,8 @@ http://vhcala4hci:50000/sap/bc/gui/sap/its/webgui
 
 **官方试用镜像默认已预置 SFLIGHT 数据**。先用 SE16 查看表数据 `SCARR` 验证（试用镜像没有 SE16N，本课程统一以 SE16 演示，公司环境两者的差异在第1课说明）：能看到 LH/AA/QF 等航空公司记录（且 `SFLIGHT`/`SBOOK` 有数据）就直接进入第三节。
 
+更省事的办法：SE38 运行课程自带的 **`zac_env_check`**——一键检查 9 个课程对象是否入库、6 张演示表是否存在及数据条数，全部"就绪"即可开始上课。
+
 ![SE16 SCARR](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/SE16_SCARR.png)
 
 以下情况需要跑 SAP 自带的生成器（重新生成或重置数据）：
@@ -256,6 +258,7 @@ SE38 运行 `ZAC_HELLO_WORLD`，看到 `Hello ABAP!` 与航空公司信息，环
 | 对象 | 类型 | 涉及课程 | 说明 |
 |------|------|---------|------|
 | `zac_hello_world` | 程序 | 第2课 | Hello World 与基本数据类型 |
+| `zac_env_check` | 程序 | 第0课 | 课程环境自检：一键检查对象入库与演示数据 |
 | `zac_doms_priority` + `zac_de_priority` | 域 + 数据元素 | 第3课 | 优先级字段的域（固定值 1/2/3）与数据元素 |
 | `zac_flight_ext` | 透明表 | 第3课、第15课 | 建表演示；增强示例引用 |
 | `zac_internal_table` | 程序 | 第4课 | 内表与结构体操作 |
@@ -306,7 +309,7 @@ SAP GUI 登录语言选英文（EN）即可——仓库母语为 E，中文以 U
 - [ ] SCARR/SFLIGHT/SBOOK 有数据（官方镜像默认预置；为空则跑 `SAPBC_DATA_GENERATOR`）
 - [ ] abapGit 可运行（官方镜像自带），本仓库已 Clone/Pull 到仓库包 `ZABAP_COURSE`
 - [ ] 个人练习包已建好（跟课练习、课后作业放这里，与仓库包分开）
-- [ ] `ZAC_HELLO_WORLD` 运行成功
+- [ ] `ZAC_ENV_CHECK` 运行成功，输出全部"就绪"（课程对象入库 + 演示数据一键检查）
 
 全部打勾，就可以正式开始下一课了。
 
