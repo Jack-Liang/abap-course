@@ -30,15 +30,13 @@ hide:
 
 <span class="ac-fig-no">FIG.00 · SFLIGHT</span>
 
-<img src="assets/images/hero-blueprint.png" alt="工程制图风格主视觉：客机三视线稿与课程系统架构示意" loading="eager">
+<img src="assets/images/hero-blueprint.svg" alt="工程制图风格主视觉：客机三视线稿与课程五阶段系统图" width="1680" height="1120" loading="eager">
 
 <span class="ac-fig-cap"><span>DWG · SFLIGHT 航线与课程系统</span><span>SCALE 1:24</span></span>
 
 </figure>
 
 </div>
-
-> **内容进度**：全部 25 课已完成编写并逐课打磨——第0、1课为定稿（final）状态，第2-24课为初稿（draft）状态（知识骨架完整，正在逐课补充实操细节与配图）。配套 demo 对象已全部随仓库下发（abapGit Pull 即得，含第24课综合实战的程序与屏幕），并已在实机完成导入、激活、运行全链路验证。欢迎在评论区反馈。
 
 ## 课程阶段
 
@@ -121,3 +119,19 @@ hide:
 ## :material-account-edit: 关于作者
 
 **Jack Liang**，ABAP 开发者。课程之外，在个人博客 [jack-liang.com](https://jack-liang.com) 持续更新 ABAP/SAP 实战文章（函数模块 HTTP 化、NWRFC SDK 调 BAPI、SAP 技术雷达等），个人经历与联系方式见[关于页](https://jack-liang.com/about)。课程的问题与建议，欢迎在任意一课底部的评论区留言。
+
+<!-- 课次状态变更时同步改：两段宽度、图例数字、aria-label -->
+<div class="ac-rev">
+  <div class="ac-rev-head">
+    <span class="ac-rev-title">内容进度 / REV</span>
+    <span class="ac-rev-total">共 25 课</span>
+  </div>
+  <div class="ac-rev-track" role="img" aria-label="全部 25 课：定稿 2 课，初稿 23 课">
+    <span class="ac-rev-seg ac-rev-seg--final" style="width: 8%;"></span>
+    <span class="ac-rev-seg ac-rev-seg--draft" style="width: 92%;"></span>
+  </div>
+  <div class="ac-rev-legend">
+    <span><i class="ac-rev-key ac-rev-key--final"></i>定稿 2 课 · 8%</span>
+    <span><i class="ac-rev-key ac-rev-key--draft"></i>初稿 23 课 · 92%</span>
+  </div>
+</div>

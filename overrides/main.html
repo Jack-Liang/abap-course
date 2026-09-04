@@ -16,6 +16,27 @@
 
   {{ super() }}
 
+  {% if not page.is_homepage and (page.previous_page or page.next_page) %}
+  <nav class="ac-pn" aria-label="课程章节导航">
+    {% if page.previous_page %}
+    <a class="ac-pn__item ac-pn__item--prev" href="{{ page.previous_page.url | url }}">
+      <span class="ac-pn__dir">上一节</span>
+      <span class="ac-pn__title">{{ page.previous_page.title | e }}</span>
+    </a>
+    {% else %}
+    <span class="ac-pn__item ac-pn__item--empty" aria-hidden="true"></span>
+    {% endif %}
+    {% if page.next_page %}
+    <a class="ac-pn__item ac-pn__item--next" href="{{ page.next_page.url | url }}">
+      <span class="ac-pn__dir">下一节</span>
+      <span class="ac-pn__title">{{ page.next_page.title | e }}</span>
+    </a>
+    {% else %}
+    <span class="ac-pn__item ac-pn__item--empty" aria-hidden="true"></span>
+    {% endif %}
+  </nav>
+  {% endif %}
+
 {% if not page.is_homepage %}
   <!-- giscus 评论（存储于 GitHub Discussions） -->
   <h2 id="__comments">留言讨论</h2>

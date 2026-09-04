@@ -269,6 +269,39 @@ button:focus-visible {
 .md-footer a { color: var(--ac-link); }
 .md-copyright { color: var(--ac-soft); }
 
+/* ---------- 正文上一节/下一节卡 ---------- */
+.ac-pn {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+  margin: 2rem 0 1.2rem;
+}
+.ac-pn__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ac-line-strong);
+  background: var(--ac-surface);
+  text-decoration: none;
+}
+.ac-pn__dir {
+  font-family: var(--ac-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--ac-soft);
+}
+.ac-pn__item--prev .ac-pn__dir::before { content: "\2190  "; }
+.ac-pn__item--next { text-align: right; }
+.ac-pn__item--next .ac-pn__dir::after { content: "  \2192"; }
+.ac-pn__title { color: var(--ac-ink); font-weight: 600; line-height: 1.4; }
+.ac-pn__item--empty { border: none; background: transparent; }
+a.ac-pn__item:hover { border-color: var(--ac-brand); }
+a.ac-pn__item:hover .ac-pn__title { color: var(--ac-link); }
+@media (max-width: 480px) {
+  .ac-pn__item { padding: 0.6rem 0.75rem; }
+}
+
 /* ---------- 排印 ---------- */
 .md-typeset h1 {
   font-weight: 700;
@@ -447,6 +480,60 @@ button:focus-visible {
   margin-bottom: 0.4em;
 }
 .md-typeset blockquote p { color: var(--ac-soft); }
+
+/* ---------- 首页内容进度条（REV） ---------- */
+.ac-rev { margin: 2.2rem 0 0; }
+.ac-rev-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+.ac-rev-title,
+.ac-rev-total {
+  font-family: var(--ac-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: var(--ac-soft);
+}
+.ac-rev-total { letter-spacing: 0.08em; }
+.ac-rev-track {
+  display: flex;
+  height: 0.9rem;
+  border: 1px solid var(--ac-line-strong);
+  background: var(--ac-surface);
+  overflow: hidden;
+}
+.ac-rev-seg { display: block; height: 100%; }
+.ac-rev-seg--final { background: var(--ac-final); }
+.ac-rev-seg--draft {
+  border-left: 1px solid var(--ac-line-strong);
+  background: repeating-linear-gradient(135deg,
+    color-mix(in srgb, var(--ac-draft) 55%, transparent) 0 6px,
+    transparent 6px 12px);
+}
+.ac-rev-legend {
+  display: flex;
+  gap: 1.6rem;
+  margin-top: 0.45rem;
+  font-family: var(--ac-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--ac-soft);
+}
+.ac-rev-key {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.55rem;
+  margin-right: 0.35rem;
+  border: 1px solid var(--ac-line-strong);
+}
+.ac-rev-key--final { background: var(--ac-final); }
+.ac-rev-key--draft {
+  background: repeating-linear-gradient(135deg,
+    color-mix(in srgb, var(--ac-draft) 55%, transparent) 0 4px,
+    transparent 4px 8px);
+}
 
 /* ---------- 课次横幅（课文页全宽图） ---------- */
 .ac-banner {
