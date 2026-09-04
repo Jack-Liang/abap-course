@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% if page.meta and page.meta.status and page.meta.status != "final" %}
+  {% if page.meta and page.meta.status %}
+    <div class="ac-corner-stamp ac-corner-stamp--{{ page.meta.status }}">{{ page.meta.status | upper }}</div>
     {% if page.meta.status == "draft" %}
       <div class="ac-status ac-status--draft">
-        ✍️ <strong>本课为初稿</strong>——知识骨架已完整，正在逐课打磨（补充实操细节与配图）。欢迎在页面底部评论区反馈，你的意见会直接改进这节课。
+        <strong>本课为初稿</strong>——知识骨架已完整，正在逐课打磨（补充实操细节与配图）。欢迎在页面底部评论区反馈，你的意见会直接改进这节课。
       </div>
     {% elif page.meta.status == "beta" %}
       <div class="ac-status ac-status--beta">
-        🧪 <strong>本课内容基本定稿，校对中</strong>——发现错漏欢迎评论区指出。
+        <strong>本课内容基本定稿，校对中</strong>——发现错漏欢迎评论区指出。
       </div>
     {% endif %}
   {% endif %}

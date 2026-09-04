@@ -28,7 +28,11 @@ hide:
 
 <figure class="ac-hero-art">
 
-<img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/common/hero-wing-above-clouds.jpg" alt="云海之上的机翼与蓝天——SFLIGHT 航班主题" loading="eager">
+<span class="ac-fig-no">FIG.00 · SFLIGHT</span>
+
+<img src="assets/images/hero-blueprint.png" alt="工程制图风格主视觉：客机三视线稿与课程系统架构示意" loading="eager">
+
+<span class="ac-fig-cap"><span>DWG · SFLIGHT 航线与课程系统</span><span>SCALE 1:24</span></span>
 
 </figure>
 
