@@ -21,3 +21,6 @@ site/
 cache/
 .cache/
 site/
+
+# Python（hooks.py 构建钩子）
+__pycache__/
