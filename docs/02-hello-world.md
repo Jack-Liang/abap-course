@@ -46,28 +46,37 @@ status: draft
 2. 点 **Create**，弹窗中 Title 填 `Hello World 演示`，Type 保持默认 **Executable program**；
 3. 系统要求选择 Package：选第0课建好的**个人练习包**（练习代码不进课程包 `ZABAP_COURSE`，免得混进 abapGit 仓库；普通包会提示关联传输请求，确认即可，`$TMP` 本地包则没有这一步）；随后进入源代码编辑器。
 
+![SE38 输入程序名 ZHELLO_DEVELOPER 后点 Create，在 Program Attributes 弹窗填写 Title、Type 保持 Executable program](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/02-hello-world/se38-program-attributes.png)
+
+![Create Object Directory Entry 弹窗中为程序指定 Package，或点 Local Object 直接存入本地包 $TMP（免传输请求）](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/02-hello-world/se38-object-directory-entry.png)
+
 ### 步骤 2：敲入代码
 
-把下面这段敲入编辑器（或粘贴，但建议敲一遍找手感；`REPORT` 行的名字换成你自己在步骤 1 建的）：
+把下面这段敲入编辑器（或粘贴，但建议敲一遍找手感；`REPORT` 行通常已经存在，不用复制下面的第一行）：
 
 ```abap
-REPORT zac_hello_world.
+REPORT ZHELLO_DEVELOPER.
 
 START-OF-SELECTION.
-  WRITE: / 'Hello ABAP!', / '---'.
+  WRITE: / 'Hello ABAP!', / sy-uline.
 
   " 传统写法：先声明变量，再查询
   DATA: lv_carrid   TYPE scarr-carrid,
         lv_carrname TYPE scarr-carrname.
+
   SELECT SINGLE carrid, carrname
     FROM scarr INTO (@lv_carrid, @lv_carrname).
+
   WRITE: / |航空公司代码: { lv_carrid }|,
          / |名称: { lv_carrname }|.
 
   " 新语法写法：@DATA 内联声明
+  WRITE: / sy-uline, '新语法'.
+
   SELECT SINGLE carrid, carrname
     FROM scarr INTO @DATA(ls_carr).
-  WRITE: / |(新语法) 航空公司: { ls_carr-carrname }|.
+
+  WRITE: / |航空公司: { ls_carr-carrname }|.
 ```
 
 ### 步骤 3：保存、激活、运行
@@ -84,8 +93,8 @@ START-OF-SELECTION.
 
 !!! warning "常见报错"
 
-    - **"Statement is not accessible"**：某条语句写在了事件块外或声明区外的非法位置；
-    - **激活报 "Object ... does not exist"**：程序名敲错，或没保存就激活；
+    - **"Unknown column name "CARRNAM"."**：字段名写错，或字段在 SCARR 表中不存在；
+    - **激活报 "Each ABAP program can contain only one "REPORT", "PROGRAM", or "FUNCTION-POOL" statement."**：程序头只能有一个 `REPORT` 语句，不能有多个；
     - **输出空白**：SFLIGHT 数据没生成（回第0课第二节），或 SELECT 条件写错。
 
 ## 知识点
@@ -109,6 +118,8 @@ END-OF-SELECTION.                " ④ 可选：列表输出前的收尾逻辑
 
 ### 2. 基本数据类型速查
 
+什么是数据类型？我们日常使用的金额是小数，数人头用的是整数，发消息用的是一段文字（字符串）。每种数据都可以找到一种活多种数据类型来表示，这就是数据类型。
+
 | 类型 | 含义 | 长度/精度 | 典型用途 | 示例 |
 |------|------|----------|---------|------|
 | `C` | 字符 | 默认 1，可定长 | 代码、标志位 | `'AA'`、`'X'` |
@@ -119,9 +130,15 @@ END-OF-SELECTION.                " ④ 可选：列表输出前的收尾逻辑
 | `D` | 日期 | 8 位 `YYYYMMDD` | 日期字段 | `'20260730'` |
 | `T` | 时间 | 6 位 `HHMMSS` | 时间字段 | `'103000'` |
 | `STRING` | 变长字符串 | 按需增长 | 文本、JSON | `'你好 ABAP'` |
-| `XSTRING` | 十进制字节串 | 变长 | 文件、二进制 | Excel 内容 |
+| `XSTRING` | 十六进制字节串 | 变长 | 文件 | Excel 内容 |
 
 **两个选型直觉：** 金额一律 `P`（配 `DECIMALS`，别用 F）；编号一律 `N`（保住前导零，别用 I 或 C）。
+
+我们在 SE11 中查看 SCARR 表时就会发现，除了 Data element 外，还有 Data type 这一列，我们双击就能看到该字段的类型说明。
+
+SAP 的数据元素、域 的类型都是基于上面的基础类型创建的，在这些基础类型之上，我们定义了类型的长度、描述，这样就形成了各种各样的数据类型，在这里我们不但能看到各种数据类型的说明，也能看到类型的长度、描述等信息，甚至这些类型在哪里被用到，也可以通过 “Where- Used List” 查看。
+
+![SE11 数据类型说明](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/02-hello-world/se11-data-type.png)
 
 ### 3. DATA 声明与 TYPE vs LIKE
 
@@ -134,9 +151,9 @@ CONSTANTS lc_aa  TYPE s_carr_id VALUE 'AA'. " 常量：激活时定值，运行�
 DATA lv_code     LIKE lv_carrid.          " 旧式：跟随另一变量
 ```
 
-- **TYPE**：引用数据字典类型或已定义类型——**推荐**，语义清晰、重构友好；
+- **TYPE**：引用数据字典(DDIC)类型或已定义类型——**推荐**，语义清晰、重构友好；
 - **LIKE**：照抄另一个对象的结构——旧代码常见，新代码少用（跟着变量走，变量变了它跟着变，有时是坑）；
-- 命名规范（课程约定）：局部变量 `lv_`、全局 `gv_`、内表 `lt_`、工作区 `ls_`、常量 `lc_`。
+- 命名规范（课程约定）：局部变量 `lv_`、全局 `gv_`、内表 `lt_`、工作区 `ls_`、常量 `lc_` 或 `gc_`，`lc` 有时候容易和本地类的常量混淆，我们有时候也会`使用 `c_`。
 
 ### 4. WRITE 与字符串模板
 
@@ -175,6 +192,7 @@ WRITE: / '名称'   LEFT-JUSTIFIED,
 !!! tip "格式化输出的现代分工"
 
     简单列表：字符串模板的格式化选项（第8课细讲）能干同样的事且更灵活；正经报表：直接上 ALV（第10课），颜色、对齐、列宽全是字段目录里的一项配置。`WRITE ... FORMAT` 家族基本只在读老代码和极少数纯文本输出场景出现。
+    更多详情，我们可以把光标放到 `WRITE` 上面，点击 F1 查看帮助。
 
 ### 6. 新语法：@DATA 内联声明
 
@@ -189,11 +207,11 @@ SELECT SINGLE carrid, carrname FROM scarr INTO @DATA(ls_carr).
 
 - 变量在**使用处**声明并自动获得正确类型，删掉了"先声明后使用"的样板代码；
 - 适用于 SELECT / LOOP AT / READ TABLE / FETCH 等语句的接收位置；
-- **作用域规则**：内联变量作用于声明所在的**语句块**（如某个 LOOP 内部声明，出了循环就不可见）——这正是它和全局 DATA 的取舍点。
+- **作用域规则**：内联变量作用从声明所在的**语句**开始，到逻辑块结束。可以理解为一个局部变量。这正是它和全局 DATA 的取舍点。
 
 !!! tip "什么时候不用内联声明"
 
-    变量需要**跨语句块使用**（如 LOOP 里查出值、循环外还要用）时，老实写全局 `DATA`。作用域拿不准就用全局声明，永远不会错。
+    变量需要**跨语句块使用**（如 Form(子例程) 里查出值、Form 外还要用）时，老实写全局 `DATA`。
 
 ## 💡 实战经验
 
@@ -201,13 +219,17 @@ SELECT SINGLE carrid, carrname FROM scarr INTO @DATA(ls_carr).
 
     几乎每个语句执行后都会设置它：`0` 成功、`4` 未找到（SELECT 场景）、`8` 系统错误。每次 SELECT / READ / CALL FUNCTION 之后**先看 sy-subrc 再用结果**，是 ABAP 开发者的肌肉记忆。
 
+我们可以在 SE11 中查看 SYST 这个结构，它包含了系统变量的说明。
+
+![SE11 系统变量说明](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/02-hello-world/se11-system-variables.png)
+
 !!! tip "WRITE 数值前的幽灵空格"
 
-    直接 `WRITE lv_num` 输出数值时前面会自动补一个符号位空格。用字符串模板 `|{ lv_num }|` 输出更干净。
+    直接 `WRITE lv_num` 输出数值时，由于数字类型默认靠右对齐，前面会自动留一些空位。用字符串模板 `|{ lv_num }|` 输出更干净。
 
 !!! tip "日期永远不是你想的样子"
 
-    ABAP 内部日期是 `YYYYMMDD` 数字串，直接输出是 `20260730`。要人类可读格式用 `|{ lv_date DATE = ISO }|`。金额同理：`|{ lv_price CURRENCY = 'USD' }|`（第8课）。
+    ABAP 内部日期是 `YYYYMMDD` 数字串，直接输出是 `20260730`。要输出位更友好可读的格式用 `|{ lv_date DATE = ISO }|`。金额同理：`|{ lv_price CURRENCY = 'USD' }|`（第8课）。
 
 ## 📖 延伸阅读
 
