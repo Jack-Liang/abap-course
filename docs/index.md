@@ -120,18 +120,18 @@ hide:
 
 **Jack Liang**，ABAP 开发者。课程之外，在个人博客 [jack-liang.com](https://jack-liang.com) 持续更新 ABAP/SAP 实战文章（函数模块 HTTP 化、NWRFC SDK 调 BAPI、SAP 技术雷达等），个人经历与联系方式见[关于页](https://jack-liang.com/about)。课程的问题与建议，欢迎在任意一课底部的评论区留言。
 
-<!-- 课次状态变更时同步改：两段宽度、图例数字、aria-label -->
+<!-- 进度数字由 hooks.py 构建时自动计算（扫描课次 frontmatter status），勿手改 -->
 <div class="ac-rev">
   <div class="ac-rev-head">
     <span class="ac-rev-title">内容进度 / REV</span>
-    <span class="ac-rev-total">共 25 课</span>
+    <span class="ac-rev-total">共 {{REV_TOTAL}} 课</span>
   </div>
-  <div class="ac-rev-track" role="img" aria-label="全部 25 课：定稿 2 课，初稿 23 课">
-    <span class="ac-rev-seg ac-rev-seg--final" style="width: 8%;"></span>
-    <span class="ac-rev-seg ac-rev-seg--draft" style="width: 92%;"></span>
+  <div class="ac-rev-track" role="img" aria-label="全部 {{REV_TOTAL}} 课：定稿 {{REV_FINAL}} 课，初稿 {{REV_DRAFT}} 课">
+    <span class="ac-rev-seg ac-rev-seg--final" style="width: {{REV_FINAL_PCT}}%;"></span>
+    <span class="ac-rev-seg ac-rev-seg--draft" style="width: {{REV_DRAFT_PCT}}%;"></span>
   </div>
   <div class="ac-rev-legend">
-    <span><i class="ac-rev-key ac-rev-key--final"></i>定稿 2 课 · 8%</span>
-    <span><i class="ac-rev-key ac-rev-key--draft"></i>初稿 23 课 · 92%</span>
+    <span><i class="ac-rev-key ac-rev-key--final"></i>定稿 {{REV_FINAL}} 课 · {{REV_FINAL_PCT}}%</span>
+    <span><i class="ac-rev-key ac-rev-key--draft"></i>初稿 {{REV_DRAFT}} 课 · {{REV_DRAFT_PCT}}%</span>
   </div>
 </div>

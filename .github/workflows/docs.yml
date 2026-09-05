@@ -6,6 +6,7 @@ on:
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
+      - 'hooks.py'
       - '.github/workflows/docs.yml'
 
 permissions:

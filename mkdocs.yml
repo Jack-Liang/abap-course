@@ -32,6 +32,9 @@ theme:
     - content.code.copy
     - toc.follow
 
+hooks:
+  - hooks.py
+
 plugins:
   - search
   - git-revision-date-localized:
