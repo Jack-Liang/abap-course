@@ -1,0 +1,2826 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能">
+      
+      
+      
+        <link rel="canonical" href="https://abap.jack-liang.com/00-getting-started/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../01-sap-overview/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>第0课 环境搭建与仓库导入 - ABAP Course</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="第0课 环境搭建与仓库导入 - ABAP Course" />
+<meta property="og:description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能" />
+<meta property="og:image" content="https://abap.jack-liang.com/assets/images/social/00-getting-started.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://abap.jack-liang.com/00-getting-started/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="第0课 环境搭建与仓库导入 - ABAP Course" />
+<meta property="twitter:description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能" />
+<meta property="twitter:image" content="https://abap.jack-liang.com/assets/images/social/00-getting-started.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#第0课准备篇环境搭建与仓库导入" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="ABAP Course" class="md-header__button md-logo" aria-label="ABAP Course" data-md-component="logo">
+      
+  <img src="../assets/images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <!-- 覆写自 Material 同名 partial：站名可点击回首页（上游默认为纯文本 span） -->
+          <a class="md-ellipsis" href=".." title="返回首页">
+            ABAP Course
+          </a>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第0课 环境搭建与仓库导入
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换至深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换至浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Jack-Liang/abap-course" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Jack-Liang/abap-course
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ABAP Course" class="md-nav__button md-logo" aria-label="ABAP Course" data-md-component="logo">
+      
+  <img src="../assets/images/logo.svg" alt="logo">
+
+    </a>
+    ABAP Course
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Jack-Liang/abap-course" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Jack-Liang/abap-course
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    准备篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第0课 环境搭建与仓库导入
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第0课 环境搭建与仓库导入
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#一选择你的练习系统三选一" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、选择你的练习系统（三选一）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、选择你的练习系统（三选一）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#方案-aabap-cloud-developer-trial官方试用镜像推荐" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        方案 A：ABAP Cloud Developer Trial（官方试用镜像，推荐）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#安装-sap-gui-客户端并首次登录方案-a-必读" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安装 SAP GUI 客户端并首次登录（方案 A 必读）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#方案-b公司学校的开发系统" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        方案 B：公司/学校的开发系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#方案-cbtp-试用版仅部分课程适用" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        方案 C：BTP 试用版（仅部分课程适用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#二确认-sflight-演示数据" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、确认 SFLIGHT 演示数据
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#三用-abapgit-导入本仓库" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、用 abapGit 导入本仓库
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、用 abapGit 导入本仓库">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-启动-abapgit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 启动 abapGit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-创建开发包仓库包--个人练习包" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 创建开发包（仓库包 + 个人练习包）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-在线克隆本仓库" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 在线克隆本仓库
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-验证" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#四命名规范与对象对照" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、命名规范与对象对照
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、命名规范与对象对照">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#先分清仓库代码和个人练习" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        先分清：仓库代码和个人练习
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#命名规范项目规范" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        命名规范（项目规范）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#对象对照矩阵" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对象对照矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#五常见问题faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、常见问题（FAQ）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#环境就绪清单" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        环境就绪清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-sap-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1课 SAP 系统入门与开发环境
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-hello-world/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2课 Hello World 与基本数据类型
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-data-dictionary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3课 数据字典——建一张自定义表
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-internal-table/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4课 内表与结构体操作
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-open-sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5课 Open SQL——增删改查
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6课 ABAP 调试器
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    核心篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    核心篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-selection-screen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7课 选择屏幕
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-formatting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8课 数据格式化
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-function-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9课 Function Module
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-alv-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10课 ALV 报表（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-alv-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11课 ALV 交互事件
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-excel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12课 Excel 导入导出
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-oo-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13课 ABAP 面向对象编程（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    高级篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    高级篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-bapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14课 BAPI 调用
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-enhancement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15课 增强（Enhancement）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-external-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16课 调用外部接口
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-transport/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17课 Transport Request
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-message-class/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18课 消息处理
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-new-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19课 新语法专题
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    现代开发篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    现代开发篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20-cds-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20课 CDS View（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21-cds-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21课 CDS View（进阶）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22-oo-alv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22课 OO ALV
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23-btp-abapgit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23课 BTP 概览 + abapGit
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24课 综合实战
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    附录
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考资料库
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    许可与声明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#一选择你的练习系统三选一" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、选择你的练习系统（三选一）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、选择你的练习系统（三选一）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#方案-aabap-cloud-developer-trial官方试用镜像推荐" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        方案 A：ABAP Cloud Developer Trial（官方试用镜像，推荐）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#安装-sap-gui-客户端并首次登录方案-a-必读" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安装 SAP GUI 客户端并首次登录（方案 A 必读）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#方案-b公司学校的开发系统" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        方案 B：公司/学校的开发系统
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#方案-cbtp-试用版仅部分课程适用" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        方案 C：BTP 试用版（仅部分课程适用）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#二确认-sflight-演示数据" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、确认 SFLIGHT 演示数据
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#三用-abapgit-导入本仓库" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、用 abapGit 导入本仓库
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、用 abapGit 导入本仓库">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-启动-abapgit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 启动 abapGit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-创建开发包仓库包--个人练习包" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 创建开发包（仓库包 + 个人练习包）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-在线克隆本仓库" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 在线克隆本仓库
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-验证" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 验证
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#四命名规范与对象对照" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、命名规范与对象对照
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、命名规范与对象对照">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#先分清仓库代码和个人练习" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        先分清：仓库代码和个人练习
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#命名规范项目规范" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        命名规范（项目规范）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#对象对照矩阵" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        对象对照矩阵
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#五常见问题faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、常见问题（FAQ）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#环境就绪清单" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        环境就绪清单
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+  
+    <div class="ac-corner-stamp ac-corner-stamp--final">FINAL</div>
+    
+  
+
+  
+                  
+
+
+  
+  
+
+
+<h1 id="第0课准备篇环境搭建与仓库导入">第0课（准备篇）：环境搭建与仓库导入<a class="headerlink" href="#第0课准备篇环境搭建与仓库导入" title="Permanent link">&para;</a></h1>
+<p><img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/banner.jpg" alt="第0课（准备篇）：环境搭建与仓库导入 章节横幅" class="ac-banner"></p>
+<blockquote>
+<p>上课之前，把"教室"准备好：一套带 SFLIGHT 演示数据的 ABAP 系统，并用 abapGit 把本仓库的课程代码拉进去。</p>
+</blockquote>
+<p><strong>预计耗时：</strong> 2～4 小时（大部分时间在下载 23GB 镜像和等待系统初始化）</p>
+<p><strong>完成标志：</strong> SE38 里能运行 <code>ZAC_ENV_CHECK</code>，输出环境自检结果。</p>
+<hr />
+<h2 id="一选择你的练习系统三选一">一、选择你的练习系统（三选一）<a class="headerlink" href="#一选择你的练习系统三选一" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>适合谁</th>
+<th>课程兼容性</th>
+<th>成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. ABAP Cloud Developer Trial</strong>（官方试用镜像，推荐）</td>
+<td>自学者</td>
+<td>✅ 24 课全部兼容</td>
+<td>免费；本机 Docker，需 16GB+ 内存 / 170GB 磁盘</td>
+</tr>
+<tr>
+<td>B. 公司/学校的开发系统</td>
+<td>有导师带、有开发账号</td>
+<td>✅ 基本兼容，个别课受权限/网络限制</td>
+<td>需要申请开发权限</td>
+</tr>
+<tr>
+<td>C. BTP 试用版（ABAP 环境）</td>
+<td>只想体验现代开发</td>
+<td>⚠️ 仅部分课程适用（见下方说明）</td>
+<td>免费，注册即用</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>为什么推荐官方试用镜像：</strong> 本课程以传统 ABAP 开发为主线（SE38/SE11/SE16、经典 ALV、函数模块、BAPI），这些都是 SAP GUI + NetWeaver 技术栈的内容，试用镜像完整支持；而 BTP 上的 ABAP 环境是 ABAP Cloud，没有 SAP GUI，也不放开经典 ALV / 函数模块 / 多数 BAPI。</p>
+</blockquote>
+<h3 id="方案-aabap-cloud-developer-trial官方试用镜像推荐">方案 A：ABAP Cloud Developer Trial（官方试用镜像，推荐）<a class="headerlink" href="#方案-aabap-cloud-developer-trial官方试用镜像推荐" title="Permanent link">&para;</a></h3>
+<p>SAP 官方发布的免费试用环境 <strong>ABAP Cloud Developer Trial</strong>（Docker 镜像 <a href="https://hub.docker.com/r/sapse/abap-cloud-developer-trial"><code>sapse/abap-cloud-developer-trial</code></a>，按 ABAP Platform 年份发布版本），底层是完整的 ABAP Platform + HANA，<strong>同时支持 SAP GUI 经典技术栈与现代 ABAP Cloud 开发</strong>，本课程 24 课全部兼容。</p>
+<p><strong>硬件要求（以官方 Docker Hub 页面为准，以下为 2025 版数值）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU</td>
+<td>4 核及以上</td>
+</tr>
+<tr>
+<td>内存</td>
+<td><strong>最低 16GB，官方强烈建议 32GB</strong>（Windows 在 <code>.wslconfig</code> 设置 <code>memory=24GB</code>；macOS 在 Docker Desktop 中分配 16GB+）</td>
+</tr>
+<tr>
+<td>磁盘</td>
+<td>Linux <strong>150GB</strong>；Windows/macOS 给 Docker Desktop 分配 <strong>170GB</strong>（镜像压缩约 23GB，解压后超过 53GB）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>部署步骤：</strong></p>
+<ol>
+<li>在 <a href="https://hub.docker.com">Docker Hub</a> 注册并本机执行 <code>docker login</code>——<strong>该镜像不开放匿名拉取</strong>；</li>
+<li>拉取镜像（TAG 以页面最新为准，当前为 <code>2025</code>）：</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>docker<span class="w"> </span>pull<span class="w"> </span>sapse/abap-cloud-developer-trial:2025
+</code></pre></div>
+<ol>
+<li>启动容器。Linux 原生环境：</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--stop-timeout<span class="w"> </span><span class="m">3600</span><span class="w"> </span>-it<span class="w"> </span>--name<span class="w"> </span>a4h<span class="w"> </span>-h<span class="w"> </span>vhcala4hci<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>sapse/abap-cloud-developer-trial:2025
+</code></pre></div>
+<p>Windows / macOS（Docker Desktop）必须映射端口并加 <code>-skip-limits-check</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>run<span class="w"> </span>--stop-timeout<span class="w"> </span><span class="m">3600</span><span class="w"> </span>-i<span class="w"> </span>--name<span class="w"> </span>a4h<span class="w"> </span>-h<span class="w"> </span>vhcala4hci<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>-p<span class="w"> </span><span class="m">3200</span>:3200<span class="w"> </span>-p<span class="w"> </span><span class="m">3300</span>:3300<span class="w"> </span>-p<span class="w"> </span><span class="m">8443</span>:8443<span class="w"> </span>-p<span class="w"> </span><span class="m">30213</span>:30213<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>-p<span class="w"> </span><span class="m">50000</span>:50000<span class="w"> </span>-p<span class="w"> </span><span class="m">50001</span>:50001<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>sapse/abap-cloud-developer-trial:2025<span class="w"> </span>-skip-limits-check
+</code></pre></div>
+<p><strong>关键参数说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-h vhcala4hci</code></td>
+<td>主机名是固定值，改了系统无法启动（确需自定义时用 <code>-skip-hostname-check</code>）</td>
+</tr>
+<tr>
+<td><code>--stop-timeout 3600</code></td>
+<td>停容器时给 HANA 留足内存数据落盘时间；停止请用 <code>docker stop -t 7200 a4h</code>，<strong>不要直接关机或杀进程</strong></td>
+</tr>
+<tr>
+<td><code>-skip-limits-check</code></td>
+<td>Mac/Windows 无法修改宿主机内核参数（shmmax 等），必须加</td>
+</tr>
+<tr>
+<td><code>-agree-to-sap-license</code></td>
+<td>预先同意开发者许可，免去每次启动的交互确认</td>
+</tr>
+<tr>
+<td><code>--mac-address 02:42:ac:11:00:11</code></td>
+<td>固定容器 MAC，防止重启后硬件 key 变化导致许可失效（官方 Docker Hub 页提示的坑；此为页面示例值，可自定，之后保持不变即可）</td>
+</tr>
+</tbody>
+</table>
+<p>常用端口：
+- <code>3200</code> SAP GUI：SAP 客户端与服务器通信
+- <code>3300</code> RFC：ABAP 系统间通信协议
+- <code>30213</code> HANA：HANA 数据库端口，可通过数据库软件如 HANA Studio 、DBeaver 等连接
+- <code>8443</code> Cloud Connector：与 BTP 平台通信的接口，默认不开启
+- <code>50000/50001</code> HTTP/HTTPS：ABAP 系统对外提供 http/https 服务的端口</p>
+<p>注意<strong>不要用大写 <code>-P</code></strong>（随机分配端口会导致 SAP GUI 等客户端连不上）。</p>
+<ol>
+<li>首次启动：该镜像<strong>未预加载数据（initial load）</strong>，启动后第一次打开事务码和程序会明显偏慢，这是由于程序尚未编译导致的，运行一次后会正常。</li>
+</ol>
+<p>服务器就绪后，还差最后一步：装客户端、建连接并首次登录——见下方专门小节。</p>
+<blockquote>
+<p><strong>Apple Silicon（M 系列芯片）注意：</strong> 镜像为 x86_64 架构，在 M 系列 Mac 上需通过 Rosetta 模拟运行，参考 Docker Hub 页面链接的社区指南。</p>
+<p><strong>许可证：</strong> 仅限学习/演示用途；ABAP 许可证有效期约 3 个月，到期后用 SAP<em>（客户端 000）进 SLICENSE 取硬件 key，到 minisap 页面选择 A4H 系统下载新许可，通过事务码 SLICENSE 导入，或挂载至 <code>/opt/sap/ASABAP_license</code> 更新。</em><em>未到期却报许可无效</em>*，多半是容器 MAC 变了、硬件 key 跟着变——启动命令加固定 <code>--mac-address</code> 可防（见上方参数表）。</p>
+<p><strong>提示：</strong> <code>DDIC</code> / <code>SAP*</code> 仅用于系统管理（比如 DEVELOPER 密码过期时用 SU01 重置），日常开发请始终用 DEVELOPER 登录。</p>
+</blockquote>
+<h3 id="安装-sap-gui-客户端并首次登录方案-a-必读">安装 SAP GUI 客户端并首次登录（方案 A 必读）<a class="headerlink" href="#安装-sap-gui-客户端并首次登录方案-a-必读" title="Permanent link">&para;</a></h3>
+<p>容器只是<strong>服务器</strong>——登录还需要在自己电脑上准备一个客户端。按你的系统三选一：</p>
+<table>
+<thead>
+<tr>
+<th>客户端</th>
+<th>适合系统</th>
+<th>获取方式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SAP GUI for Windows</td>
+<td>Windows</td>
+<td><a href="https://support.sap.com/en/my-support/software-downloads.html">SAP Support Portal 软件下载区</a>（需 S-user 下载权限）</td>
+<td>公司电脑通常已由 IT 预装</td>
+</tr>
+<tr>
+<td>SAP GUI for Java</td>
+<td>macOS / Linux</td>
+<td>同上（同一下载区）</td>
+<td>7.80 起原生支持 Apple Silicon（M 系列）</td>
+</tr>
+<tr>
+<td>SAP GUI for HTML（浏览器版）</td>
+<td>任何系统，<strong>零安装</strong></td>
+<td>无需下载，浏览器直接访问</td>
+<td>界面细节与桌面版略有差异；拿不到桌面版时的兜底路线</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>个人自学者注意：</strong> 两款桌面版 GUI 都挂在 SAP Support Portal 的下载区，需要 SAP 客户/合作伙伴的 S-user 授权才能下载——没有公司渠道的自学者常卡在这一步。你也可以尝试通过 <a href="https://www.sap.com/products/try-sap/trials-downloads.html?search=SAP+GUI">SAP 试用版下载页</a> 用普通 SAP 账号注册下载桌面版 GUI；若仍拿不到，用浏览器版即可完成全部课程（做法见本节末尾）。版本与系统要求以 <a href="https://pages.community.sap.com/topics/gui/family">SAP GUI 官方页面</a>为准。</p>
+</blockquote>
+<p><strong>桌面版创建连接（Windows / Java 参数通用）：</strong></p>
+<ul>
+<li>Windows（SAP Logon）：新建条目 → 用户指定系统 → 应用服务器 <code>localhost</code>、系统编号 <code>00</code>、系统 ID <code>A4H</code>；</li>
+<li>macOS / Linux（SAP GUI for Java）：新建连接，连接串填 <code>conn=/H/localhost/S/3200</code>，描述随意（如 <code>A4H Trial</code>）。</li>
+</ul>
+<p><strong>首次登录：</strong> 客户端 <code>001</code>，用户 <strong>DEVELOPER</strong>，初始密码以镜像页面为准（2025 版为 <code>ABAPtr2025#SP00</code>，<code>SAP*</code> 和 <code>DDIC</code> 同密码），首次登录会强制修改密码。第1课的"打开 SAP GUI、选中连接"指的就是这里建好的连接。</p>
+<p><strong>浏览器版做法（零安装兜底）：</strong> 先给本机 hosts 文件（Windows：<code>C:\Windows\System32\drivers\etc\hosts</code>；macOS / Linux：<code>/etc/hosts</code>）加一行 <code>127.0.0.1 vhcala4hci</code>，再在浏览器打开：</p>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>http://vhcala4hci:50000/sap/bc/gui/sap/its/webgui
+</code></pre></div>
+- 如果出现 <strong>403 Forbidden</strong>，说明该服务未启用——仍需想办法装桌面版，然后在 SICF 中启用该服务。
+- 如果不修改 hosts 文件，需要把浏览器地址栏中的 <code>vhcala4hci</code> 修改为 <code>localhost</code>。</p>
+<blockquote>
+<p>课程演示与截图均以桌面版 SAP GUI（英文界面）为准；浏览器版事务码与功能一致，个别布局、快捷键有差异。</p>
+</blockquote>
+<h3 id="方案-b公司学校的开发系统">方案 B：公司/学校的开发系统<a class="headerlink" href="#方案-b公司学校的开发系统" title="Permanent link">&para;</a></h3>
+<p>有导师或账号支持时的首选，省去自建服务器。需要向管理员申请：</p>
+<ul>
+<li>SAP GUI 客户端（公司电脑一般由 IT 统一安装，先确认有没有，没有就一并申请）；</li>
+<li>SE38 / SE80 / SE11 / SE16 / SE16N / SE37 / SE24 / SE91 / SE19 等事务码的开发权限；</li>
+<li>一个可以自建对象的<strong>开发包（Package）</strong>和 Workbench 传输请求；</li>
+<li>注意：第 16 课调用外部 REST API，公司内网通常需要代理或防火墙放行，请提前确认。</li>
+</ul>
+<h3 id="方案-cbtp-试用版仅部分课程适用">方案 C：BTP 试用版（仅部分课程适用）<a class="headerlink" href="#方案-cbtp-试用版仅部分课程适用" title="Permanent link">&para;</a></h3>
+<p>注册 <a href="https://www.sap.com/products/technology-platform/trial.html">SAP BTP Trial</a> 后可免费开通 ABAP 环境，用 Eclipse + ADT（ABAP Development Tools）开发。但它是 ABAP Cloud：</p>
+<table>
+<thead>
+<tr>
+<th>课程</th>
+<th>BTP 上是否可用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第2/4/5/8/13/18/19 课（基础语法、内表、SQL、OO、新语法）</td>
+<td>✅ 可用（ADT 中运行控制台程序）</td>
+</tr>
+<tr>
+<td>第20/21/23 课（CDS、BTP）</td>
+<td>✅ 完全适用</td>
+</tr>
+<tr>
+<td>第1/3/6/7/9～12/14～17/22/24 课</td>
+<td>❌ 不适用（依赖 SAP GUI、经典事务码、函数模块、经典 ALV、BAPI）</td>
+</tr>
+</tbody>
+</table>
+<p>结论：BTP Trial 可以作为<strong>第二套体验环境</strong>，但不能作为本课程的主环境。</p>
+<hr />
+<h2 id="二确认-sflight-演示数据">二、确认 SFLIGHT 演示数据<a class="headerlink" href="#二确认-sflight-演示数据" title="Permanent link">&para;</a></h2>
+<p><strong>官方试用镜像默认已预置 SFLIGHT 数据</strong>。先用 SE16 查看表数据 <code>SCARR</code> 验证（试用镜像没有 SE16N，本课程统一以 SE16 演示，公司环境两者的差异在第1课说明）：能看到 LH/AA/QF 等航空公司记录（且 <code>SFLIGHT</code>/<code>SBOOK</code> 有数据）就直接进入第三节。</p>
+<p>更省事的办法：SE38 运行课程自带的 <strong><code>zac_env_check</code></strong>——一键检查 9 个课程对象是否入库、6 张演示表是否存在及数据条数，全部"就绪"即可开始上课。</p>
+<p><img alt="SE16 SCARR" src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/SE16_SCARR.png" /></p>
+<p>以下情况需要跑 SAP 自带的生成器（重新生成或重置数据）：</p>
+<ol>
+<li>系统里没有预置数据（部分公司系统如此）；</li>
+<li>练习时把数据改乱了（如第5课的 INSERT/UPDATE/DELETE Demo），想恢复原始数据集。</li>
+</ol>
+<p>做法：SE38 运行程序 <strong><code>SAPBC_DATA_GENERATOR</code></strong>，选择 <strong>Standard</strong>（标准规模：SCARR 约 15 家航空公司、SPFLI 航线、SFLIGHT 航班、SBOOK 数万条预订）执行即可。</p>
+<p><img alt="SE38 SAPBC_DATA_GENERATOR" src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/SE38_SAPBC_DATA_GENERATOR.png" /></p>
+<blockquote>
+<p>课程 Demo 中大量示例以 <code>carrid = 'AA'</code>、<code>connid = '0017'</code> 为例，预置/生成的数据里这两条一定有数据。若你的系统 SE38 里找不到该生成器，参考 SAP Community 上 "SFLIGHT data" 相关的替代生成方案。</p>
+</blockquote>
+<hr />
+<h2 id="三用-abapgit-导入本仓库">三、用 abapGit 导入本仓库<a class="headerlink" href="#三用-abapgit-导入本仓库" title="Permanent link">&para;</a></h2>
+<h3 id="1-启动-abapgit">1. 启动 abapGit<a class="headerlink" href="#1-启动-abapgit" title="Permanent link">&para;</a></h3>
+<p><strong>官方试用镜像已自带独立版 abapGit</strong>：SE38 中直接运行程序 <code>ZABAPGIT_STANDALONE</code>，能看到 abapGit 仓库列表界面即可开始（镜像自带的版本可能略旧，学习用途足够）。</p>
+<p><img alt="SE38 ZABAPGIT_STANDALONE" src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/SE38_ZABAPGIT_STANDALONE.png" /></p>
+<p>若你的系统里没有（公司老系统、旧版镜像等），手动安装一次性完成：</p>
+<ol>
+<li>从 <a href="https://abapgit.org">abapgit.org</a> 下载独立版程序 <code>zabapgit_standalone.prog.abap</code>（GitHub 上游：abapGit/abapGit 的 Releases）；</li>
+<li>SE38 新建程序 <code>ZABAPGIT_STANDALONE</code>，把下载的源码整个粘贴/上传进去，保存并<strong>激活</strong>；</li>
+<li>运行（F8）即可。</li>
+</ol>
+<p><img alt="SE38 上传 abapGit 程序" src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/SE38_UPLOAD.png" /></p>
+<h3 id="2-创建开发包仓库包--个人练习包">2. 创建开发包（仓库包 + 个人练习包）<a class="headerlink" href="#2-创建开发包仓库包--个人练习包" title="Permanent link">&para;</a></h3>
+<p>SE80（右键 → Create → Package）创建<strong>两个</strong>包，职责从现在起就分开：</p>
+<table>
+<thead>
+<tr>
+<th>包</th>
+<th>名字</th>
+<th>类型</th>
+<th>放什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>课程仓库包</td>
+<td><strong><code>ZABAP_COURSE</code></strong>（描述随意，如 "ABAP Course"）</td>
+<td>普通开发包<code>ZABAP_COURSE</code>或本地包<code>$ABAP_COURSE</code>，</td>
+<td>abapGit 仓库——随本仓库分发的课程对象</td>
+</tr>
+<tr>
+<td>个人练习包</td>
+<td>自定，如 <code>ZMY_PRACTICE</code></td>
+<td>普通包或本地包 <code>$TMP</code> 均可</td>
+<td>你跟课敲的练习代码、课后作业</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>选<strong>本地包</strong>：不能放在<code>$TMP</code>下，需新建<code>$</code>开头本地包，<strong>无需传输请求</strong>。</li>
+<li>普通开发包：系统会弹出Workbench创建提示，确认即可，单机练习无需真实传输。</li>
+<li>练习场景优先用<code>$TMP</code>：对象不进入传输请求，操作简单。</li>
+<li>若练习对象需要走传输（第17课内容），创建普通包。</li>
+<li>两类包分开，避免练习代码混入abapGit仓库，防止Pull受干扰（参考第4节约定）。</li>
+</ul>
+<h3 id="3-在线克隆本仓库">3. 在线克隆本仓库<a class="headerlink" href="#3-在线克隆本仓库" title="Permanent link">&para;</a></h3>
+<ol>
+<li>运行 <code>ZABAPGIT_STANDALONE</code>，点击 <strong>New Online</strong>；</li>
+<li>填写：</li>
+<li>Git repository URL：`https://github.com/Jack-Liang/abap-course.git.</li>
+<li>Package：<code>ZABAP_COURSE</code> 或 <code>$ABAP_COURSE</code></li>
+<li>Branch：<code>master</code></li>
+<li>点击 <strong>Clone</strong>，之后进入仓库页面点击 <strong>Pull</strong> 拉取全部对象；</li>
+<li>Pull 完成后对象列表应为绿色（全部激活）。</li>
+</ol>
+<p><img alt="abapGit 新建在线仓库" src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/ABAPGIT_ONLINE_PULL.png" /></p>
+<p><strong>如果 Pull 报 SSL 证书错误</strong>（试用镜像常见，系统里没有 GitHub 的受信证书）：</p>
+<ul>
+<li>方法一（治本）：浏览器导出 <code>github.com</code> 的证书链，事务码 <strong>STRUST</strong> 导入到 SSL client (Anonymous) / (Standard) 后重试；</li>
+</ul>
+<p><img alt="STRUST 导入证书" src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/STRUST.png" /></p>
+<ul>
+<li>方法二（绕开）：GitHub 上 Code → Download ZIP 下载本仓库，abapGit 菜单选择 <strong>Import from ZIP</strong> 离线导入，效果相同（只是之后无法直接 Pull 更新）。</li>
+</ul>
+<p><img alt="GitHub 下载本仓库 ZIP" src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/GITHUB_DOWNLOAD_ZIP.png" /></p>
+<p><img alt="abapGit 导入 ZIP" src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/00-getting-started/abapGit_IMPORT_ZIP.png" /></p>
+<h3 id="4-验证">4. 验证<a class="headerlink" href="#4-验证" title="Permanent link">&para;</a></h3>
+<p>SE38 运行 <code>ZAC_HELLO_WORLD</code>，看到 <code>Hello ABAP!</code> 与航空公司信息，环境就绪。</p>
+<hr />
+<h2 id="四命名规范与对象对照">四、命名规范与对象对照<a class="headerlink" href="#四命名规范与对象对照" title="Permanent link">&para;</a></h2>
+<h3 id="先分清仓库代码和个人练习">先分清：仓库代码和个人练习<a class="headerlink" href="#先分清仓库代码和个人练习" title="Permanent link">&para;</a></h3>
+<p>课程里的开发分两条线，<strong>命名规范只约束第一条</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>课程仓库代码</th>
+<th>个人练习代码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>放哪个包</td>
+<td><code>ZABAP_COURSE</code>（第三节建的仓库包）</td>
+<td>自己的个人练习包（或 <code>$TMP</code>）</td>
+</tr>
+<tr>
+<td>怎么命名</td>
+<td>遵守下方 <code>zac_</code> 项目规范</td>
+<td>随意——<code>z</code> 开头带上自己的标识（如 <code>zhello_developer</code>），不与其他对象重名即可</td>
+</tr>
+<tr>
+<td>什么时候写它</td>
+<td>运行课程 Demo、给本仓库贡献代码</td>
+<td>跟课"从零敲一遍"、课后作业、自己折腾</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>一句话：<strong><code>zac_</code> 规范管的是进本仓库的代码，不管你的练习。</strong> 自己做练习，一律放个人练习包，怎么方便怎么来；只有当你要把代码提交到本仓库（Pull Request）时，才在 <code>ZABAP_COURSE</code> 包里开发并遵守项目规范。个别课需要手工复建的仓库对象（如第9课的函数组）名字必须照抄——课文里会单独说明，但包照样放自己的练习包。</p>
+</blockquote>
+<h3 id="命名规范项目规范">命名规范（项目规范）<a class="headerlink" href="#命名规范项目规范" title="Permanent link">&para;</a></h3>
+<p>本仓库所有开发对象统一带课程前缀 <strong><code>zac_</code></strong>（Z + ABAP Course），避免与系统里其他项目的 Z 对象重名。<strong>课号不写进对象名</strong>——课序调整时对象名不受影响；课与对象的对应关系维护在下方矩阵表中，各程序的头注释同时标注了所属课次，方便在系统里就近查找。</p>
+<table>
+<thead>
+<tr>
+<th>对象类型</th>
+<th>命名规则</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>报表程序 / INCLUDE</td>
+<td><code>zac_&lt;语义名&gt;</code></td>
+<td><code>zac_sql_crud</code>、<code>zac_flight_top</code></td>
+</tr>
+<tr>
+<td>类</td>
+<td><code>zcl_ac_&lt;语义名&gt;</code></td>
+<td><code>zcl_ac_flight_query</code></td>
+</tr>
+<tr>
+<td>接口</td>
+<td><code>zif_ac_&lt;语义名&gt;</code></td>
+<td>——</td>
+</tr>
+<tr>
+<td>函数组 / 函数模块</td>
+<td><code>zac_&lt;语义名&gt;</code></td>
+<td><code>zac_flight_utils</code> / <code>zac_calc_flight_duration</code></td>
+</tr>
+<tr>
+<td>CDS 视图</td>
+<td><code>zac_&lt;语义名&gt;</code></td>
+<td><code>zac_flight_detail</code></td>
+</tr>
+<tr>
+<td>表 / 消息类</td>
+<td><code>zac_&lt;语义名&gt;</code></td>
+<td><code>zac_flight_ext</code> / <code>zac_flight_msg</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>补充约定：仓库开发包为 <code>ZABAP_COURSE</code>；一个对象可服务多课（见矩阵"涉及课程"列），新增对象时先查矩阵避免重复造轮子。</p>
+</blockquote>
+<h3 id="对象对照矩阵">对象对照矩阵<a class="headerlink" href="#对象对照矩阵" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>类型</th>
+<th>涉及课程</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>zac_env_check</code></td>
+<td>程序</td>
+<td>第0课</td>
+<td>课程环境自检：一键检查对象入库与演示数据</td>
+</tr>
+<tr>
+<td><code>zac_hello_world</code></td>
+<td>程序</td>
+<td>第2课</td>
+<td>Hello World 与基本数据类型</td>
+</tr>
+<tr>
+<td><code>zac_doms_priority</code> + <code>zac_de_priority</code></td>
+<td>域 + 数据元素</td>
+<td>第3课</td>
+<td>优先级字段的域（固定值 1/2/3）与数据元素</td>
+</tr>
+<tr>
+<td><code>zac_flight_ext</code></td>
+<td>透明表</td>
+<td>第3课、第15课</td>
+<td>建表演示；增强示例引用</td>
+</tr>
+<tr>
+<td><code>zac_internal_table</code></td>
+<td>程序</td>
+<td>第4课</td>
+<td>内表与结构体操作</td>
+</tr>
+<tr>
+<td><code>zac_sql_crud</code></td>
+<td>程序</td>
+<td>第5课</td>
+<td>Open SQL 增删改查</td>
+</tr>
+<tr>
+<td><code>zac_selection_screen</code></td>
+<td>程序</td>
+<td>第7课</td>
+<td>选择屏幕</td>
+</tr>
+<tr>
+<td><code>zac_formatting</code></td>
+<td>程序</td>
+<td>第8课</td>
+<td>字符串/日期/货币格式化</td>
+</tr>
+<tr>
+<td><code>zac_call_function</code> + <code>zac_flight_utils</code>（函数组）+ <code>zac_calc_flight_duration</code>（FM，均已入库）</td>
+<td>程序 + FM</td>
+<td>第9课</td>
+<td>函数模块调用</td>
+</tr>
+<tr>
+<td><code>zac_alv_basic</code></td>
+<td>程序</td>
+<td>第10课</td>
+<td>经典 ALV 基础</td>
+</tr>
+<tr>
+<td><code>zac_alv_events</code></td>
+<td>程序</td>
+<td>第11课</td>
+<td>ALV 交互事件</td>
+</tr>
+<tr>
+<td><code>zac_excel</code></td>
+<td>程序</td>
+<td>第12课</td>
+<td>Excel 导入导出</td>
+</tr>
+<tr>
+<td><code>zac_oo_basic</code> + <code>zcl_ac_flight_query</code></td>
+<td>程序 + 类</td>
+<td>第13课</td>
+<td>OO 基础及其工具类</td>
+</tr>
+<tr>
+<td><code>zac_bapi</code></td>
+<td>程序</td>
+<td>第14课</td>
+<td>BAPI 调用</td>
+</tr>
+<tr>
+<td><code>zcl_ac_flight_service</code></td>
+<td>类</td>
+<td>第14课、第24课</td>
+<td>第14课引入，综合实战的主役业务服务类</td>
+</tr>
+<tr>
+<td><code>zac_rest_api</code></td>
+<td>程序</td>
+<td>第16课</td>
+<td>调用外部 REST 接口（需外网）</td>
+</tr>
+<tr>
+<td><code>zac_message</code> + <code>zac_flight_msg</code></td>
+<td>程序 + 消息类</td>
+<td>第18课</td>
+<td>消息处理</td>
+</tr>
+<tr>
+<td><code>zac_new_syntax</code></td>
+<td>程序</td>
+<td>第19课</td>
+<td>新语法专题</td>
+</tr>
+<tr>
+<td><code>zac_flight_detail</code> / <code>zac_flight_stats</code></td>
+<td>CDS 视图</td>
+<td>第20/21课、第24课</td>
+<td>航班详情/统计视图，综合实战复用</td>
+</tr>
+<tr>
+<td><code>zac_cds_basic</code> / <code>zac_cds_advanced</code></td>
+<td>程序</td>
+<td>第20/21课</td>
+<td>CDS 视图消费端 demo</td>
+</tr>
+<tr>
+<td><code>zac_oo_alv</code></td>
+<td>程序</td>
+<td>第22课</td>
+<td>OO ALV</td>
+</tr>
+<tr>
+<td><code>zac_flight_manager</code> + 5 个 INCLUDE</td>
+<td>程序</td>
+<td>第24课</td>
+<td>综合实战主程序（<code>zac_flight_top/sel/pbo/pai/forms</code>），含 Screen 100，均已入库</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>全部 24 课的开发对象均可通过 abapGit Pull 获取，且已在作者实机完成导入、激活、运行全链路验证。</p>
+</blockquote>
+<hr />
+<h2 id="五常见问题faq">五、常见问题（FAQ）<a class="headerlink" href="#五常见问题faq" title="Permanent link">&para;</a></h2>
+<p><strong>Q1：DEVELOPER 用户密码过期/锁死了怎么办？</strong>
+用 <code>DDIC</code> 登录，SU01 里输入 DEVELOPER，解锁并重置密码，重新登录。</p>
+<p><strong>Q2：SE16 查 SFLIGHT 没有数据？</strong>
+官方试用镜像默认预置了数据；若确实为空（如公司系统），运行 <code>SAPBC_DATA_GENERATOR</code> 生成（见第二节），跑完后等几分钟数据落库再查。</p>
+<p><strong>Q3：第16课 REST Demo 报连接失败？</strong>
+该课调用公网汇率 API（<code>api.exchangerate-api.com</code>）。公司内网需要配置代理；试用容器需要宿主机能访问外网，且 STRUST 中已导入对应 SSL 证书。跑不通可先跳过，不影响后续课程。</p>
+<p><strong>Q4：abapGit Pull 时提示对象已存在？</strong>
+说明系统里已有同名 Z 对象——多半是手工练习时建进了 <code>ZABAP_COURSE</code>（练习请放个人练习包，见第四节）。先删除同名对象再 Pull，或换一个干净的开发包。</p>
+<p><strong>Q5：课程里中文注释在系统里显示乱码？</strong>
+SAP GUI 登录语言选英文（EN）即可——仓库母语为 E，中文以 UTF-8 存储在代码和文本池中，不影响编译运行；若 GUI 显示异常，检查 SAP GUI 选项里的字符编码设置。</p>
+<hr />
+<h2 id="环境就绪清单">环境就绪清单<a class="headerlink" href="#环境就绪清单" title="Permanent link">&para;</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SAP GUI 客户端已就绪并登录成功（客户端 <code>001</code> / <code>DEVELOPER</code>），SE38/SE11/SE16/SE80 都能打开</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> SCARR/SFLIGHT/SBOOK 有数据（官方镜像默认预置；为空则跑 <code>SAPBC_DATA_GENERATOR</code>）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> abapGit 可运行（官方镜像自带），本仓库已 Clone/Pull 到仓库包 <code>ZABAP_COURSE</code></li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> 个人练习包已建好（跟课练习、课后作业放这里，与仓库包分开）</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> <code>ZAC_ENV_CHECK</code> 运行成功，输出全部"就绪"（课程对象入库 + 演示数据一键检查）</li>
+</ul>
+<p>全部打勾，就可以正式开始下一课了。</p>
+<hr />
+<p>下一课：<a href="../01-sap-overview/">第1课：SAP 系统入门与开发环境</a>——正式走进 SAP 的世界。</p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2026年9月5日 13:17:33 CST">2026年9月5日</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+
+  
+  <nav class="ac-pn" aria-label="课程章节导航">
+    
+    <a class="ac-pn__item ac-pn__item--prev" href="..">
+      <span class="ac-pn__dir">上一节</span>
+      <span class="ac-pn__title">首页</span>
+    </a>
+    
+    
+    <a class="ac-pn__item ac-pn__item--next" href="../01-sap-overview/">
+      <span class="ac-pn__dir">下一节</span>
+      <span class="ac-pn__title">第1课 SAP 系统入门与开发环境</span>
+    </a>
+    
+  </nav>
+  
+
+
+  <!-- giscus 评论（存储于 GitHub Discussions） -->
+  <h2 id="__comments">留言讨论</h2>
+  <script
+    src="https://giscus.app/client.js"
+    data-repo="Jack-Liang/abap-course"
+    data-repo-id="R_kgDOTn2rsw"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOTn2rs84DEYWS"
+    data-mapping="pathname"
+    data-strict="1"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+  ></script>
+
+  <!-- 深浅色切换时同步 giscus 主题 -->
+  <script>
+    var palette = __md_get("__palette");
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+      var giscus = document.querySelector("script[src*='giscus']");
+      if (giscus) giscus.setAttribute("data-theme", theme);
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      var ref = document.querySelector("[data-md-component=palette]");
+      if (ref) ref.addEventListener("click", function () {
+        var palette = __md_get("__palette");
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+          var frame = document.querySelector(".giscus-frame");
+          if (frame) frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: theme } } },
+            "https://giscus.app"
+          );
+        }
+      });
+    });
+  </script>
+
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 <a href="https://jack-liang.com">Jack-Liang</a> · 代码 MIT / 文档 CC BY-NC-SA 4.0 · 本项目与 SAP SE 无关联
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/Jack-Liang" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://jack-liang.com" target="_blank" rel="noopener" title="作者博客 jack-liang.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M351.9 280H161c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zm-191-48h190.9c-2.8-64.5-17.1-123.9-37.4-167.4-11.4-24.4-23.7-41.8-35.1-52.4C268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4m-48 0c3.5-85.6 25.6-165.1 57.9-217.3C78.7 47.3 10.9 131.2 1.5 232zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3zm111.4-48C501.9 131.2 434.1 47.3 342 14.7c32.3 52.2 54.4 131.7 57.9 217.3z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

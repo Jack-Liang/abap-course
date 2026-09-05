@@ -1,0 +1,2581 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能">
+      
+      
+      
+        <link rel="canonical" href="https://abap.jack-liang.com/16-external-api/">
+      
+      
+        <link rel="prev" href="../15-enhancement/">
+      
+      
+        <link rel="next" href="../17-transport/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>第16课 调用外部接口 - ABAP Course</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="第16课 调用外部接口 - ABAP Course" />
+<meta property="og:description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能" />
+<meta property="og:image" content="https://abap.jack-liang.com/assets/images/social/16-external-api.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://abap.jack-liang.com/16-external-api/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="第16课 调用外部接口 - ABAP Course" />
+<meta property="twitter:description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能" />
+<meta property="twitter:image" content="https://abap.jack-liang.com/assets/images/social/16-external-api.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#第16课调用外部接口--rest--soap--po--cpi" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="ABAP Course" class="md-header__button md-logo" aria-label="ABAP Course" data-md-component="logo">
+      
+  <img src="../assets/images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <!-- 覆写自 Material 同名 partial：站名可点击回首页（上游默认为纯文本 span） -->
+          <a class="md-ellipsis" href=".." title="返回首页">
+            ABAP Course
+          </a>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第16课 调用外部接口
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换至深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换至浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Jack-Liang/abap-course" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Jack-Liang/abap-course
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ABAP Course" class="md-nav__button md-logo" aria-label="ABAP Course" data-md-component="logo">
+      
+  <img src="../assets/images/logo.svg" alt="logo">
+
+    </a>
+    ABAP Course
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Jack-Liang/abap-course" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Jack-Liang/abap-course
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    准备篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第0课 环境搭建与仓库导入
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-sap-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1课 SAP 系统入门与开发环境
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-hello-world/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2课 Hello World 与基本数据类型
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-data-dictionary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3课 数据字典——建一张自定义表
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-internal-table/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4课 内表与结构体操作
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-open-sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5课 Open SQL——增删改查
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6课 ABAP 调试器
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    核心篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    核心篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-selection-screen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7课 选择屏幕
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-formatting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8课 数据格式化
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-function-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9课 Function Module
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-alv-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10课 ALV 报表（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-alv-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11课 ALV 交互事件
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-excel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12课 Excel 导入导出
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-oo-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13课 ABAP 面向对象编程（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    高级篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    高级篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-bapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14课 BAPI 调用
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-enhancement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15课 增强（Enhancement）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16课 调用外部接口
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16课 调用外部接口
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#前置依赖" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        前置依赖
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#问题引入" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题引入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#时间安排" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        时间安排
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#本课目标" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本课目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo实时汇率换算票价分步跟做" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demo：实时汇率换算票价（分步跟做）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#知识点" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        知识点
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="知识点">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-集成版图四条路各管什么" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 集成版图：四条路各管什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-http-五步法背下来" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. HTTP 五步法（背下来）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-json--abapui2cl_json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. JSON ↔ ABAP：/ui2/cl_json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-失败排查清单按命中率排序" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 失败排查清单（按命中率排序）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-soap-一分钟" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. SOAP 一分钟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-sap-po-概览企业内部的集成总线" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. SAP PO 概览：企业内部的集成总线
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-sap-cpi-概览云时代的-iflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. SAP CPI 概览：云时代的 iFlow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-实战经验" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 实战经验
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-延伸阅读" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 延伸阅读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#课后思考" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后思考
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-transport/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17课 Transport Request
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-message-class/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18课 消息处理
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-new-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19课 新语法专题
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    现代开发篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    现代开发篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20-cds-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20课 CDS View（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21-cds-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21课 CDS View（进阶）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22-oo-alv/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22课 OO ALV
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23-btp-abapgit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23课 BTP 概览 + abapGit
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24课 综合实战
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    附录
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考资料库
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    许可与声明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#前置依赖" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        前置依赖
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#问题引入" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题引入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#时间安排" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        时间安排
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#本课目标" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本课目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo实时汇率换算票价分步跟做" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demo：实时汇率换算票价（分步跟做）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#知识点" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        知识点
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="知识点">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-集成版图四条路各管什么" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 集成版图：四条路各管什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-http-五步法背下来" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. HTTP 五步法（背下来）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-json--abapui2cl_json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. JSON ↔ ABAP：/ui2/cl_json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-失败排查清单按命中率排序" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 失败排查清单（按命中率排序）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-soap-一分钟" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. SOAP 一分钟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-sap-po-概览企业内部的集成总线" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. SAP PO 概览：企业内部的集成总线
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-sap-cpi-概览云时代的-iflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. SAP CPI 概览：云时代的 iFlow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-实战经验" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 实战经验
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-延伸阅读" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 延伸阅读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#课后思考" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后思考
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+  
+    <div class="ac-corner-stamp ac-corner-stamp--draft">DRAFT</div>
+    
+      <div class="ac-status ac-status--draft">
+        <strong>本课为初稿</strong>——知识骨架已完整，正在逐课打磨（补充实操细节与配图）。欢迎在页面底部评论区反馈，你的意见会直接改进这节课。
+      </div>
+    
+  
+
+  
+                  
+
+
+  
+  
+
+
+<h1 id="第16课调用外部接口--rest--soap--po--cpi">第16课：调用外部接口 —— REST / SOAP / PO / CPI<a class="headerlink" href="#第16课调用外部接口--rest--soap--po--cpi" title="Permanent link">&para;</a></h1>
+<p><img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/16-external-api/banner.jpg" alt="第16课：调用外部接口 —— REST / SOAP / PO / CPI 章节横幅" class="ac-banner"></p>
+<blockquote>
+<p>45分钟 | 阶段：高级篇 | 建议边读边做</p>
+</blockquote>
+<h2 id="前置依赖">前置依赖<a class="headerlink" href="#前置依赖" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../09-function-module/">第9课</a>：RFC 概念；</li>
+<li><a href="../13-oo-basic/">第13课</a>：类与方法的调用；</li>
+<li><a href="../08-formatting/">第8课</a>：字符串处理。</li>
+</ul>
+<h2 id="问题引入">问题引入<a class="headerlink" href="#问题引入" title="Permanent link">&para;</a></h2>
+<p>SAP 不是孤岛：汇率在第三方 API 上、物流状态在合作方系统里、公众号推送要走微信接口。ABAP 怎么伸手到 HTTP 世界？返回的 JSON 怎么变成 ABAP 结构？这节课把 <strong>REST 调用五步法</strong>打通，并鸟瞰 SOAP / PO / CPI 三位"老大哥"的位置——知道每类集成该选哪条路。</p>
+<div class="admonition warning">
+<p class="admonition-title">环境差异：外网与 SSL 是前置条件</p>
+<p>Demo 调用公网汇率 API（<code>open.er-api.com</code>）。要求：① 试用容器所在主机能访问外网；② STRUST 里已导入目标站点的 SSL 证书（或先用 <code>ssl_id = 'ANONYM'</code> 试，证书报错时按第0课的 STRUST 方法导入 <code>open.er-api.com</code> 证书链）；③ 公司内网需代理。跑不通不影响学习——代码与流程讲解完整，环境问题本身就是本课知识点。</p>
+</div>
+<h2 id="时间安排">时间安排<a class="headerlink" href="#时间安排" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>场景引入</td>
+<td>集成版图：四条路各管什么</td>
+<td>3 分钟</td>
+</tr>
+<tr>
+<td>Demo 跟做</td>
+<td>实时汇率换算票价全流程</td>
+<td>8 分钟</td>
+</tr>
+<tr>
+<td>代码拆解</td>
+<td>HTTP 五步 / JSON 解析 / 异常与超时</td>
+<td>23 分钟</td>
+</tr>
+<tr>
+<td>知识总结</td>
+<td>PO/CPI 概览、集成选型表、排查清单</td>
+<td>8 分钟</td>
+</tr>
+<tr>
+<td>课后思考</td>
+<td>练习</td>
+<td>3 分钟</td>
+</tr>
+</tbody>
+</table>
+<h2 id="本课目标">本课目标<a class="headerlink" href="#本课目标" title="Permanent link">&para;</a></h2>
+<p>完成本课你将能够：</p>
+<ul>
+<li>用 <code>cl_http_client</code> 完成 GET 请求的五步流程（创建→组装→发送→接收→关闭）；</li>
+<li>用 <code>/ui2/cl_json</code> 把 JSON 反序列化进自定结构；</li>
+<li>说清 REST / SOAP / PO / CPI 的定位与选型；</li>
+<li>按清单排查外部调用失败（网络/证书/代理/超时）。</li>
+</ul>
+<h2 id="demo实时汇率换算票价分步跟做">Demo：实时汇率换算票价（分步跟做）<a class="headerlink" href="#demo实时汇率换算票价分步跟做" title="Permanent link">&para;</a></h2>
+<p>SE38 运行 <code>zac_rest_api</code>（已随仓库下发）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">REPORT</span><span class="w"> </span><span class="nv">zac_rest_api</span><span class="p">.</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">START-OF-SELECTION</span><span class="p">.</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="k">DATA</span><span class="p">:</span><span class="w"> </span><span class="nv">lo_http</span><span class="w"> </span><span class="k">TYPE REF TO</span><span class="w"> </span><span class="nv">if_http_client</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="nv">lv_json</span><span class="w"> </span><span class="k">TYPE </span><span class="nv">string</span><span class="p">.</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="c1">" 1. 创建 HTTP 客户端</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="c1">" SSL_ID 的类型是 SSFAPPLSSL，直接传字面量部分系统会报 "not type-compatible"；</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">  </span><span class="c1">" 'ANONYM' 对应 STRUST 的 "SSL Client Anonymous" PSE（'DFAULT' 则是 Standard PSE）</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">  </span><span class="k">DATA</span><span class="w"> </span><span class="nv">lv_ssl_id</span><span class="w"> </span><span class="k">TYPE </span><span class="nv">ssfapplssl</span><span class="w"> </span><span class="k">VALUE</span><span class="w"> </span><span class="s1">'ANONYM'</span><span class="p">.</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">  </span><span class="nv">cl_http_client</span><span class="o">=&gt;</span><span class="nf">create_by_url</span><span class="p">(</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="k">EXPORTING</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">      </span><span class="nv">url</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s1">'https://open.er-api.com/v6/latest/USD'</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nv">ssl_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lv_ssl_id</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="k">IMPORTING</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="nv">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lo_http</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="k">EXCEPTIONS</span><span class="w"> </span><span class="k">OTHERS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="nv">sy</span><span class="o">-</span><span class="nv">subrc</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="k">WRITE</span><span class="p">:</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="s1">'HTTP 连接创建失败（检查网络/SM59/SSL）'</span><span class="p">.</span><span class="w"> </span><span class="k">EXIT</span><span class="p">.</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">  </span><span class="k">ENDIF</span><span class="p">.</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">  </span><span class="c1">" 2. 组装 GET 请求</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">  </span><span class="nv">lo_http</span><span class="o">-&gt;</span><span class="nv">request</span><span class="o">-&gt;</span><span class="nf">set_method</span><span class="p">(</span><span class="w"> </span><span class="s1">'GET'</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">  </span><span class="nv">lo_http</span><span class="o">-&gt;</span><span class="nv">request</span><span class="o">-&gt;</span><span class="nf">set_header_field</span><span class="p">(</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">    </span><span class="nv">name</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s1">'Accept'</span><span class="w"> </span><span class="k">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'application/json'</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">  </span><span class="c1">" 3. 发送与接收</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">  </span><span class="nv">lo_http</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="w"> </span><span class="k">EXCEPTIONS</span><span class="w"> </span><span class="k">OTHERS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="nv">sy</span><span class="o">-</span><span class="nv">subrc</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="k">WRITE</span><span class="p">:</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="s1">'请求发送失败'</span><span class="p">.</span><span class="w"> </span><span class="nv">lo_http</span><span class="o">-&gt;</span><span class="nf">close</span><span class="p">(</span><span class="w"> </span><span class="p">).</span><span class="w"> </span><span class="k">EXIT</span><span class="p">.</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">  </span><span class="k">ENDIF</span><span class="p">.</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">  </span><span class="nv">lo_http</span><span class="o">-&gt;</span><span class="nf">receive</span><span class="p">(</span><span class="w"> </span><span class="k">EXCEPTIONS</span><span class="w"> </span><span class="k">OTHERS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="nv">sy</span><span class="o">-</span><span class="nv">subrc</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">    </span><span class="k">WRITE</span><span class="p">:</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="s1">'响应接收失败（外网/防火墙/SSL 证书，见课文环境提示）'</span><span class="p">.</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">    </span><span class="nv">lo_http</span><span class="o">-&gt;</span><span class="nf">close</span><span class="p">(</span><span class="w"> </span><span class="p">).</span><span class="w"> </span><span class="k">EXIT</span><span class="p">.</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">  </span><span class="k">ENDIF</span><span class="p">.</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">  </span><span class="nv">lv_json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lo_http</span><span class="o">-&gt;</span><span class="nv">response</span><span class="o">-&gt;</span><span class="nf">get_cdata</span><span class="p">(</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="w">  </span><span class="nv">lo_http</span><span class="o">-&gt;</span><span class="nf">close</span><span class="p">(</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="w">  </span><span class="k">WRITE</span><span class="p">:</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="p">|</span><span class="s1">响应前 200 字: </span><span class="p">{</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="w">    </span><span class="k">COND</span><span class="w"> </span><span class="nv">string</span><span class="p">(</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="nv">strlen</span><span class="p">(</span><span class="w"> </span><span class="nv">lv_json</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">200</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="w">                 </span><span class="nv">THEN</span><span class="w"> </span><span class="nv">substring</span><span class="p">(</span><span class="w"> </span><span class="nv">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lv_json</span><span class="w"> </span><span class="nv">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">)</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="w">                 </span><span class="k">ELSE</span><span class="w"> </span><span class="nv">lv_json</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">}|.</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a><span class="w">  </span><span class="c1">" 4. JSON 解析：按需声明字段，工具类按名自动映射</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a><span class="w">  </span><span class="k">TYPES</span><span class="p">:</span><span class="w"> </span><span class="k">BEGIN OF</span><span class="w"> </span><span class="nv">ty_rates</span><span class="p">,</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a><span class="w">           </span><span class="nv">cny</span><span class="w"> </span><span class="k">TYPE </span><span class="nv">string</span><span class="p">,</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a><span class="w">           </span><span class="nv">jpy</span><span class="w"> </span><span class="k">TYPE </span><span class="nv">string</span><span class="p">,</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a><span class="w">         </span><span class="k">END OF</span><span class="w"> </span><span class="nv">ty_rates</span><span class="p">.</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="w">  </span><span class="k">TYPES</span><span class="p">:</span><span class="w"> </span><span class="k">BEGIN OF</span><span class="w"> </span><span class="nv">ty_result</span><span class="p">,</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a><span class="w">           </span><span class="k">result    TYPE </span><span class="nv">string</span><span class="p">,</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="w">           </span><span class="nv">base_code</span><span class="w"> </span><span class="k">TYPE </span><span class="nv">string</span><span class="p">,</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a><span class="w">           </span><span class="nv">rates</span><span class="w">     </span><span class="k">TYPE </span><span class="nv">ty_rates</span><span class="p">,</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a><span class="w">         </span><span class="k">END OF</span><span class="w"> </span><span class="nv">ty_result</span><span class="p">.</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="w">  </span><span class="k">DATA</span><span class="p">(</span><span class="nv">ls_result</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">VALUE</span><span class="w"> </span><span class="nv">ty_result</span><span class="p">(</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a><span class="w">  </span><span class="p">/</span><span class="nv">ui2</span><span class="p">/</span><span class="nv">cl_json</span><span class="o">=&gt;</span><span class="nf">deserialize</span><span class="p">(</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a><span class="w">    </span><span class="k">EXPORTING</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a><span class="w">      </span><span class="nv">json</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nv">lv_json</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a><span class="w">      </span><span class="nv">pretty_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">/</span><span class="nv">ui2</span><span class="p">/</span><span class="nv">cl_json</span><span class="o">=&gt;</span><span class="nv">pretty_mode</span><span class="o">-</span><span class="nv">none</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a><span class="w">    </span><span class="k">CHANGING</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a><span class="w">      </span><span class="k">data</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nv">ls_result</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a><span class="w">  </span><span class="c1">" 5. 查票价并换算</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a><span class="w">  </span><span class="k">SELECT</span><span class="w"> </span><span class="k">SINGLE</span><span class="w"> </span><span class="nv">price</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="nv">sflight</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a><span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="nv">carrid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'AA'</span><span class="w"> </span><span class="ow">AND</span><span class="w"> </span><span class="nv">connid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'0017'</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a><span class="w">    </span><span class="k">INTO</span><span class="w"> </span><span class="err">@</span><span class="nv">DATA</span><span class="p">(</span><span class="nv">lv_price_usd</span><span class="p">).</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a><span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="nv">ls_result</span><span class="o">-</span><span class="nv">rates</span><span class="o">-</span><span class="nv">cny</span><span class="w"> </span><span class="ow">IS NOT INITIAL</span><span class="p">.</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a><span class="w">    </span><span class="k">DATA</span><span class="p">(</span><span class="nv">lv_rate</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">CONV</span><span class="w"> </span><span class="nv">f</span><span class="p">(</span><span class="w"> </span><span class="nv">ls_result</span><span class="o">-</span><span class="nv">rates</span><span class="o">-</span><span class="nv">cny</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a><span class="w">    </span><span class="k">WRITE</span><span class="p">:</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="p">|</span><span class="s1">原始票价: </span><span class="p">{</span><span class="w"> </span><span class="nv">lv_price_usd</span><span class="w"> </span><span class="p">}</span><span class="s1"> USD</span><span class="p">|.</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a><span class="w">    </span><span class="k">WRITE</span><span class="p">:</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="p">|</span><span class="s1">实时汇率: 1 USD = </span><span class="p">{</span><span class="w"> </span><span class="nv">lv_rate</span><span class="w"> </span><span class="p">}</span><span class="s1"> CNY</span><span class="p">|.</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a><span class="w">    </span><span class="k">WRITE</span><span class="p">:</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="p">|</span><span class="s1">换算票价: </span><span class="p">{</span><span class="w"> </span><span class="nv">lv_price_usd</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">lv_rate</span><span class="w"> </span><span class="k">NUMBER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">USER</span><span class="w"> </span><span class="p">}</span><span class="s1"> CNY</span><span class="p">|.</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a><span class="w">  </span><span class="k">ELSE</span><span class="p">.</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a><span class="w">    </span><span class="k">WRITE</span><span class="p">:</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="s1">'未能解析到 CNY 汇率（检查网络与 JSON 结构）'</span><span class="p">.</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a><span class="w">  </span><span class="k">ENDIF</span><span class="p">.</span>
+</code></pre></div>
+<p><strong>你会看到什么：</strong> 成功时先打印一段原始 JSON（亲眼看看接口返回长什么样），随后三行输出 USD 原价、实时汇率、换算价。失败时按提示排查——每条失败提示对应"环境提示"框里的一个原因。</p>
+<h2 id="知识点">知识点<a class="headerlink" href="#知识点" title="Permanent link">&para;</a></h2>
+<h3 id="1-集成版图四条路各管什么">1. 集成版图：四条路各管什么<a class="headerlink" href="#1-集成版图四条路各管什么" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>通路</th>
+<th>定位</th>
+<th>什么时候用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>REST（本课）</strong></td>
+<td>ABAP 直连 HTTP API</td>
+<td>轻量、点对点、自己可控两端</td>
+</tr>
+<tr>
+<td><strong>SOAP WebService</strong></td>
+<td>XML 协议 + WSDL 契约</td>
+<td>对接老系统/银行，契约先行</td>
+</tr>
+<tr>
+<td><strong>SAP PO</strong></td>
+<td>本地集成中间件（ES/BPM）</td>
+<td>大企业内部多系统总线、IDoc/代理混跑</td>
+</tr>
+<tr>
+<td><strong>SAP CPI</strong></td>
+<td>云端集成（iFlow 流程）</td>
+<td>BTP 时代的 PO，云到云/云到地</td>
+</tr>
+</tbody>
+</table>
+<p><strong>选型直觉：</strong> 简单直连走 REST；对方只给 WSDL 就 SOAP；需要监控/映射/重试的中间层治理就上 PO/CPI（集成平台不是开发偷懒，是运维治理）。</p>
+<h3 id="2-http-五步法背下来">2. HTTP 五步法（背下来）<a class="headerlink" href="#2-http-五步法背下来" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart LR
+    A["① create_by_url&lt;br/&gt;创建客户端"] --&gt; B["② set_method /&lt;br/&gt;set_header_field 组装"]
+    B --&gt; C["③ send( )"]
+    C --&gt; D["④ receive( ) →&lt;br/&gt;get_cdata( ) 拿响应"]
+    D --&gt; E["⑤ close( )&lt;br/&gt;释放连接"]</code></pre>
+<ul>
+<li><strong>GET vs POST</strong>：GET 参数在 URL、取数据；POST 带请求体（<code>set_cdata</code> 放 JSON）、交数据。本课 GET；POST 差异只在②多一步设 body 和 Content-Type；</li>
+<li><strong>认证</strong>：API Key / Bearer Token 都是加一个 Header：<code>set_header_field( name = 'Authorization' value = |Bearer { lv_token }| )</code>；</li>
+<li><strong>SM59 的角色</strong>：<code>create_by_url</code> 适合临时/简单场景；生产更常用 <code>create_by_destination</code>（SM59 里配 G 类型目标）——URL/代理/证书集中管理，改配置不改代码。</li>
+</ul>
+<h3 id="3-json--abapui2cl_json">3. JSON ↔ ABAP：/ui2/cl_json<a class="headerlink" href="#3-json--abapui2cl_json" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">/</span><span class="nv">ui2</span><span class="p">/</span><span class="nv">cl_json</span><span class="o">=&gt;</span><span class="nf">deserialize</span><span class="p">(</span><span class="w">          </span><span class="c1">" JSON → ABAP</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="k">EXPORTING</span><span class="w"> </span><span class="nv">json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lv_json</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">             </span><span class="nv">pretty_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">/</span><span class="nv">ui2</span><span class="p">/</span><span class="nv">cl_json</span><span class="o">=&gt;</span><span class="nv">pretty_mode</span><span class="o">-</span><span class="nv">none</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="k">CHANGING</span><span class="w">  </span><span class="k">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ls_result</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">/</span><span class="nv">ui2</span><span class="p">/</span><span class="nv">cl_json</span><span class="o">=&gt;</span><span class="nf">serialize</span><span class="p">(</span><span class="w">            </span><span class="c1">" ABAP → JSON（POST 出参用）</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="k">EXPORTING</span><span class="w"> </span><span class="k">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ls_request</span><span class="w"> </span><span class="nv">compress</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">abap_true</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="nv">RECEIVING</span><span class="w"> </span><span class="nv">r_json</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lv_json_out</span><span class="w"> </span><span class="p">).</span>
+</code></pre></div>
+<ul>
+<li><strong>按需建结构</strong>：你关心哪些字段就在 <code>TYPES</code> 里声明哪些——工具类按字段名匹配填充，多余 JSON 字段自动忽略；</li>
+<li><code>pretty_name</code> 决定命名风格转换（camelCase 接口常用 <code>pretty_mode-camel_case</code>；本例 JSON 键带下划线，用 <code>none</code> 精确匹配）；</li>
+<li>数据源侧还有 <code>xco</code>（ABAP Cloud）/ <code>cl_sxml</code> 等新工具，7.52 时代 <code>/ui2/cl_json</code> 是最顺手的通用件。</li>
+</ul>
+<h3 id="4-失败排查清单按命中率排序">4. 失败排查清单（按命中率排序）<a class="headerlink" href="#4-失败排查清单按命中率排序" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>容器/主机没外网</strong>：公司代理或防火墙——Basis 配代理（SM59 目标或 icman 参数）；</li>
+<li><strong>SSL 证书</strong>：报 <code>SSL unknown</code>/证书错——STRUST 导入目标站证书链（第0课同样操作）；</li>
+<li><strong>HTTP 状态码</strong>：<code>lo_http-&gt;response-&gt;get_status( )</code> 拿 code：401 认证、404 路径、5xx 对方故障——<strong>看状态码再谈别的</strong>；</li>
+<li><strong>超时</strong>：<code>lo_http-&gt;send</code> 前可设 <code>PROPERTYTYPE_LOGON_TIMEOUT</code> / 在 SM59 目标里配——外部挂了不能拖死你的工作进程；</li>
+<li><strong>JSON 结构变了</strong>：打印原始响应前 200 字（Demo 里有）再对照解析结构。</li>
+</ol>
+<h3 id="5-soap-一分钟">5. SOAP 一分钟<a class="headerlink" href="#5-soap-一分钟" title="Permanent link">&para;</a></h3>
+<p>SOAMANAGER 发布/消费 WebService：消费侧本质是"按 WSDL 生成代理类 → 调代理方法"，XML 的组装解析全部由框架代劳。SOAP 项目里你几乎不碰 XML 字符串——那是它对比手工 HTTP 的最大优点；缺点是重、慢、调试绕。</p>
+<h3 id="6-sap-po-概览企业内部的集成总线">6. SAP PO 概览：企业内部的集成总线<a class="headerlink" href="#6-sap-po-概览企业内部的集成总线" title="Permanent link">&para;</a></h3>
+<p>PO（Process Orchestration）是 SAP 的<strong>本地部署集成中间件</strong>：当"系统 A 直连系统 B"的点对点接口多到失控，就在中间架一条总线——所有消息经过 PO 做路由、映射、监控、重试。ABAP 开发者在 PO 项目里的典型角色：写被 PO 调用的<strong>代理类（Proxy）</strong>，或收发 <strong>IDoc</strong>——中间件本身由集成团队维护，你负责两头。</p>
+<p><strong>组件地图（记住五个字母）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>全称</th>
+<th>干什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SLD</strong></td>
+<td>System Landscape Directory</td>
+<td>登记"公司里有哪些系统、装了什么版本"——一切配置的底座</td>
+</tr>
+<tr>
+<td><strong>ESR</strong></td>
+<td>Enterprise Services Repository</td>
+<td>设计态：定义接口结构（Message Type）与字段映射（Message Mapping）</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td>Integration Directory</td>
+<td>配置态：这条消息从哪个系统来、走哪个通道、到哪去</td>
+</tr>
+<tr>
+<td><strong>IE / AEX</strong></td>
+<td>Integration Engine / Advanced Adapter Engine</td>
+<td>运行态：历史双栈版本里 IE 在 ABAP 栈跑消息、AEX 在 Java 栈跑适配器（File/JDBC/SOAP/IDoc…）；PO 7.5 起为 Java 单栈，运行核心是 AEX + BPM</td>
+</tr>
+<tr>
+<td><strong>BPM</strong></td>
+<td>Business Process Management</td>
+<td>跨系统流程编排（如"订单→校验→审批→发货"跨三个系统串起来）</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid"><code>flowchart LR
+    A["发送系统&lt;br/&gt;(ERP / 第三方)"] --&gt;|"适配器出站&lt;br/&gt;IDoc / File / SOAP"| B["PO 集成引擎&lt;br/&gt;路由 + 映射"]
+    B --&gt;|"适配器入站&lt;br/&gt;Proxy / IDoc / REST"| C["接收系统"]
+    B -.-&gt;|"全程留痕"| D["Message Monitor&lt;br/&gt;可查、可重发"]</code></pre>
+<p><strong>IDoc 收发流程（ABAP 侧必须会）：</strong> IDoc 是 SAP 自家的标准消息格式，三段结构——控制记录（<code>EDIDC</code>：谁发给谁、什么类型）、数据记录（业务字段按段存）、状态记录（走到哪一步）。</p>
+<ol>
+<li><strong>出站</strong>：程序/消息控制生成 IDoc → 按 <code>WE20</code> 合作伙伴参数找端口（<code>WE21</code> 定义，常用 tRFC）→ 状态 <code>03</code>（已送出端口）；</li>
+<li><strong>入站</strong>：收到 IDoc → <code>WE20</code> 决定处理模块 → 状态 <code>53</code>（过账成功）或 <code>51</code>（应用错误）；</li>
+<li><strong>排查三件套</strong>：<code>WE02</code> 看 IDoc 内容与状态、<code>BD87</code> 重处理失败单、<code>SM58</code> 看 tRFC 卡在哪。</li>
+</ol>
+<blockquote>
+<p>集成项目里最常见的一幕：业务说"单子没过去"，你在 <code>WE02</code> 里看到状态 51，双击错误消息，定位到字段映射或主数据缺失——十分钟结案。</p>
+</blockquote>
+<h3 id="7-sap-cpi-概览云时代的-iflow">7. SAP CPI 概览：云时代的 iFlow<a class="headerlink" href="#7-sap-cpi-概览云时代的-iflow" title="Permanent link">&para;</a></h3>
+<p>CPI（Cloud Platform Integration，现名 <strong>Cloud Integration</strong>，属 BTP Integration Suite）是 PO 思想的云端版本：SAP 托管租户、浏览器里画图开发、免 Basis 运维。核心概念是 <strong>iFlow（Integration Flow）</strong>——一张画布：</p>
+<pre class="mermaid"><code>flowchart LR
+    A["Sender&lt;br/&gt;HTTPS / OData / SFTP"] --&gt; B["iFlow 步骤&lt;br/&gt;Content Modifier → Mapping&lt;br/&gt;→ Router → Script"]
+    B --&gt; C["Receiver&lt;br/&gt;S/4HANA / SuccessFactors / 第三方"]</code></pre>
+<ul>
+<li><strong>步骤积木</strong>：Content Modifier（改报文头/体）、Mapping（图形化字段映射，思路与 PO 一脉相承）、Router（条件分支）、Groovy/JavaScript Script（兜底自由度）；</li>
+<li><strong>适配器接两端</strong>：HTTPS、OData、SOAP、IDoc、SFTP、JMS……连 SAP 云产品（SuccessFactors / Ariba / Concur）有大量<strong>官方预打包 iFlow</strong>，从 SAP Business Accelerator Hub 下载、改参数即可上线；</li>
+<li><strong>开发即 Web</strong>：设计、部署、监控（Message Monitoring）全在浏览器，没有 SM59 / STRUST 那套——但思想同源：连接、映射、监控、重试。</li>
+</ul>
+<p><strong>PO vs CPI 一表选型：</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>SAP PO</th>
+<th>SAP CPI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>部署</td>
+<td>客户本地机房（自己运维）</td>
+<td>BTP 云租户（SAP 运维）</td>
+</tr>
+<tr>
+<td>开发工具</td>
+<td>ESR / ID 客户端（老牌但重）</td>
+<td>浏览器 Web UI</td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>企业内部老系统总线、IDoc / File 密集</td>
+<td>云 SaaS 集成、云到地混合</td>
+</tr>
+<tr>
+<td>复用资产</td>
+<td>历年自建映射</td>
+<td>官方预打包 iFlow 内容库</td>
+</tr>
+<tr>
+<td>趋势</td>
+<td>存量巨大、新增减少</td>
+<td>SAP 官方战略方向</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句话：</strong> 老系统还在机房，PO 就还在跑；新项目只要沾一朵云，默认先看 CPI——而你写的 ABAP（Proxy / OData / IDoc）在两边是同一套接法。</p>
+<h2 id="-实战经验">💡 实战经验<a class="headerlink" href="#-实战经验" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">生产环境走 SM59 Destination</p>
+<p>URL 硬编码在代码里 = 改环境要改代码。<code>create_by_destination</code> + SM59 配置，DEV/QAS/PROD 各自指向，代码零改动。</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">外部调用要设超时 + 兜底</p>
+<p>外部接口的平均可用性远低于你的想象。默认超时、失败降级（用上次缓存汇率 + 提示"汇率非实时"）是负责任的写法。</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">调接口前先打印原始响应</p>
+<p>解析为空九成是结构与 JSON 对不上。Demo 里那行"响应前 200 字"请保留习惯——十秒定位映射问题。</p>
+</div>
+<h2 id="-延伸阅读">📖 延伸阅读<a class="headerlink" href="#-延伸阅读" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm">ABAP Keyword Documentation</a>——<code>IF_HTTP_CLIENT</code> / JSON 章节；</li>
+<li><a href="https://help.sap.com">SAP Help Portal</a> 搜 "CPI" / "Process Orchestration"——两位中间件的官方文档；</li>
+<li><a href="https://jack-liang.com/blog/abap-fm-json-in-depth-analysis/">abap_fm_json 深度解析——把 ABAP 函数模块暴露成 HTTP 服务</a>（作者博客）——本课是"调别人的服务"，这篇是反向：把自己的 FM 提供成 HTTP/JSON 服务。</li>
+</ul>
+<h2 id="课后思考">课后思考<a class="headerlink" href="#课后思考" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>把你的回答写在<strong>页面底部评论区</strong>，注明题号，一起讨论。</p>
+</blockquote>
+<ol>
+<li>五步法里 <code>close( )</code> 忘了会怎样？（提示：连接是系统资源）</li>
+<li>把 Demo 改成 POST：请求体 <code>{"base":"USD"}</code> 发给一个你找得到的公开 POST 接口（或本地 mock）——<code>set_cdata</code> 之外还需要设哪个 Header？</li>
+<li>汇率解析用 <code>pretty_mode-none</code> 精确匹配——如果接口字段是 <code>baseCode</code>（驼峰），ABAP 结构字段该怎么声明、pretty_name 用哪个模式？</li>
+<li>你负责的接口要同时给三个系统用，选 REST 直连还是 PO/CPI 中间层？列出你的判断依据。</li>
+<li>业务报"单子没过去"，你在 <code>WE02</code> 里看到 IDoc 状态 51——接下来的排查顺序是什么？（提示：本课"排查三件套"）</li>
+</ol>
+<hr />
+<p>下一课：<a href="../17-transport/">第17课：Transport Request（请求与传输）</a></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2026年8月29日 19:30:02 CST">2026年8月29日</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+
+  
+  <nav class="ac-pn" aria-label="课程章节导航">
+    
+    <a class="ac-pn__item ac-pn__item--prev" href="../15-enhancement/">
+      <span class="ac-pn__dir">上一节</span>
+      <span class="ac-pn__title">第15课 增强（Enhancement）</span>
+    </a>
+    
+    
+    <a class="ac-pn__item ac-pn__item--next" href="../17-transport/">
+      <span class="ac-pn__dir">下一节</span>
+      <span class="ac-pn__title">第17课 Transport Request</span>
+    </a>
+    
+  </nav>
+  
+
+
+  <!-- giscus 评论（存储于 GitHub Discussions） -->
+  <h2 id="__comments">留言讨论</h2>
+  <script
+    src="https://giscus.app/client.js"
+    data-repo="Jack-Liang/abap-course"
+    data-repo-id="R_kgDOTn2rsw"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOTn2rs84DEYWS"
+    data-mapping="pathname"
+    data-strict="1"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+  ></script>
+
+  <!-- 深浅色切换时同步 giscus 主题 -->
+  <script>
+    var palette = __md_get("__palette");
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+      var giscus = document.querySelector("script[src*='giscus']");
+      if (giscus) giscus.setAttribute("data-theme", theme);
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      var ref = document.querySelector("[data-md-component=palette]");
+      if (ref) ref.addEventListener("click", function () {
+        var palette = __md_get("__palette");
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+          var frame = document.querySelector(".giscus-frame");
+          if (frame) frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: theme } } },
+            "https://giscus.app"
+          );
+        }
+      });
+    });
+  </script>
+
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 <a href="https://jack-liang.com">Jack-Liang</a> · 代码 MIT / 文档 CC BY-NC-SA 4.0 · 本项目与 SAP SE 无关联
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/Jack-Liang" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://jack-liang.com" target="_blank" rel="noopener" title="作者博客 jack-liang.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M351.9 280H161c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zm-191-48h190.9c-2.8-64.5-17.1-123.9-37.4-167.4-11.4-24.4-23.7-41.8-35.1-52.4C268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4m-48 0c3.5-85.6 25.6-165.1 57.9-217.3C78.7 47.3 10.9 131.2 1.5 232zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3zm111.4-48C501.9 131.2 434.1 47.3 342 14.7c32.3 52.2 54.4 131.7 57.9 217.3z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

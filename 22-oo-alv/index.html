@@ -1,0 +1,2467 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能">
+      
+      
+      
+        <link rel="canonical" href="https://abap.jack-liang.com/22-oo-alv/">
+      
+      
+        <link rel="prev" href="../21-cds-advanced/">
+      
+      
+        <link rel="next" href="../23-btp-abapgit/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>第22课 OO ALV - ABAP Course</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="第22课 OO ALV - ABAP Course" />
+<meta property="og:description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能" />
+<meta property="og:image" content="https://abap.jack-liang.com/assets/images/social/22-oo-alv.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://abap.jack-liang.com/22-oo-alv/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="第22课 OO ALV - ABAP Course" />
+<meta property="twitter:description" content="从零开始的 SAP ABAP 开发实战课程，24 课时掌握 ABAP 开发核心技能" />
+<meta property="twitter:image" content="https://abap.jack-liang.com/assets/images/social/22-oo-alv.png" />
+</head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#第22课oo-alv--面向对象的-alv" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href=".." title="ABAP Course" class="md-header__button md-logo" aria-label="ABAP Course" data-md-component="logo">
+      
+  <img src="../assets/images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <!-- 覆写自 Material 同名 partial：站名可点击回首页（上游默认为纯文本 span） -->
+          <a class="md-ellipsis" href=".." title="返回首页">
+            ABAP Course
+          </a>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第22课 OO ALV
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换至深色模式"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="切换至深色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="切换至浅色模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换至浅色模式" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Jack-Liang/abap-course" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Jack-Liang/abap-course
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ABAP Course" class="md-nav__button md-logo" aria-label="ABAP Course" data-md-component="logo">
+      
+  <img src="../assets/images/logo.svg" alt="logo">
+
+    </a>
+    ABAP Course
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Jack-Liang/abap-course" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Jack-Liang/abap-course
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    准备篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第0课 环境搭建与仓库导入
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    基础篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    基础篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-sap-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1课 SAP 系统入门与开发环境
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-hello-world/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2课 Hello World 与基本数据类型
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--final"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-data-dictionary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3课 数据字典——建一张自定义表
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-internal-table/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4课 内表与结构体操作
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-open-sql/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5课 Open SQL——增删改查
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第6课 ABAP 调试器
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    核心篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    核心篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-selection-screen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第7课 选择屏幕
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-formatting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第8课 数据格式化
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-function-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第9课 Function Module
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-alv-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第10课 ALV 报表（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-alv-events/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第11课 ALV 交互事件
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-excel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第12课 Excel 导入导出
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13-oo-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第13课 ABAP 面向对象编程（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    高级篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    高级篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14-bapi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第14课 BAPI 调用
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15-enhancement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第15课 增强（Enhancement）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16-external-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第16课 调用外部接口
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17-transport/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第17课 Transport Request
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18-message-class/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第18课 消息处理
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19-new-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第19课 新语法专题
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    现代开发篇
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    现代开发篇
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20-cds-basic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第20课 CDS View（基础）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21-cds-advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第21课 CDS View（进阶）
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22课 OO ALV
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第22课 OO ALV
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#前置依赖" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        前置依赖
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#问题引入" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题引入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#时间安排" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        时间安排
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#本课目标" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本课目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo停靠式-oo-alv分步跟做" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demo：停靠式 OO ALV（分步跟做）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#知识点" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        知识点
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="知识点">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-容器体系grid-的房子" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 容器体系：Grid 的"房子"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-grid-核心三方法" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Grid 核心三方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-字段目录的捷径lvc_fieldcatalog_merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 字段目录的捷径：LVC_FIELDCATALOG_MERGE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-事件oo-版的回调" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 事件：OO 版的"回调"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-自定义工具栏的两步走" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 自定义工具栏的两步走
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-实战经验" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 实战经验
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-延伸阅读" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 延伸阅读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#课后思考" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后思考
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23-btp-abapgit/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第23课 BTP 概览 + abapGit
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第24课 综合实战
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    附录
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    附录
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考资料库
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LICENSE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    许可与声明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#前置依赖" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        前置依赖
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#问题引入" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        问题引入
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#时间安排" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        时间安排
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#本课目标" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        本课目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo停靠式-oo-alv分步跟做" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Demo：停靠式 OO ALV（分步跟做）
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#知识点" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        知识点
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="知识点">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-容器体系grid-的房子" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 容器体系：Grid 的"房子"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-grid-核心三方法" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Grid 核心三方法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-字段目录的捷径lvc_fieldcatalog_merge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 字段目录的捷径：LVC_FIELDCATALOG_MERGE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-事件oo-版的回调" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 事件：OO 版的"回调"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-自定义工具栏的两步走" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. 自定义工具栏的两步走
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-实战经验" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        💡 实战经验
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#-延伸阅读" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📖 延伸阅读
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#课后思考" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        课后思考
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+  
+    <div class="ac-corner-stamp ac-corner-stamp--draft">DRAFT</div>
+    
+      <div class="ac-status ac-status--draft">
+        <strong>本课为初稿</strong>——知识骨架已完整，正在逐课打磨（补充实操细节与配图）。欢迎在页面底部评论区反馈，你的意见会直接改进这节课。
+      </div>
+    
+  
+
+  
+                  
+
+
+  
+  
+
+
+<h1 id="第22课oo-alv--面向对象的-alv">第22课：OO ALV —— 面向对象的 ALV<a class="headerlink" href="#第22课oo-alv--面向对象的-alv" title="Permanent link">&para;</a></h1>
+<p><img src="https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/22-oo-alv/banner.jpg" alt="第22课：OO ALV —— 面向对象的 ALV 章节横幅" class="ac-banner"></p>
+<blockquote>
+<p>45分钟 | 阶段：现代开发篇 | 建议边读边做</p>
+</blockquote>
+<h2 id="前置依赖">前置依赖<a class="headerlink" href="#前置依赖" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../10-alv-basic/">第10课</a>、<a href="../11-alv-events/">第11课</a>：Function ALV 的数据/字段目录/交互三板斧；</li>
+<li><a href="../13-oo-basic/">第13课</a>：类、方法、SET HANDLER 之前的接口概念。</li>
+</ul>
+<h2 id="问题引入">问题引入<a class="headerlink" href="#问题引入" title="Permanent link">&para;</a></h2>
+<p>Function ALV 十行代码能跑，但你想要：可编辑单元格、自定义工具栏按钮、双击事件直接进你的方法、表格和表单同屏联动——REUSE 那套回调机制开始捉襟见肘。<strong>OO ALV（<code>cl_gui_alv_grid</code>）</strong>把 ALV 变成真正的对象：容器装它、事件处理器挂它、方法调它——第13课的 OO 功课在这里兑现为完全的掌控力。</p>
+<h2 id="时间安排">时间安排<a class="headerlink" href="#时间安排" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>时段</th>
+<th>内容</th>
+<th>时长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>场景引入</td>
+<td>Function ALV 的天花板</td>
+<td>3 分钟</td>
+</tr>
+<tr>
+<td>Demo 跟做</td>
+<td>运行 zac_oo_alv：停靠式 ALV + 三类事件</td>
+<td>10 分钟</td>
+</tr>
+<tr>
+<td>代码拆解</td>
+<td>容器体系 / Grid 核心 / 事件注册 / 工具栏</td>
+<td>25 分钟</td>
+</tr>
+<tr>
+<td>知识总结</td>
+<td>Function vs OO ALV 终极对比</td>
+<td>4 分钟</td>
+</tr>
+<tr>
+<td>课后思考</td>
+<td>练习</td>
+<td>3 分钟</td>
+</tr>
+</tbody>
+</table>
+<h2 id="本课目标">本课目标<a class="headerlink" href="#本课目标" title="Permanent link">&para;</a></h2>
+<p>完成本课你将能够：</p>
+<ul>
+<li>说清容器（Container）体系与"Grid 必须住在容器里"的从属关系；</li>
+<li>用 Docking Container 免屏实现"选择屏幕 + ALV 同屏"；</li>
+<li>用 <code>set_table_for_first_display</code> 展示数据、注册 <code>SET HANDLER</code> 处理三类事件；</li>
+<li>通过 TOOLBAR 事件追加自定义按钮并响应。</li>
+</ul>
+<h2 id="demo停靠式-oo-alv分步跟做">Demo：停靠式 OO ALV（分步跟做）<a class="headerlink" href="#demo停靠式-oo-alv分步跟做" title="Permanent link">&para;</a></h2>
+<p>SE38 运行 <code>zac_oo_alv</code>（已随仓库下发）——<strong>选择屏幕出现的同时，底部直接挂着 ALV 表格</strong>（这就是 Docking Container 的免屏魔法）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">REPORT</span><span class="w"> </span><span class="nv">zac_oo_alv</span><span class="p">.</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">CLASS</span><span class="w"> </span><span class="nv">lcl_app</span><span class="w"> </span><span class="k">DEFINITION</span><span class="p">.</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="k">PUBLIC SECTION</span><span class="p">.</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="k">METHODS</span><span class="p">:</span><span class="w"> </span><span class="nv">constructor</span><span class="p">,</span><span class="w"> </span><span class="nv">display_data</span><span class="p">.</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="k">PRIVATE SECTION</span><span class="p">.</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="k">DATA</span><span class="p">:</span><span class="w"> </span><span class="nv">mo_container</span><span class="w"> </span><span class="k">TYPE REF TO</span><span class="w"> </span><span class="nv">cl_gui_docking_container</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">          </span><span class="nv">mo_grid</span><span class="w">      </span><span class="k">TYPE REF TO</span><span class="w"> </span><span class="nv">cl_gui_alv_grid</span><span class="p">,</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">          </span><span class="nv">mt_data</span><span class="w">      </span><span class="k">TYPE STANDARD TABLE OF</span><span class="w"> </span><span class="nv">sflight</span><span class="p">.</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="k">METHODS</span><span class="p">:</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span><span class="nv">handle_double_click</span><span class="w"> </span><span class="k">FOR EVENT</span><span class="w"> </span><span class="nv">double_click</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="nv">cl_gui_alv_grid</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="k">IMPORTING</span><span class="w"> </span><span class="nv">e_row</span><span class="w"> </span><span class="nv">e_column</span><span class="p">,</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span><span class="nv">handle_toolbar</span><span class="w"> </span><span class="k">FOR EVENT</span><span class="w"> </span><span class="nv">toolbar</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="nv">cl_gui_alv_grid</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">        </span><span class="k">IMPORTING</span><span class="w"> </span><span class="nv">e_object</span><span class="p">,</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">      </span><span class="nv">handle_user_command</span><span class="w"> </span><span class="k">FOR EVENT</span><span class="w"> </span><span class="nv">user_command</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="nv">cl_gui_alv_grid</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="k">IMPORTING</span><span class="w"> </span><span class="nv">e_ucomm</span><span class="p">.</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="k">ENDCLASS</span><span class="p">.</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="k">CLASS</span><span class="w"> </span><span class="nv">lcl_app</span><span class="w"> </span><span class="k">IMPLEMENTATION</span><span class="p">.</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">  </span><span class="k">METHOD</span><span class="w"> </span><span class="nf">constructor</span><span class="p">.</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="c1">" 停靠容器：直接挂在选择屏幕上，无需 Screen Painter 画屏</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="nv">mo_container</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="w"> </span><span class="nv">cl_gui_docking_container</span><span class="p">(</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">                      </span><span class="nv">repid</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nv">sy</span><span class="o">-</span><span class="nv">repid</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">                      </span><span class="nv">dynnr</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nv">sy</span><span class="o">-</span><span class="nv">dynnr</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">                      </span><span class="nv">side</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nv">cl_gui_docking_container</span><span class="o">=&gt;</span><span class="nv">dock_at_bottom</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">                      </span><span class="nv">extension</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="nv">mo_grid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="w"> </span><span class="nv">cl_gui_alv_grid</span><span class="p">(</span><span class="w"> </span><span class="nv">i_parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">mo_container</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="nv">sflight</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="err">@</span><span class="nv">mt_data</span><span class="w"> </span><span class="nv">UP</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="nv">ROWS</span><span class="p">.</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="c1">" 实例事件的每个处理器都必须各带一个 FOR &lt;实例&gt;，不能共用末尾一个 FOR</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="k">SET HANDLER</span><span class="p">:</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">      </span><span class="nv">me</span><span class="o">-&gt;</span><span class="nv">handle_double_click</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="nv">mo_grid</span><span class="p">,</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">      </span><span class="nv">me</span><span class="o">-&gt;</span><span class="nv">handle_toolbar</span><span class="w">      </span><span class="k">FOR</span><span class="w"> </span><span class="nv">mo_grid</span><span class="p">,</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">      </span><span class="nv">me</span><span class="o">-&gt;</span><span class="nv">handle_user_command</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="nv">mo_grid</span><span class="p">.</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">  </span><span class="k">ENDMETHOD</span><span class="p">.</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">  </span><span class="k">METHOD</span><span class="w"> </span><span class="nf">display_data</span><span class="p">.</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">    </span><span class="k">DATA</span><span class="p">(</span><span class="nv">ls_layout</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">VALUE</span><span class="w"> </span><span class="nv">lvc_s_layo</span><span class="p">(</span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="w">      </span><span class="nv">zebra</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">abap_true</span><span class="w"> </span><span class="nv">cwidth_opt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">abap_true</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">    </span><span class="k">DATA</span><span class="p">(</span><span class="nv">lt_fcat</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">VALUE</span><span class="w"> </span><span class="nv">lvc_t_fcat</span><span class="p">(</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="w">      </span><span class="p">(</span><span class="w"> </span><span class="nv">fieldname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'CARRID'</span><span class="w">    </span><span class="nv">ref_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SFLIGHT'</span><span class="w"> </span><span class="nv">ref_field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'CARRID'</span><span class="w"> </span><span class="nv">hotspot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'X'</span><span class="w"> </span><span class="p">)</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">      </span><span class="p">(</span><span class="w"> </span><span class="nv">fieldname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'CONNID'</span><span class="w">    </span><span class="nv">ref_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SFLIGHT'</span><span class="w"> </span><span class="nv">ref_field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'CONNID'</span><span class="w"> </span><span class="nv">hotspot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'X'</span><span class="w"> </span><span class="p">)</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="w">      </span><span class="p">(</span><span class="w"> </span><span class="nv">fieldname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'FLDATE'</span><span class="w">    </span><span class="nv">ref_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SFLIGHT'</span><span class="w"> </span><span class="nv">ref_field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'FLDATE'</span><span class="w"> </span><span class="p">)</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="w">      </span><span class="p">(</span><span class="w"> </span><span class="nv">fieldname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'PRICE'</span><span class="w">     </span><span class="nv">ref_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SFLIGHT'</span><span class="w"> </span><span class="nv">ref_field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'PRICE'</span><span class="w"> </span><span class="nv">do_sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'X'</span><span class="w"> </span><span class="p">)</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a><span class="w">      </span><span class="p">(</span><span class="w"> </span><span class="nv">fieldname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SEATSMAX'</span><span class="w">  </span><span class="nv">ref_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SFLIGHT'</span><span class="w"> </span><span class="nv">ref_field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SEATSMAX'</span><span class="w"> </span><span class="nv">do_sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'X'</span><span class="w"> </span><span class="p">)</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a><span class="w">      </span><span class="p">(</span><span class="w"> </span><span class="nv">fieldname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SEATSOCC'</span><span class="w">  </span><span class="nv">ref_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SFLIGHT'</span><span class="w"> </span><span class="nv">ref_field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SEATSOCC'</span><span class="w"> </span><span class="nv">do_sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'X'</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a><span class="w">    </span><span class="nv">mo_grid</span><span class="o">-&gt;</span><span class="nf">set_table_for_first_display</span><span class="p">(</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a><span class="w">      </span><span class="k">EXPORTING</span><span class="w"> </span><span class="nv">is_layout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">ls_layout</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a><span class="w">      </span><span class="k">CHANGING</span><span class="w">  </span><span class="nv">it_outtab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">mt_data</span><span class="w"> </span><span class="nv">it_fieldcatalog</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">lt_fcat</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a><span class="w">  </span><span class="k">ENDMETHOD</span><span class="p">.</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a><span class="w">  </span><span class="k">METHOD</span><span class="w"> </span><span class="nf">handle_double_click</span><span class="p">.</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a><span class="w">    </span><span class="k">READ</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="nv">mt_data</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="k">DATA</span><span class="p">(</span><span class="nv">ls_row</span><span class="p">)</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="nv">e_row</span><span class="o">-</span><span class="nv">index</span><span class="p">.</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a><span class="w">    </span><span class="k">IF</span><span class="w"> </span><span class="nv">sy</span><span class="o">-</span><span class="nv">subrc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a><span class="w">      </span><span class="k">MESSAGE</span><span class="w"> </span><span class="p">|{</span><span class="w"> </span><span class="nv">ls_row</span><span class="o">-</span><span class="nv">carrid</span><span class="w"> </span><span class="p">}</span><span class="s1">-</span><span class="p">{</span><span class="w"> </span><span class="nv">ls_row</span><span class="o">-</span><span class="nv">connid</span><span class="w"> </span><span class="p">}</span><span class="s1"> 票价 </span><span class="p">{</span><span class="w"> </span><span class="nv">ls_row</span><span class="o">-</span><span class="nv">price</span><span class="w"> </span><span class="p">}|</span><span class="w"> </span><span class="nv">TYPE</span><span class="w"> </span><span class="s1">'I'</span><span class="p">.</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a><span class="w">    </span><span class="k">ENDIF</span><span class="p">.</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a><span class="w">  </span><span class="k">ENDMETHOD</span><span class="p">.</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="w">  </span><span class="k">METHOD</span><span class="w"> </span><span class="nf">handle_toolbar</span><span class="p">.</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a><span class="w">    </span><span class="k">DATA</span><span class="p">(</span><span class="nv">ls_btn</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">VALUE</span><span class="w"> </span><span class="nv">stb_button</span><span class="p">(</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a><span class="w">      </span><span class="k">function</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'ZEXPORT'</span><span class="w"> </span><span class="nv">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'@16@'</span><span class="w"> </span><span class="nv">quickinfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'导出 CSV'</span><span class="w"> </span><span class="nv">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'导出'</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a><span class="w">    </span><span class="k">APPEND</span><span class="w"> </span><span class="nv">ls_btn</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="nv">e_object</span><span class="o">-&gt;</span><span class="nv">mt_toolbar</span><span class="p">.</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a><span class="w">  </span><span class="k">ENDMETHOD</span><span class="p">.</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a><span class="w">  </span><span class="k">METHOD</span><span class="w"> </span><span class="nf">handle_user_command</span><span class="p">.</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a><span class="w">    </span><span class="k">CASE</span><span class="w"> </span><span class="nv">e_ucomm</span><span class="p">.</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a><span class="w">      </span><span class="k">WHEN</span><span class="w"> </span><span class="s1">'ZEXPORT'</span><span class="p">.</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a><span class="w">        </span><span class="k">CALL FUNCTION</span><span class="w"> </span><span class="s1">'GUI_DOWNLOAD'</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a><span class="w">          </span><span class="k">EXPORTING</span><span class="w"> </span><span class="nv">filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">|</span><span class="s1">flight_</span><span class="p">{</span><span class="w"> </span><span class="nv">sy</span><span class="o">-</span><span class="nv">datum</span><span class="w"> </span><span class="p">}</span><span class="s1">.csv</span><span class="p">|</span><span class="w"> </span><span class="nv">filetype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'ASC'</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a><span class="w">          </span><span class="k">TABLES</span><span class="w"> </span><span class="nv">data_tab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">mt_data</span><span class="p">.</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a><span class="w">    </span><span class="k">ENDCASE</span><span class="p">.</span>
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a><span class="w">  </span><span class="k">ENDMETHOD</span><span class="p">.</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a><span class="k">ENDCLASS</span><span class="p">.</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a><span class="k">INITIALIZATION</span><span class="p">.</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a><span class="w">  </span><span class="c1">" 在选择屏幕阶段挂载 ALV：屏幕出现即见表格，事件即时可交互</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a><span class="w">  </span><span class="k">DATA</span><span class="p">(</span><span class="nv">go_app</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">NEW</span><span class="w"> </span><span class="nv">lcl_app</span><span class="p">(</span><span class="w"> </span><span class="p">).</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a><span class="w">  </span><span class="nv">go_app</span><span class="o">-&gt;</span><span class="nf">display_data</span><span class="p">(</span><span class="w"> </span><span class="p">).</span>
+</code></pre></div>
+<p><strong>跟做三步：</strong></p>
+<ol>
+<li>运行即见底部 ALV（50 行 SFLIGHT，斑马纹 + 合计）；</li>
+<li><strong>双击任意行</strong> → 弹窗显示"公司-航线 票价"（<code>double_click</code> 事件）；</li>
+<li>工具栏多了一个<strong>"导出"按钮</strong>（<code>toolbar</code> 事件追加），点击 → <code>user_command</code> 事件接到 <code>ZEXPORT</code> 功能码 → 下载 CSV。</li>
+</ol>
+<!-- 配图（待截图后启用）：![停靠式 OO ALV](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/22-oo-alv/docking-alv.png) -->
+
+<h2 id="知识点">知识点<a class="headerlink" href="#知识点" title="Permanent link">&para;</a></h2>
+<h3 id="1-容器体系grid-的房子">1. 容器体系：Grid 的"房子"<a class="headerlink" href="#1-容器体系grid-的房子" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart TD
+    C["CL_GUI_CUSTOM_CONTAINER&lt;br/&gt;自定义控件区（Screen Painter 画）"] --&gt; G["CL_GUI_ALV_GRID&lt;br/&gt;表格本体"]
+    D["CL_GUI_DOCKING_CONTAINER&lt;br/&gt;停靠容器（免屏，贴边停靠）"] --&gt; G
+    S["CL_GUI_SPLITTER_CONTAINER&lt;br/&gt;分割容器（多窗格）"] --&gt; G</code></pre>
+<ul>
+<li><strong>Grid 必须住在容器里</strong>——它自己不知道往哪渲染；</li>
+<li>三种容器选型：有专用屏幕（Dialog 程序/综合实战）→ Custom；想偷懒免屏 → Docking（本课）；一屏多区域 → Splitter；</li>
+<li>Custom Container 路线需要：Screen Painter 画屏 → 放一个 Custom Control 起名（如 <code>CC_ALV</code>）→ <code>container_name = 'CC_ALV'</code> → <code>CALL SCREEN 100</code>——第24课综合实战走这条路。</li>
+</ul>
+<h3 id="2-grid-核心三方法">2. Grid 核心三方法<a class="headerlink" href="#2-grid-核心三方法" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set_table_for_first_display</code></td>
+<td>首次展示（Field Catalog + Layout + 数据）</td>
+</tr>
+<tr>
+<td><code>refresh_table_display</code></td>
+<td>数据变了刷新（对应第11课 <code>rs_selfield-refresh</code>）</td>
+</tr>
+<tr>
+<td><code>set_ready_for_input( 1 )</code></td>
+<td>进入可编辑模式（REUSE 做不到的重头戏之一）</td>
+</tr>
+</tbody>
+</table>
+<p>字段目录从 <code>slis_t_fieldcat_alv</code> 换成 <code>lvc_t_fcat</code>——字段名略不同（<code>cwidth_opt</code> vs <code>colwidth_optimize</code>），语义一致，迁移成本是"改几个字段名"。</p>
+<h3 id="3-字段目录的捷径lvc_fieldcatalog_merge">3. 字段目录的捷径：LVC_FIELDCATALOG_MERGE<a class="headerlink" href="#3-字段目录的捷径lvc_fieldcatalog_merge" title="Permanent link">&para;</a></h3>
+<p>Demo 里手写 <code>VALUE</code> 目录是为了看清每个字段的控制项；纯展示 DDIC 表全字段时有一条捷径——让系统照着 DDIC 结构自动铺出整张目录：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">DATA</span><span class="w"> </span><span class="nv">lt_fcat</span><span class="w"> </span><span class="k">TYPE </span><span class="nv">lvc_t_fcat</span><span class="p">.</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">CALL FUNCTION</span><span class="w"> </span><span class="s1">'LVC_FIELDCATALOG_MERGE'</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="k">EXPORTING</span><span class="w">  </span><span class="nv">i_structure_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'SFLIGHT'</span><span class="w">   </span><span class="c1">" 或传内表：i_internal_tabname</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="k">CHANGING</span><span class="w">   </span><span class="nv">ct_fieldcat</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nv">lt_fcat</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="k">EXCEPTIONS</span><span class="w"> </span><span class="k">OTHERS</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">.</span>
+</code></pre></div>
+<ul>
+<li><strong>自动生成</strong>：列头、数据类型、输出长度全从 DDIC 抄来——字段多、字段常变的表省下一大截维护量；</li>
+<li><strong>手写（VALUE）</strong>：自定义列头、计算列（DDIC 里不存在的列）、hotspot / do_sum / edit 逐项精调时，手写，或"先生成再 <code>LOOP ... MODIFY</code> 局部改"。</li>
+</ul>
+<p>取舍一句话：<strong>快出原型用 MERGE，要精修就手写；混合场景先 MERGE 再补改几行。</strong></p>
+<h3 id="4-事件oo-版的回调">4. 事件：OO 版的"回调"<a class="headerlink" href="#4-事件oo-版的回调" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">" 类定义里：声明处理方法（签名由事件规定）</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">METHODS</span><span class="w"> </span><span class="nv">handle_double_click</span><span class="w"> </span><span class="k">FOR EVENT</span><span class="w"> </span><span class="nv">double_click</span><span class="w"> </span><span class="k">OF</span><span class="w"> </span><span class="nv">cl_gui_alv_grid</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="k">IMPORTING</span><span class="w"> </span><span class="nv">e_row</span><span class="w"> </span><span class="nv">e_column</span><span class="p">.</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1">" 构造里：注册（把方法挂到具体 Grid 实例上）</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">SET HANDLER</span><span class="w"> </span><span class="nv">me</span><span class="o">-&gt;</span><span class="nv">handle_double_click</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="nv">mo_grid</span><span class="p">.</span>
+</code></pre></div>
+<p>对比第11课的字符串 FORM 名回调：<strong>方法有了类型检查、有了封装（直接访问类属性 mt_data）、多实例多处理器随便挂</strong>——这就是第13课"接口与实现"思想的控件版。</p>
+<p>常用事件一览：</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>触发</th>
+<th>本课</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>double_click</code></td>
+<td>双击单元格</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>toolbar</code></td>
+<td>工具栏生成时（追加按钮的机会）</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>user_command</code></td>
+<td>点击功能码（含你的自定义按钮）</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>data_changed</code></td>
+<td>可编辑单元格数据变更</td>
+<td>进阶/实战</td>
+</tr>
+<tr>
+<td><code>hotspot_click</code></td>
+<td>热点单击</td>
+<td>与双击同理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-自定义工具栏的两步走">5. 自定义工具栏的两步走<a class="headerlink" href="#5-自定义工具栏的两步走" title="Permanent link">&para;</a></h3>
+<ol>
+<li><code>handle_toolbar</code> 里 <code>APPEND VALUE stb_button( function = 'ZEXPORT' icon = '@16@' ... ) TO e_object-&gt;mt_toolbar</code>——<strong>在系统生成工具栏时插队追加</strong>；</li>
+<li><code>handle_user_command</code> 里 <code>CASE e_ucomm WHEN 'ZEXPORT'</code> 响应——功能码自定义（课程规范带 Z 前缀）。</li>
+</ol>
+<p>这套"TOOLBAR 追加 + USER_COMMAND 响应"对等于经典屏幕的 GUI Status，但全在类里、随对象走。</p>
+<h2 id="-实战经验">💡 实战经验<a class="headerlink" href="#-实战经验" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">免屏原型用 Docking，正式交互用 Custom</p>
+<p>快速验证数据展示，Docking + INITIALIZATION 三分钟见效；要做正式的 Dialog 交互（按钮布局、屏幕流），走 Custom Container + Screen。课程把两条路都给了样板。</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">可编辑 + data_changed 是 OO ALV 的招牌菜</p>
+<p>REUSE 做不了（像样的）在线编辑。OO ALV：fcat 设 <code>edit = 'X'</code> + <code>set_ready_for_input</code> + 监听 <code>data_changed</code> 校验——Excel 式录入界面就出来了，第24课的预订编辑靠它。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">控件编程别忘了 PBO 刷新</p>
+<p>Custom Container 路线下每次 <code>CALL SCREEN</code> 的 PBO 都要判断容器是否已存在（<code>IF mo_container IS INITIAL</code> 才创建）——重复创建控件是 OO ALV 第一崩溃源（CONTROL_ERROR）。</p>
+</div>
+<h2 id="-延伸阅读">📖 延伸阅读<a class="headerlink" href="#-延伸阅读" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm">ABAP Keyword Documentation</a>——<code>CL_GUI_ALV_GRID</code> / <code>CL_GUI_DOCKING_CONTAINER</code> 类文档；</li>
+<li>第10课对比表：Function / SALV / OO 的选型回顾。</li>
+</ul>
+<h2 id="课后思考">课后思考<a class="headerlink" href="#课后思考" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>把你的回答写在<strong>页面底部评论区</strong>，注明题号，一起讨论。</p>
+</blockquote>
+<ol>
+<li>Grid 与容器的关系为什么这样设计？（提示：渲染位置与表格逻辑的分离，像不像第13课的接口思想？）</li>
+<li>把 Demo 的 Docking 换成右侧停靠（<code>dock_at_right</code>）、宽度 400——改哪几个参数？</li>
+<li>动手：给 <code>handle_double_click</code> 换成弹<strong>二级 ALV</strong>（该航班的 SBOOK 明细，参考第11课 <code>show_bookings</code>，但用 OO 方式在弹窗容器 <code>cl_gui_dialogbox_container</code> 里展示）——贴出你的方法。</li>
+<li>Function ALV 与 OO ALV 各自的最佳场景是什么？你们团队的标准是哪个？</li>
+</ol>
+<hr />
+<p>下一课：<a href="../23-btp-abapgit/">第23课：BTP 概览 + abapGit</a></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="最后更新">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="2026年8月29日 19:30:02 CST">2026年8月29日</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+
+
+                
+
+  
+  <nav class="ac-pn" aria-label="课程章节导航">
+    
+    <a class="ac-pn__item ac-pn__item--prev" href="../21-cds-advanced/">
+      <span class="ac-pn__dir">上一节</span>
+      <span class="ac-pn__title">第21课 CDS View（进阶）</span>
+    </a>
+    
+    
+    <a class="ac-pn__item ac-pn__item--next" href="../23-btp-abapgit/">
+      <span class="ac-pn__dir">下一节</span>
+      <span class="ac-pn__title">第23课 BTP 概览 + abapGit</span>
+    </a>
+    
+  </nav>
+  
+
+
+  <!-- giscus 评论（存储于 GitHub Discussions） -->
+  <h2 id="__comments">留言讨论</h2>
+  <script
+    src="https://giscus.app/client.js"
+    data-repo="Jack-Liang/abap-course"
+    data-repo-id="R_kgDOTn2rsw"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOTn2rs84DEYWS"
+    data-mapping="pathname"
+    data-strict="1"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async
+  ></script>
+
+  <!-- 深浅色切换时同步 giscus 主题 -->
+  <script>
+    var palette = __md_get("__palette");
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+      var giscus = document.querySelector("script[src*='giscus']");
+      if (giscus) giscus.setAttribute("data-theme", theme);
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      var ref = document.querySelector("[data-md-component=palette]");
+      if (ref) ref.addEventListener("click", function () {
+        var palette = __md_get("__palette");
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate" ? "transparent_dark" : "light";
+          var frame = document.querySelector(".giscus-frame");
+          if (frame) frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: theme } } },
+            "https://giscus.app"
+          );
+        }
+      });
+    });
+  </script>
+
+
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2026 <a href="https://jack-liang.com">Jack-Liang</a> · 代码 MIT / 文档 CC BY-NC-SA 4.0 · 本项目与 SAP SE 无关联
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/Jack-Liang" target="_blank" rel="noopener" title="GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://jack-liang.com" target="_blank" rel="noopener" title="作者博客 jack-liang.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M351.9 280H161c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zm-191-48h190.9c-2.8-64.5-17.1-123.9-37.4-167.4-11.4-24.4-23.7-41.8-35.1-52.4C268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4m-48 0c3.5-85.6 25.6-165.1 57.9-217.3C78.7 47.3 10.9 131.2 1.5 232zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3zm111.4-48C501.9 131.2 434.1 47.3 342 14.7c32.3 52.2 54.4 131.7 57.9 217.3z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
