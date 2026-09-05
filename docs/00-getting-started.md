@@ -10,7 +10,7 @@ status: final
 
 **预计耗时：** 2～4 小时（大部分时间在下载 23GB 镜像和等待系统初始化）
 
-**完成标志：** SE38 里能运行 `ZAC_HELLO_WORLD`，输出 Hello ABAP 和航空公司信息。
+**完成标志：** SE38 里能运行 `ZAC_ENV_CHECK`，输出环境自检结果。
 
 ---
 
@@ -257,8 +257,8 @@ SE38 运行 `ZAC_HELLO_WORLD`，看到 `Hello ABAP!` 与航空公司信息，环
 
 | 对象 | 类型 | 涉及课程 | 说明 |
 |------|------|---------|------|
-| `zac_hello_world` | 程序 | 第2课 | Hello World 与基本数据类型 |
 | `zac_env_check` | 程序 | 第0课 | 课程环境自检：一键检查对象入库与演示数据 |
+| `zac_hello_world` | 程序 | 第2课 | Hello World 与基本数据类型 |
 | `zac_doms_priority` + `zac_de_priority` | 域 + 数据元素 | 第3课 | 优先级字段的域（固定值 1/2/3）与数据元素 |
 | `zac_flight_ext` | 透明表 | 第3课、第15课 | 建表演示；增强示例引用 |
 | `zac_internal_table` | 程序 | 第4课 | 内表与结构体操作 |

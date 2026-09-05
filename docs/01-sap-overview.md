@@ -44,7 +44,7 @@ status: final
 
 打开 SAP GUI，选中第0课创建的连接（试用镜像：应用服务器 `localhost`、实例号 `00`、系统 ID `A4H`），输入用户名和密码登录。
 
-Windows 版本的密码栏被黑色圆点遮挡，这是正常现象，无需在意，直接输入密码后回车即可。
+Windows 版本的密码栏被黑色`●`或`*`填充，这是正常现象，当它不存在，直接输入密码后回车即可。
 
 ![SAP 登录界面](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/01-sap-overview/login-screen.png)
 
