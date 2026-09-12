@@ -1,5 +1,5 @@
 ---
-status: draft
+status: published
 ---
 
 # 第3课：数据字典 —— 建一张自定义表
@@ -38,63 +38,90 @@ SFLIGHT 是 SAP 自带的标准表，但实际项目中你一定需要自己的�
 
 ## Demo：创建 ZAC_FLIGHT_EXT（分步跟做）
 
+我们先来找一张标准表看一下它长什么样。
+
+![SE11 表 SFLIGHT 字段列表](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-sflight.jpg)
+
+上图中的第一列就是字段名，我们可以把它想想成一张表格，每个字段代表每一列表格的表头是什么，第二列 Data Element，用于描述这个字段的类型、长度，双击其中一个我们能看到这个字段的更多详细信息。
+
+![SE11 数据元素和域](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-de-domain.gif)
+
+SAP 通过这样的层层封装，让表的字段更符合业务逻辑，也更符合 SAP 的数据字典规范。用户在使用时，如果想这个这个字段是什么含义，有哪些值可选，被哪些表引用，都可以直接从数据字典里查看。
+
+现在就让我们参考 `ZAC_FLIGHT_EXT` 来建一张自定义表 `ZAC_FLIGHT_EXT` 。
+
 > 表已随课程仓库下发，可直接在 SE11 打开 `ZAC_FLIGHT_EXT` 对照每一步的结果；更建议自己按下述流程建一遍——对象名换成自己的前缀（如 `zmy_`，下述步骤里的 `zac_` 对应替换；同名 `zac_` 对象已在系统里，照敲会提示已存在），存到**个人练习包**（第0课第四节：练习不进课程包）。
 
 **目标：** 一张航班补充信息表——按"公司+航线+日期"定位一个航班，挂备注和优先级两个字段。
 
-| 字段 | 类型 | 键 | 说明 |
-|------|------|----|------|
-| CARRID | `s_carr_id` | ✔ | 航空公司代码 |
-| CONNID | `s_conn_id` | ✔ | 航线编号 |
-| FLDATE | `s_date` | ✔ | 航班日期 |
-| REMARK | CHAR(100) | | 备注 |
-| PRIORITY | CHAR(1) | | 优先级 |
+| 字段 | 数据元素 | 类型 | 主键 | 说明 |
+|------|------|------|----|------|
+| MANDT | `mandt` | | ✔ | 航空公司代码 |
+| CARRID | `s_carr_id` |  | ✔ | 航空公司代码 |
+| CONNID | `s_conn_id` |  | ✔ | 航线编号 |
+| FLDATE | `s_date` |  | ✔ | 航班日期 |
+| REMARK | | CHAR(100) |  | 备注（预定义类型 CHAR(100)） |
+| PRIORITY | `zac_de_priority` | CHAR(1) | | 优先级 |
 
-<!-- 配图（待截图后启用）：![SE11 表 ZAC_FLIGHT_EXT 字段列表](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-zac-flight-ext.png) -->
+![SE11 表 ZAC_FLIGHT_EXT 字段列表](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-zac-flight-ext.jpg)
 
-### 步骤 1：建 Domain（优先级字段用）
+这张表一共 6 个字段，前面 4 个是主键，后2 个是普通字段。所谓“主键”就是表的唯一标识，我们把它的四个主键组合起来，就形成了一个唯一的记录。住进我们参考的数据元素是标准的，系统中已经存在不需要新建。剩下的两普通字段，我们来手动创建。
 
-1. SE11 → 选 **Domain** → 名称 `zac_doms_priority` → Create；
-2. Short text：`航班优先级`；Data Type `CHAR`，Length `1`；
-3. **Value Range → Fixed Values**：`1` 高、`2` 中、`3` 低——这一步同时种下了未来 F4 帮助的候选值；
-4. `Ctrl+S` 保存（选个人练习包）→ **激活**。
+建表通常有两种方式：自上而下、自下而上。
+
+前者是我们在 SE11 中直接建表，根据字段来建数据元素，最后一起激活；后者是先建域，再建数据元素，最后建表。
+
+下面我们演示前者。
+
+### 步骤 1：建透明表
+
+1. SE11 → **Database table** → 名称 `zac_flight_ext` → Create；
+2. Short Description：`航班补充信息表`；Delivery Class 保持 `A`；Data Browser/Table View Editing 选择 `X`；
+3. **Fields 页签**逐行录入上表的六个字段：
+4. 填入字段的 Data Element。
+    - 当填到 REMARK 字段时，通常右侧的 Data Type 等列是灰色不可填写的，需要点击 `Built-In Type`（内建类型），此时就可以填了。
+
+    ![SE11 REMARK](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-remark.jpg)
 
 ### 步骤 2：建 Data Element
 
-1. SE11 → **Data element** → 名称 `zac_de_priority` → Create；
-2. Short text：`航班优先级`；**Domain** 字段填 `zac_doms_priority`；
-3. **Field Label** 页签：Short `优先级`、Medium `航班优先级`——这些标签将来直接出现在 ALV 列头和屏幕上；
-4. 保存 → 激活。
+. `PRIORITY` 字段参考的是我们自定义的数据元素  `ZAC_DE_PRIORITY`，填入之后在该数据元素上双击，系统会提示我们该数据元素不存在，是否新建，我们选择新建。
 
-> CARRID 等三个键字段**不需要自建**——直接复用标准数据元素 `S_CARR_ID / S_CONN_ID / S_DATE`，这正是三层的复用红利。
+1. Short text：`航班优先级`；**Domain** 字段填 `zac_doms_priority`；
+2. **Field Label** 页签：Short `优先级`、Medium `航班优先级`——这些标签将来直接出现在 ALV 列头和屏幕上；
 
-### 步骤 3：建透明表
+### 步骤 3：建 Domain
 
-1. SE11 → **Database table** → 名称 `zac_flight_ext` → Create；
-2. Short Description：`航班补充信息表`；Delivery Class 保持 `A`；
-3. **Fields 页签**逐行录入上表的五个字段：
+由于 Domain `zac_doms_priority` 不存在，此时我们如果激活数据元素是会报错的，我们双击域，根据提示选择新建。
 
-| Field | Key | Data Element / Type | ... |
-|-------|-----|--------------------|----|
-| CLIENT | ✔ | `mandt`（**首字段必填，系统自动要求**） |
-| CARRID | ✔ | `s_carr_id` |
-| CONNID | ✔ | `s_conn_id` |
-| FLDATE | ✔ | `s_date` |
-| REMARK | | 直接填预定义类型 CHAR，Length 100 |
-| PRIORITY | | `zac_de_priority` |
+1. Short text：`航班优先级`；Data Type `CHAR`，Length `1`；
+2. **Value Range → Fixed Values**：`1` 高、`2` 中、`3` 低——这一步同时种下了未来 F4 帮助的候选值；
 
+![SE11 域 ZAC_DOMS_PRIORITY](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-zac-domoms-priority.jpg)
+
+
+### 步骤 4：激活表
+
+1. 逐级保存域和数据元素后我们返回到创建表界面。
+2. 此时我们可以激活表了。
+3. 激活时系统会提示我们**Technical Settings**尚未设置，根据引导跳转到技术设置界面。
 4. **Technical Settings**（菜单：Extras → ...）：Data Class `APPL0`（主数据/小表）、Size Category `0`（最小量级）、Buffering 不开；
-5. 保存 → 激活。
+5. 保存 → 返回后激活。
 
-**你会看到什么：** 激活后 SE16 已经能查这张表——一张物理表在数据库里诞生了。
+**你会看到什么：** 激活后表名称后面的状态会显示为“Active”， SE16 已经能查这张表——一张物理表在数据库里诞生了。
 
-### 步骤 4：录入数据并验证
+### 步骤 5：录入数据并验证
 
 1. SE16 查 `ZAC_FLIGHT_EXT`——空表；
 2. 菜单 **Table Entries → Personalize for editing / Maintain entries**（或用 SM30 配视图维护）插入几行：`AA / 0017 / 2026-07-30 / 金牌客户包机 / 1`；
+![SE16 维护 ZAC_FLIGHT_EXT 数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/SE16-INSERT_DATA.png)
 3. 再查一次，数据在。
 
-<!-- 配图（待截图后启用）：![SE16 维护 ZAC_FLIGHT_EXT 数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se16-maintain-ext.png) -->
+![SE16 新增数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-new_data.png)
+
+如果点击后报错，请回到 SE11 检查表是否激活。
+
+![SE11 表 ZAC_FLIGHT_EXT 表维护](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/SE11-Data_Table_Editing.png)
 
 ## 知识点
 
