@@ -4,7 +4,7 @@
   <!-- 微信分享缩略图：微信不读 og:image，改抓页面首张 ≥300×300 的可见光栅图；
        display:none 会被跳过，故用绝对定位移出视口。logo 是 SVG 抓不到，
        此图须保持在 DOM 中先于正文所有插图。 -->
-  <img src="{{ 'assets/images/wechat-cover.png' | url }}" alt="" aria-hidden="true"
+  <img src="{{ 'assets/images/wechat-cover-v2.png' | url }}" alt="" aria-hidden="true"
        width="600" height="600" style="position:absolute;left:-9999px;top:-9999px;">
   {% if page.meta and page.meta.status %}
     <div class="ac-corner-stamp ac-corner-stamp--{{ page.meta.status }}">{{ page.meta.status | upper }}</div>
