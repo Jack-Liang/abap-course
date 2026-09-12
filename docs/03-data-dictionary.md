@@ -1,5 +1,5 @@
 ---
-status: published
+status: final
 ---
 
 # 第3课：数据字典 —— 建一张自定义表
@@ -114,14 +114,14 @@ SAP 通过这样的层层封装，让表的字段更符合业务逻辑，也更�
 
 1. SE16 查 `ZAC_FLIGHT_EXT`——空表；
 2. 菜单 **Table Entries → Personalize for editing / Maintain entries**（或用 SM30 配视图维护）插入几行：`AA / 0017 / 2026-07-30 / 金牌客户包机 / 1`；
-![SE16 维护 ZAC_FLIGHT_EXT 数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/SE16-INSERT_DATA.png)
+![SE16 维护 ZAC_FLIGHT_EXT 数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se16-insert-data.jpg)
 3. 再查一次，数据在。
 
-![SE16 新增数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-new_data.png)
+![SE16 新增数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-new-data.jpg)
 
 如果点击后报错，请回到 SE11 检查表是否激活。
 
-![SE11 表 ZAC_FLIGHT_EXT 表维护](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/SE11-Data_Table_Editing.png)
+![SE11 表 ZAC_FLIGHT_EXT 表维护](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-data-table-editing.jpg)
 
 ## 知识点
 
