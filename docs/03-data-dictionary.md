@@ -46,9 +46,9 @@ SFLIGHT 是 SAP 自带的标准表，但实际项目中你一定需要自己的�
 
 ![SE11 数据元素和域](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-de-domain.gif)
 
-SAP 通过这样的层层封装，让表的字段更符合业务逻辑，也更符合 SAP 的数据字典规范。用户在使用时，如果想这个这个字段是什么含义，有哪些值可选，被哪些表引用，都可以直接从数据字典里查看。
+SAP 通过这样的层层封装，让表的字段更符合业务逻辑，也更符合 SAP 的数据字典规范。用户在使用时，如果想知道这个这个字段是什么含义，有哪些值可选，被哪些表引用，都可以直接从数据字典里查看。
 
-现在就让我们参考 `ZAC_FLIGHT_EXT` 来建一张自定义表 `ZAC_FLIGHT_EXT` 。
+现在就让我们参考 `ZAC_FLIGHT_EXT` 来建一张自定义表。
 
 > 表已随课程仓库下发，可直接在 SE11 打开 `ZAC_FLIGHT_EXT` 对照每一步的结果；更建议自己按下述流程建一遍——对象名换成自己的前缀（如 `zmy_`，下述步骤里的 `zac_` 对应替换；同名 `zac_` 对象已在系统里，照敲会提示已存在），存到**个人练习包**（第0课第四节：练习不进课程包）。
 
@@ -65,19 +65,19 @@ SAP 通过这样的层层封装，让表的字段更符合业务逻辑，也更�
 
 ![SE11 表 ZAC_FLIGHT_EXT 字段列表](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-zac-flight-ext.jpg)
 
-这张表一共 6 个字段，前面 4 个是主键，后2 个是普通字段。所谓“主键”就是表的唯一标识，我们把它的四个主键组合起来，就形成了一个唯一的记录。住进我们参考的数据元素是标准的，系统中已经存在不需要新建。剩下的两普通字段，我们来手动创建。
+这张表一共 6 个字段，前面 4 个是主键，后2 个是普通字段。所谓“主键”就是表的唯一标识，我们把它的四个主键组合起来，就形成了一个唯一的记录。主键我们参考的数据元素是系统标准，系统中已经存在不需要新建。剩下的两普通字段，我们来手动创建。
 
 建表通常有两种方式：自上而下、自下而上。
 
 前者是我们在 SE11 中直接建表，根据字段来建数据元素，最后一起激活；后者是先建域，再建数据元素，最后建表。
 
-下面我们演示前者。
+下面我们演示前一种方法。
 
 ### 步骤 1：建透明表
 
-1. SE11 → **Database table** → 名称 `zac_flight_ext` → Create；
+1. SE11 → **Database table** → 名称 `zmy_ac_flight_ext` → Create；
 2. Short Description：`航班补充信息表`；Delivery Class 保持 `A`；Data Browser/Table View Editing 选择 `X`；
-3. **Fields 页签**逐行录入上表的六个字段：
+3. **Fields 页签**逐行录入上文的六个字段：
 4. 填入字段的 Data Element。
     - 当填到 REMARK 字段时，通常右侧的 Data Type 等列是灰色不可填写的，需要点击 `Built-In Type`（内建类型），此时就可以填了。
 
@@ -85,14 +85,14 @@ SAP 通过这样的层层封装，让表的字段更符合业务逻辑，也更�
 
 ### 步骤 2：建 Data Element
 
-. `PRIORITY` 字段参考的是我们自定义的数据元素  `ZAC_DE_PRIORITY`，填入之后在该数据元素上双击，系统会提示我们该数据元素不存在，是否新建，我们选择新建。
+`PRIORITY` 字段参考的是我们自定义的数据元素  `ZMY_AC_DE_PRIORITY`，填入之后在该数据元素上双击，系统会提示我们该数据元素不存在，是否新建，我们选择新建。
 
-1. Short text：`航班优先级`；**Domain** 字段填 `zac_doms_priority`；
+1. Short text：`航班优先级`；**Domain** 字段填 `zmy_ac_doms_priority`；
 2. **Field Label** 页签：Short `优先级`、Medium `航班优先级`——这些标签将来直接出现在 ALV 列头和屏幕上；
 
 ### 步骤 3：建 Domain
 
-由于 Domain `zac_doms_priority` 不存在，此时我们如果激活数据元素是会报错的，我们双击域，根据提示选择新建。
+由于 Domain `zmy_ac_doms_priority` 也不存在，此时我们如果激活数据元素是会报错的，我们双击域，根据提示选择新建。
 
 1. Short text：`航班优先级`；Data Type `CHAR`，Length `1`；
 2. **Value Range → Fixed Values**：`1` 高、`2` 中、`3` 低——这一步同时种下了未来 F4 帮助的候选值；
@@ -112,16 +112,16 @@ SAP 通过这样的层层封装，让表的字段更符合业务逻辑，也更�
 
 ### 步骤 5：录入数据并验证
 
-1. SE16 查 `ZAC_FLIGHT_EXT`——空表；
+1. SE16 查 `zmy_ac_flight_ext`——空表；
 2. 菜单 **Table Entries → Personalize for editing / Maintain entries**（或用 SM30 配视图维护）插入几行：`AA / 0017 / 2026-07-30 / 金牌客户包机 / 1`；
-![SE16 维护 ZAC_FLIGHT_EXT 数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se16-insert-data.jpg)
+![SE16 新增数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-new-data.jpg)
+![SE16 维护 ZMY_AC_FLIGHT_EXT 数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se16-insert-data.jpg)
 3. 再查一次，数据在。
 
-![SE16 新增数据](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-new-data.jpg)
 
 如果点击后报错，请回到 SE11 检查表是否激活。
 
-![SE11 表 ZAC_FLIGHT_EXT 表维护](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-data-table-editing.jpg)
+![SE11 表 ZMY_AC_FLIGHT_EXT 表维护](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-data-table-editing.jpg)
 
 ## 知识点
 
@@ -138,9 +138,9 @@ flowchart LR
 |----|--------|---------|
 | Domain | 类型、长度、小数位、**固定值域**、转换例程 | 所有引用它的数据元素 |
 | Data Element | 业务语义、字段标签（4 种长度）、F1 文档 | 所有引用它的表字段 |
-| Table | 字段编排、主键、外键、索引、技术设置 | 数据库对象本身 |
+| Table | 字段编排、主键、外键、索引、技术设置 | 数据库中的数据、引用的程序 |
 
-**复用是灵魂：** `S_CARR_ID` 这个数据元素被几十张标准表引用——"航空公司代码"的定义全系统只有一处，改一处生效。这就是"两张表都要航空公司代码字段怎么办"的标准答案：**引用同一个 Data Element**。
+**复用是灵魂：** `S_CARR_ID` 这个数据元素被几十张标准表引用——"航空公司代码"的定义全系统只有一处，改一处生效。这就是"两张表都要航空公司代码字段怎么办"的标准答案：**引用同一个 Data Element**。但也正因为如此，我们在实施过程中的每次改动已有数据类型都应该首先评估影响范围。
 
 ### 2. Domain 细节
 
@@ -155,19 +155,21 @@ flowchart LR
 
 ### 4. 表的关键配置
 
-- **Client 字段（MANDT）**：SAP 三层里"逻辑租户"隔离的物理实现——每张应用表第一键都是它，程序读写时系统自动带当前 Client（第1课 Client 概念的落地）；
+- **Client 字段（MANDT）**：SAP 三层里"逻辑租户"隔离的物理实现——每张应用表第一键都是它，程序读写时系统自动带当前 Client（第1课 Client 概念的落地）。实际实施中我们常问跨不跨 Client，说的就是这个；
 - **Delivery Class**：`A` 应用表（业务数据）最常见；`C` 定制表；`S` 系统表；
-- **Data Browser/Table View Maint.**（Delivery & Maintenance 页签）：决定能否在 SE16 直接维护数据——练习库开 `Display/Maintenance Allowed` 方便，生产慎开；
+- **Data Browser/Table View Maint.**（Delivery & Maintenance 页签）：决定能否在 SE16 直接维护数据——练习库开 `Display/Maintenance Allowed` 方便，但实际实施中，我们要问这个表是数据表还是配置表，数据正常应该由代码逻辑执行增删改，配置表才开这个；
 - **Data Class**：`APPL0` 主数据、`APPL1` 事务数据（大）、`APPL2` 组织与定制数据——影响数据库存储优化；
 - **Size Category**：量级预估（0 = 千行以内 …），影响空间预分配；
 - **Buffering**：单条/全表缓冲——配置表开了很香，交易大表千万别开（第5课性能话题会回收）。
+- 以上配置处都可以试试按 F1。
 
 ### 5. 外键与索引
 
 **外键（Foreign Key）**：把字段"合同化"地挂在另一张表上。给 ZAC_FLIGHT_EXT 的 CARRID 建外键 → SCARR：
 
 1. 选中 CARRID 字段 → **Foreign Keys** 按钮；
-2. 填 Check Table `SCARR`，Cardinality `N:1`（本表 N 行对应主表 1 行）；
+2. 填 Check Table `SCARR`，Cardinality `1:N`（本表 N 行对应主表 1 行）；
+![SE11 外键配置](https://cdn.jsdelivr.net/gh/jack-liang/abap-course-assets@main/03-data-dictionary/se11-foreign-keys.gif)
 3. 确认后，录入不存在的航空公司代码将被数据库字典校验拒绝。
 
 **索引**：主键之外给高频查询字段建的"目录"。原则：
@@ -203,9 +205,10 @@ flowchart LR
 
     建字段前先搜有没有现成 Data Element（SE11 → Data element → F4 搜索描述）。SAP 标准库几万个数据元素，`ZAC` 开头再造轮子既low又难维护。
 
-!!! tip "CHAR(1) 标志位是重灾区"
-
-    `'X'/space` 之外的标志位值，请像本课 PRIORITY 那样建 Domain + Fixed Values——否则两年后没人记得 `T` 是什么意思。
+!!! tip "为什么要有域值？"
+    试想一下，前面的同事见了一个字段，后面的同事要给表里写数据，Ta 要怎么知道该填什么值呢？ 即便知道了要填1、2、3，Ta 又是否知道这几个数字代表什么含义？
+    域就是这个问题的解决方案，它定义了字段的取值范围和含义，帮助开发人员和用户理解数据的含义。
+    开发内容就是文档本身，这是最高级的文档。
 
 ## 📖 延伸阅读
 
@@ -220,6 +223,7 @@ flowchart LR
 2. 两张表都需要"航空公司代码"字段，正确的复用姿势是什么？
 3. 打开 SE11 查看 SFLIGHT 的外键：它挂在哪些表上？Cardinality 各是多少？
 4. 什么场景下你会给表开 Buffering？什么场景绝对不开？
+5. 如果你在其他开发语言里建过表，比较跟在 SAP 里建表有哪些不同？
 
 ---
 
