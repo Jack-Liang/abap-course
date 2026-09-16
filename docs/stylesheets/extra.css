@@ -95,6 +95,9 @@ body[data-md-color-scheme="default"][data-md-color-primary] {
   --md-default-bg-color: var(--ac-paper);
   --md-footer-bg-color: var(--ac-surface);
   --md-footer-fg-color: var(--ac-soft);
+  /* --light/--lighter 不桥接时是半透明白，白底页脚上文字与图标隐形 */
+  --md-footer-fg-color--light: var(--ac-soft);
+  --md-footer-fg-color--lighter: var(--ac-soft);
   --md-text-font: "72", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
     "Noto Sans CJK SC", sans-serif;
@@ -110,6 +113,8 @@ body[data-md-color-scheme="slate"][data-md-color-primary] {
   --md-default-bg-color: var(--ac-paper);
   --md-footer-bg-color: var(--ac-surface);
   --md-footer-fg-color: var(--ac-soft);
+  --md-footer-fg-color--light: var(--ac-soft);
+  --md-footer-fg-color--lighter: var(--ac-soft);
 }
 
 /* ---------- 底色：网格图纸 ---------- */
@@ -267,7 +272,14 @@ button:focus-visible {
 }
 .md-footer-meta { background-color: var(--ac-surface); }
 .md-footer a { color: var(--ac-link); }
-.md-copyright { color: var(--ac-soft); }
+.md-copyright,
+.md-copyright__highlight { color: var(--ac-soft); }
+/* Material 对页脚链接有 html .md-footer-meta.md-typeset a{color:var(--md-footer-fg-color--light)}
+   （0,2,2，压过上面的 .md-footer a）。变量已桥接为 --ac-soft，但链接仍应回到主题蓝，
+   故以同特异性、后加载夺回；悬停/聚焦转墨色（--ac-ink）。 */
+html .md-footer-meta.md-typeset a { color: var(--ac-link); }
+html .md-footer-meta.md-typeset a:hover,
+html .md-footer-meta.md-typeset a:focus { color: var(--ac-ink); }
 
 /* ---------- 正文上一节/下一节卡 ---------- */
 .ac-pn {
