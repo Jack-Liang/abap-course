@@ -55,7 +55,10 @@ markdown_extensions:
   - md_in_html
   - toc:
       permalink: true
-      slugify: !!python/name:pymdownx.slugs.uslugify
+      # 旧写法 pymdownx.slugs.uslugify 在 pymdown-extensions 12 已移除（11 起弃用）；
+      # uslugify 即 slugify(case='lower')，此处等价替换，锚点不变。
+      # 注意 object/apply 的映射参数须挂在 kwds: 下，否则等同无参调用。
+      slugify: !!python/object/apply:pymdownx.slugs.slugify {kwds: {case: lower}}
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
