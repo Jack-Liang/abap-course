@@ -756,6 +756,32 @@ a.ac-pn__item:hover .ac-pn__title { color: var(--ac-link); }
 .md-top { border: 1px solid var(--ac-line-strong); border-radius: 0; background: var(--ac-surface); color: var(--ac-soft); }
 .md-top:hover { background: var(--ac-surface); color: var(--ac-brand); border-color: var(--ac-brand); }
 
+/* ---------- 顶栏搜索框：图框检索栏 ---------- */
+/* Material 桌面端默认给 #00000042 灰胶囊（为其深色头栏设计），在白底图框头上发灰；
+   占位文字/图标走 --md-primary-bg-color--light（半透明白），浅色下对比不足。
+   改为描边方框：与侧栏、内容图框同语言，悬停/检索中描边转品牌蓝。 */
+@media screen and (min-width: 60em) {
+  .md-header .md-search__form {
+    background-color: var(--ac-surface);
+    border: 1px solid var(--ac-line-strong);
+    border-radius: 0;
+    color: var(--ac-ink);
+  }
+  .md-header .md-search__form:hover,
+  .md-header .md-search__form:focus-within {
+    border-color: var(--ac-brand);
+  }
+}
+/* 检索展开态：Material 会把表单换回 --md-default-bg-color（纸灰），压回白底并点亮描边 */
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+  background-color: var(--ac-surface);
+  border-color: var(--ac-brand);
+}
+.md-header .md-search__input { color: var(--ac-ink); }
+.md-header .md-search__input::placeholder { color: var(--ac-soft); }
+.md-header .md-search__icon { color: var(--ac-soft); }
+.md-header .md-search__icon:hover { color: var(--ac-ink); }
+
 /* ---------- 搜索结果面板 ---------- */
 .md-search__inner, .md-search__scrollwrap { border-radius: 0; }
 .md-search-result__item { border-radius: 0; }
