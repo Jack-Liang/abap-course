@@ -24,6 +24,8 @@
             {{ config.site_name }}
           </a>
         </div>
+        <!-- 首页不换题：滚动时顶栏保持站名，不显示 nav 里的「首页」二字 -->
+        {% if not page.is_homepage %}
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             {% if page.meta and page.meta.title %}
@@ -33,6 +35,7 @@
             {% endif %}
           </span>
         </div>
+        {% endif %}
       </div>
     </div>
     {% if config.theme.palette %}
