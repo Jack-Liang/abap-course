@@ -17,29 +17,34 @@ START-OF-SELECTION.
 
   cl_http_client=>create_by_url(
     EXPORTING
-      url    = 'https://open.er-api.com/v6/latest/USD'
-      ssl_id = lv_ssl_id
+      url             = 'https://open.er-api.com/v6/latest/USD'
+      ssl_id          = lv_ssl_id
     IMPORTING
-      client = lo_http
+      client          = lo_http
     EXCEPTIONS OTHERS = 4 ).
   IF sy-subrc <> 0.
-    WRITE: / 'HTTP 连接创建失败（检查网络/SM59/SSL）'. EXIT.
+    WRITE: / 'HTTP 连接创建失败（检查网络/SM59/SSL）'.
+    EXIT.
   ENDIF.
 
   " 2. 组装 GET 请求
   lo_http->request->set_method( 'GET' ).
   lo_http->request->set_header_field(
-    name  = 'Accept' value = 'application/json' ).
+    name  = 'Accept'
+    value = 'application/json' ).
 
   " 3. 发送与接收
   lo_http->send( EXCEPTIONS OTHERS = 1 ).
   IF sy-subrc <> 0.
-    WRITE: / '请求发送失败'. lo_http->close( ). EXIT.
+    WRITE: / '请求发送失败'.
+    lo_http->close( ).
+    EXIT.
   ENDIF.
   lo_http->receive( EXCEPTIONS OTHERS = 1 ).
   IF sy-subrc <> 0.
     WRITE: / '响应接收失败（外网/防火墙/SSL 证书，见课文环境提示）'.
-    lo_http->close( ). EXIT.
+    lo_http->close( ).
+    EXIT.
   ENDIF.
 
   lv_json = lo_http->response->get_cdata( ).
@@ -47,7 +52,8 @@ START-OF-SELECTION.
 
   WRITE: / |响应前 200 字: {
     COND string( WHEN strlen( lv_json ) > 200
-                 THEN substring( val = lv_json len = 200 )
+                 THEN substring( val = lv_json
+                                 len = 200 )
                  ELSE lv_json ) }|.
 
   " 4. JSON 解析：按需声明字段，工具类按名自动映射

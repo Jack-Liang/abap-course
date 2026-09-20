@@ -12,7 +12,7 @@ CLASS lcl_app DEFINITION.
   PRIVATE SECTION.
     DATA: mo_container TYPE REF TO cl_gui_docking_container,
           mo_grid      TYPE REF TO cl_gui_alv_grid,
-          mt_data      TYPE STANDARD TABLE OF sflight.
+          mt_data      TYPE STANDARD TABLE OF sflight WITH EMPTY KEY.
     METHODS:
       handle_double_click FOR EVENT double_click OF cl_gui_alv_grid
         IMPORTING e_row e_column,
@@ -64,7 +64,7 @@ CLASS lcl_app IMPLEMENTATION.
   METHOD handle_toolbar.
     DATA(ls_btn) = VALUE stb_button(
       function = 'ZEXPORT' icon = '@16@' quickinfo = '导出 CSV' text = '导出' ).
-    APPEND ls_btn TO e_object->mt_toolbar.
+    INSERT ls_btn INTO TABLE e_object->mt_toolbar.
   ENDMETHOD.
 
   METHOD handle_user_command.
@@ -73,6 +73,7 @@ CLASS lcl_app IMPLEMENTATION.
         CALL FUNCTION 'GUI_DOWNLOAD'
           EXPORTING filename = |flight_{ sy-datum }.csv| filetype = 'ASC'
           TABLES data_tab = mt_data.
+      WHEN OTHERS.
     ENDCASE.
   ENDMETHOD.
 ENDCLASS.

@@ -14,7 +14,7 @@ TYPES: BEGIN OF ty_sflight,
          carrname TYPE scarr-carrname,
        END OF ty_sflight.
 
-DATA: gt_sflight TYPE TABLE OF ty_sflight.
+DATA: gt_sflight TYPE STANDARD TABLE OF ty_sflight WITH EMPTY KEY.
 
 START-OF-SELECTION.
   SELECT f~carrid, f~connid, f~fldate, f~price, c~carrname
@@ -36,13 +36,13 @@ FORM display_alv.
 
   CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
     EXPORTING
-      i_callback_program       = sy-repid
-      i_callback_user_command  = 'USER_COMMAND'
-      i_callback_top_of_page   = 'TOP_OF_PAGE'
-      is_layout                = ls_layout
-      it_fieldcat              = lt_fieldcat
+      i_callback_program      = sy-repid
+      i_callback_user_command = 'USER_COMMAND'
+      i_callback_top_of_page  = 'TOP_OF_PAGE'
+      is_layout               = ls_layout
+      it_fieldcat             = lt_fieldcat
     TABLES
-      t_outtab                 = gt_sflight.
+      t_outtab                = gt_sflight.
 ENDFORM.
 
 FORM user_command USING p_ucomm    TYPE sy-ucomm
@@ -70,7 +70,8 @@ FORM show_bookings USING p_carrid TYPE s_carr_id
     WHERE carrid = @p_carrid AND connid = @p_connid AND fldate = @p_fldate
     INTO TABLE @DATA(lt_sbook).
   IF lt_sbook IS INITIAL.
-    MESSAGE '该航班暂无预订记录' TYPE 'I'. RETURN.
+    MESSAGE '该航班暂无预订记录' TYPE 'I'.
+    RETURN.
   ENDIF.
   DATA(lt_fc) = VALUE slis_t_fieldcat_alv(
     ( fieldname = 'BOOKID'     seltext_l = '预订号' )

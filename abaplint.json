@@ -1,0 +1,61 @@
+{
+  "global": {
+    "files": "/src/**/*.*",
+    "exclude": [
+      "/src/zac_flight_utils.fugr.saplzac_flight_utils.abap",
+      "/src/zac_flight_utils.fugr.lzac_flight_utilstop.abap"
+    ],
+    "skipGeneratedFunctionGroups": true
+  },
+  "dependencies": [
+    {
+      "url": "https://github.com/abaplint/deps",
+      "files": "/src/**/*.*",
+      "folder": "/lint_deps"
+    }
+  ],
+  "syntax": {
+    "version": {
+      "release": "v752",
+      "language": "Normal"
+    },
+    "errorNamespace": "^(Z|Y|LT?CL_|TY_|LIF_|C_|.*ABAPGIT)"
+  },
+  "rules": {
+    "parser_error": true,
+    "check_syntax": true,
+    "check_include": true,
+    "main_file_contents": true,
+    "uncaught_exception": true,
+    "obsolete_statement": true,
+    "avoid_use": true,
+    "max_one_statement": true,
+    "unnecessary_return": true,
+    "unused_variables": true,
+    "short_case": true,
+    "fully_type_itabs": true,
+    "prefer_insert_into_table": true,
+    "strict_sql": true,
+    "no_yoda_conditions": {
+      "onlyConstants": true
+    },
+    "keyword_case": true,
+    "indentation": true,
+    "in_statement_indentation": true,
+    "line_only_punc": true,
+    "line_break_multiple_parameters": true,
+    "align_parameters": true,
+    "align_type_expressions": true,
+    "whitespace_end": true,
+    "space_before_colon": true,
+    "space_before_dot": true,
+    "colon_missing_space": true,
+    "sequential_blank": true,
+    "empty_line_in_statement": true,
+    "line_length": true,
+    "description_empty": true,
+    "local_variable_names": {
+      "expectedFS": "^<.+>$"
+    }
+  }
+}

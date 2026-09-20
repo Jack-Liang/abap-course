@@ -70,13 +70,14 @@ CLASS lcl_alv_display IMPLEMENTATION.
     " 自定义工具栏：追加导出按钮（第22课写法）
     DATA(ls_btn) = VALUE stb_button(
       function = 'ZEXPORT' icon = '@16@' quickinfo = '导出 CSV' text = '导出' ).
-    APPEND ls_btn TO e_object->mt_toolbar.
+    INSERT ls_btn INTO TABLE e_object->mt_toolbar.
   ENDMETHOD.
 
   METHOD handle_user_command.
     CASE e_ucomm.
       WHEN 'ZEXPORT'.
         mo_app->export_to_csv( ).
+      WHEN OTHERS.
     ENDCASE.
   ENDMETHOD.
 

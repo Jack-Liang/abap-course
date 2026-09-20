@@ -13,7 +13,9 @@ START-OF-SELECTION.
 
   " 字符串模板格式化
   SELECT SINGLE carrid, carrname, currcode
-    FROM scarr INTO @DATA(ls_carr) WHERE carrid = 'AA'.
+    FROM scarr
+    WHERE carrid = 'AA'
+    INTO @DATA(ls_carr).
   WRITE: / |航空公司: { ls_carr-carrname } 货币: { ls_carr-currcode }|.
 
   " 日期格式化
@@ -35,8 +37,8 @@ START-OF-SELECTION.
 
   " REPLACE 新语法
   DATA(lv_result) = replace(
-    val = |Hello ABAP World|
-    sub = 'World'
+    val  = |Hello ABAP World|
+    sub  = 'World'
     with = 'SAP' ).
   WRITE: / lv_result.
 

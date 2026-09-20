@@ -16,8 +16,9 @@ REPORT zac_message.
 PARAMETERS: p_carrid TYPE s_carr_id OBLIGATORY.
 
 AT SELECTION-SCREEN ON p_carrid.
-  SELECT SINGLE carrid FROM scarr INTO @DATA(lv_check)
-    WHERE carrid = @p_carrid.
+  SELECT SINGLE carrid FROM scarr
+    WHERE carrid = @p_carrid
+    INTO @DATA(lv_check) ##NEEDED.
   IF sy-subrc <> 0.
     MESSAGE e001(zac_flight_msg) WITH p_carrid.
   ENDIF.
@@ -28,8 +29,9 @@ START-OF-SELECTION.
     INTO @DATA(lv_count).
   MESSAGE s004(zac_flight_msg) WITH lv_count.
 
-  SELECT SINGLE * FROM sflight INTO @DATA(ls_f)
-    WHERE carrid = @p_carrid AND connid = '0017'.
+  SELECT SINGLE * FROM sflight
+    WHERE carrid = @p_carrid AND connid = '0017'
+    INTO @DATA(ls_f).
   IF sy-subrc <> 0.
     MESSAGE e002(zac_flight_msg) INTO DATA(lv_msg).
     WRITE: / lv_msg.

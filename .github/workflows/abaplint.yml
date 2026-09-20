@@ -1,0 +1,27 @@
+name: abaplint
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'src/**'
+      - 'abaplint.json'
+      - '.github/workflows/abaplint.yml'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'abaplint.json'
+      - '.github/workflows/abaplint.yml'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # abaplint 不做语义化版本管理，官方建议固定版本；升级时改这里
+      - name: Run abaplint
+        run: npx -y @abaplint/cli@2.120.57
