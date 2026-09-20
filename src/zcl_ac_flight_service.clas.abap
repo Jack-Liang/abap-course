@@ -16,10 +16,10 @@ CLASS zcl_ac_flight_service DEFINITION
         RETURNING VALUE(rv_bookid) TYPE bapisbokey-bookingid,
       "! 教学占位（课后练习）：真实项目走后续单据流程，这里保持空实现
       cancel_booking
-        IMPORTING iv_carrid TYPE s_carr_id
-                  iv_connid TYPE s_conn_id
-                  iv_fldate TYPE s_date
-                  iv_bookid TYPE bapisbokey-bookingid,
+        IMPORTING iv_carrid TYPE s_carr_id ##NEEDED
+                  iv_connid TYPE s_conn_id ##NEEDED
+                  iv_fldate TYPE s_date ##NEEDED
+                  iv_bookid TYPE bapisbokey-bookingid ##NEEDED,
       get_flight_info
         IMPORTING iv_carrid      TYPE s_carr_id
                   iv_connid      TYPE s_conn_id
@@ -84,7 +84,7 @@ CLASS ZCL_AC_FLIGHT_SERVICE IMPLEMENTATION.
 
 
   METHOD cancel_booking.
-    RETURN.
+    " 课后练习：参照 create_booking 实现——BAPI_FLBOOKING_CANCEL1 + RET2 检查 + COMMIT
   ENDMETHOD.
 
 
