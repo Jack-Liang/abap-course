@@ -16,6 +16,12 @@
      <ENTRY>第7课：选择屏幕</ENTRY>
      <LENGTH>8</LENGTH>
     </item>
+    <item>
+     <ID>S</ID>
+     <KEY>B01</KEY>
+     <ENTRY>航班查询条件</ENTRY>
+     <LENGTH>6</LENGTH>
+    </item>
    </TPOOL>
   </asx:values>
  </asx:abap>

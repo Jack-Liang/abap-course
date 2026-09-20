@@ -4,7 +4,7 @@
 *& 第24课：综合实战 —— 选择屏幕（第7课）
 *&---------------------------------------------------------------------*
 
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-b01.
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-b01.
 PARAMETERS p_carrid TYPE s_carr_id OBLIGATORY DEFAULT 'AA'.
 SELECT-OPTIONS s_date FOR sflight-fldate.
 SELECTION-SCREEN END OF BLOCK b1.
@@ -13,7 +13,7 @@ SELECTION-SCREEN END OF BLOCK b1.
 AT SELECTION-SCREEN ON p_carrid.
   SELECT SINGLE carrid FROM scarr
     WHERE carrid = @p_carrid
-    INTO @DATA(lv_carrid).
+    INTO @DATA(lv_carrid) ##NEEDED.
   IF sy-subrc <> 0.
     MESSAGE ID 'ZAC_FLIGHT_MSG' TYPE 'E' NUMBER 001 WITH p_carrid.
   ENDIF.

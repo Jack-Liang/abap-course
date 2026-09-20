@@ -47,18 +47,20 @@ REPORT zac_oo_basic.
 " SFLIGHT_TAB 表类型并非每个系统都交付，课程统一用本地类型，任何环境可跑
 TYPES ty_sflight_tab TYPE STANDARD TABLE OF sflight WITH EMPTY KEY.
 
+" 自定义异常：找不着数据不是数据库错误
+" cx_static_check 子类抛出前，方法签名必须声明 RAISING（否则激活报错）
+CLASS lcx_not_found DEFINITION INHERITING FROM cx_static_check.
+ENDCLASS.
+
 " 接口：只声明"能做什么"，不管"谁来做"
 INTERFACE lif_flight_query.
   METHODS:
     get_flights EXPORTING et_sflight TYPE ty_sflight_tab,
     get_flight_detail IMPORTING iv_connid TYPE s_conn_id
                                 iv_fldate TYPE s_date
-                      RETURNING VALUE(rs_detail) TYPE sflight.
+                      RETURNING VALUE(rs_detail) TYPE sflight
+                      RAISING   lcx_not_found.
 ENDINTERFACE.
-
-" 自定义异常：找不着数据不是数据库错误
-CLASS lcx_not_found DEFINITION INHERITING FROM cx_static_check.
-ENDCLASS.
 
 CLASS lcl_flight_query DEFINITION.
   PUBLIC SECTION.
@@ -106,7 +108,8 @@ START-OF-SELECTION.
   " 异常处理：查一个不存在的日期
   TRY.
       DATA(ls_detail) = lo_query->lif_flight_query~get_flight_detail(
-        iv_connid = '0017' iv_fldate = '20260730' ).
+        iv_connid = '0017'
+        iv_fldate = '20260730' ).
       WRITE: / |详情: 票价 { ls_detail-price }, 座位 { ls_detail-seatsocc }/{ ls_detail-seatsmax }|.
     CATCH lcx_not_found INTO DATA(lx_error).
       WRITE: / |未找到航班: { lx_error->get_text( ) }|.

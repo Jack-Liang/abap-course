@@ -42,10 +42,8 @@ status: draft
 ```abap
 REPORT zac_selection_screen.
 
-" 块标题必须是变量名或文本符号，不接受字面量
-DATA title_b1 TYPE c LENGTH 40 VALUE '航班查询条件'.
-
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE title_b1.
+" 块标题不接受字面量——用文本符号 TEXT-b01（SE38: Goto → Text Elements 维护）
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-b01.
 PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA'.
 SELECT-OPTIONS: s_connid FOR sflight-connid NO-EXTENSION,
                 s_date   FOR sflight-fldate,
@@ -53,8 +51,9 @@ SELECT-OPTIONS: s_connid FOR sflight-connid NO-EXTENSION,
 SELECTION-SCREEN END OF BLOCK b1.
 
 AT SELECTION-SCREEN ON p_carrid.
-  SELECT SINGLE carrid FROM scarr INTO @DATA(lv_check)
-    WHERE carrid = @p_carrid.
+  SELECT SINGLE carrid FROM scarr
+    WHERE carrid = @p_carrid
+    INTO @DATA(lv_check) ##NEEDED.                 " 只看 sy-subrc；##NEEDED 告诉静态检查"变量是故意的"
   IF sy-subrc <> 0.
     MESSAGE e001(zac_flight_msg) WITH p_carrid.  " 航空公司代码 &1 不存在
   ENDIF.
@@ -158,9 +157,9 @@ AT SELECTION-SCREEN ON END OF s_date.
 ### 5. 布局：BLOCK 分组与文本
 
 ```abap
-" 块标题必须是变量名或文本符号（字面量语法检查不过）：
-DATA title_b1 TYPE c LENGTH 40 VALUE '航班查询条件'.
-SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE title_b1.
+" 块标题必须是变量名或文本符号（字面量语法检查不过）。
+" 文本符号 TEXT-b01 在 Goto → Text Elements 里维护，随 abapGit 仓库分发：
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-b01.
   ...
 SELECTION-SCREEN END OF BLOCK b1.
 ```

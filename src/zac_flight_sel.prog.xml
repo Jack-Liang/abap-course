@@ -14,6 +14,12 @@
      <ENTRY>Include ZAC_FLIGHT_SEL</ENTRY>
      <LENGTH>22</LENGTH>
     </item>
+    <item>
+     <ID>S</ID>
+     <KEY>B01</KEY>
+     <ENTRY>航班查询条件</ENTRY>
+     <LENGTH>6</LENGTH>
+    </item>
    </TPOOL>
   </asx:values>
  </asx:abap>
