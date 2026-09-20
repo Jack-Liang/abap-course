@@ -42,6 +42,9 @@ status: draft
 ```abap
 REPORT zac_selection_screen.
 
+" 表工作区：SELECT-OPTIONS ... FOR sflight-字段 的引用需要它（漏写即"Field unknown"激活错误）
+TABLES: sflight.
+
 " 块标题不接受字面量——用文本符号 TEXT-b01（SE38: Goto → Text Elements 维护）
 SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE TEXT-b01.
 PARAMETERS: p_carrid TYPE sflight-carrid OBLIGATORY DEFAULT 'AA'.

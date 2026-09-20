@@ -29,10 +29,14 @@ START-OF-SELECTION.
   WRITE: / |航空公司数量: { lines( lt_carrids ) }|.
 
   " FOR GROUPS —— 按航空公司分组统计航班数
+  " （GROUP SIZE 附加组件部分系统不支持，组内遍历 FOR IN GROUP 是基线写法）
   DATA(lt_summary) = VALUE ty_count_tab(
     FOR GROUPS grp OF ls IN lt_sflight
-      GROUP BY ( carrid = ls-carrid cnt = GROUP SIZE )
-    ( carrid = grp-carrid cnt = grp-cnt ) ).
+      GROUP BY ( carrid = ls-carrid )
+    ( carrid = grp-carrid
+      cnt    = REDUCE i( INIT n = 0
+                      FOR m IN GROUP grp
+                      NEXT n = n + 1 ) ) ).
   LOOP AT lt_summary INTO DATA(ls_grp).
     WRITE: / |{ ls_grp-carrid }: { ls_grp-cnt } 条航班|.
   ENDLOOP.

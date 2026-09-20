@@ -15,7 +15,7 @@ status: published
 
 ## 问题引入
 
-SFLIGHT 有几千行，`SELECT SINGLE` 一次取一条显然不现实（数据库通讯消耗大）。怎么把数据一次性"装起来"，再分组、排序、查找？答案就是**内表（Internal Table）**——ABAP 的内存容器，也是这门语言几十年来的核心数据结构。本课同时引入一批现代写法（`FOR` / `GROUP BY` / `REDUCE`），它们会让你的内表代码从"过程式循环"进化为"表达式"。
+SFLIGHT 有几千行，`SELECT SINGLE` 一次取一条显然不现实（数据库通讯消耗大）。怎么把数据一次性"装起来"，再分组、排序、查找？答案就是**内表（Internal Table）**——存在于 ABAP 程序中的表，也是这门语言几十年来的核心数据结构。本课同时引入一批现代写法（`FOR` / `GROUP BY` / `REDUCE`），它们会让你的内表代码从"过程式循环"进化为"表达式"。
 
 ## 时间安排
 
@@ -62,14 +62,20 @@ START-OF-SELECTION.
   DATA(lt_carrids) = VALUE ty_carrid_tab(
     FOR GROUPS grp OF ls IN lt_sflight
       GROUP BY ( carrid = ls-carrid )
-    ( grp-carrid ) ).
+    ( grp-carrid )
+  ).
   WRITE: / |航空公司数量: { lines( lt_carrids ) }|.
 
   " ③ FOR GROUPS——按航空公司分组统计航班数
+  "    （GROUP SIZE 附加组件部分系统不支持，组内遍历 FOR IN GROUP 是基线写法）
   DATA(lt_summary) = VALUE ty_count_tab(
     FOR GROUPS grp OF ls IN lt_sflight
-      GROUP BY ( carrid = ls-carrid cnt = GROUP SIZE )
-    ( carrid = grp-carrid cnt = grp-cnt ) ).
+      GROUP BY ( carrid = ls-carrid )
+    ( carrid = grp-carrid
+      cnt = REDUCE i( INIT n = 0
+                      FOR m IN GROUP grp
+                      NEXT n = n + 1 ) )
+  ).
   LOOP AT lt_summary INTO DATA(ls_grp).
     WRITE: / |{ ls_grp-carrid }: { ls_grp-cnt } 条航班|.
   ENDLOOP.
@@ -78,7 +84,8 @@ START-OF-SELECTION.
   DATA(lv_total) = REDUCE i(
     INIT sum = 0
     FOR ls IN lt_sflight
-    NEXT sum = sum + ls-seatsocc ).
+    NEXT sum = sum + ls-seatsocc
+  ).
   WRITE: / |总已占座位: { lv_total }|.
 ```
 
@@ -201,13 +208,17 @@ DATA(lt_carrids) = VALUE ty_carrid_tab(
 **② `FOR GROUPS`：ABAP 层的分组统计**
 
 ```abap
-FOR GROUPS grp OF ls IN lt_sflight
-  GROUP BY ( carrid = ls-carrid cnt = GROUP SIZE )
-  ( carrid = grp-carrid cnt = grp-cnt )
+DATA(lt_summary) = VALUE ty_count_tab(
+  FOR GROUPS grp OF ls IN lt_sflight
+    GROUP BY ( carrid = ls-carrid )
+  ( carrid = grp-carrid
+    cnt = REDUCE i( INIT n = 0
+                    FOR m IN GROUP grp
+                    NEXT n = n + 1 ) ) ).
 ```
 
-- `GROUP BY` 定义分组键，`grp` 代表组键、组内成员可再 `FOR IN GROUP grp` 展开；
-- 组键里可以用两个特殊值附加组件：`GROUP SIZE`（组内行数）和 `GROUP INDEX`（组序号）——统计类需求直接挂在键上，不必再数一遍；
+- `GROUP BY` 定义分组键，`grp` 代表组键、组内成员用 `FOR ... IN GROUP grp` 展开——Demo ③ 的组内计数就是这么来的；
+- 更高的版本允许把 `GROUP SIZE`（组内行数）、`GROUP INDEX`（组序号）作为附加组件挂在组键上，但**部分系统不支持，激活阶段直接报 "is not a valid component"**——课程代码统一用组内遍历的基线写法，任何 7.40 SP08+ 系统可跑；
 - 对应 SQL 的 `GROUP BY`——数据已在内存时用它，别再倒回数据库。
 
 **③ `REDUCE`：折叠成单值**
