@@ -1,5 +1,5 @@
 ---
-status: draft
+status: published
 ---
 
 # 第4课：内表与结构体操作
@@ -15,7 +15,7 @@ status: draft
 
 ## 问题引入
 
-SFLIGHT 有几千行，`SELECT SINGLE` 一次取一条显然不现实。怎么把数据一次性"装起来"，再分组、排序、查找？答案就是**内表（Internal Table）**——ABAP 的内存容器，也是这门语言几十年来的核心数据结构。本课同时引入一批现代写法（`FOR` / `GROUP BY` / `REDUCE`），它们会让你的内表代码从"过程式循环"进化为"表达式"。
+SFLIGHT 有几千行，`SELECT SINGLE` 一次取一条显然不现实（数据库通讯消耗大）。怎么把数据一次性"装起来"，再分组、排序、查找？答案就是**内表（Internal Table）**——ABAP 的内存容器，也是这门语言几十年来的核心数据结构。本课同时引入一批现代写法（`FOR` / `GROUP BY` / `REDUCE`），它们会让你的内表代码从"过程式循环"进化为"表达式"。
 
 ## 时间安排
 
@@ -56,20 +56,20 @@ START-OF-SELECTION.
   " ① 批量读取：一次 SELECT 把 SFLIGHT 全部装进内存
   SELECT * FROM sflight INTO TABLE @DATA(lt_sflight).
 
-  " ② FOR 表推导式——提取不重复的航空公司
-  "    （UNIQUE KEY 是去重的关键：缺了它只排序、不去重）
+  " ② FOR GROUPS——提取不重复的航空公司
+  "    （SFLIGHT 每家有几十行，直接 FOR 塞进 UNIQUE KEY 表会撞键
+  "      dump ITAB_DUPLICATE_KEY；GROUP BY 一组只出一行，天然去重）
   DATA(lt_carrids) = VALUE ty_carrid_tab(
-    FOR ls IN lt_sflight
-    ( ls-carrid )
-  ).
+    FOR GROUPS grp OF ls IN lt_sflight
+      GROUP BY ( carrid = ls-carrid )
+    ( grp-carrid ) ).
   WRITE: / |航空公司数量: { lines( lt_carrids ) }|.
 
   " ③ FOR GROUPS——按航空公司分组统计航班数
   DATA(lt_summary) = VALUE ty_count_tab(
     FOR GROUPS grp OF ls IN lt_sflight
       GROUP BY ( carrid = ls-carrid cnt = GROUP SIZE )
-    ( carrid = grp-carrid cnt = grp-cnt )
-  ).
+    ( carrid = grp-carrid cnt = grp-cnt ) ).
   LOOP AT lt_summary INTO DATA(ls_grp).
     WRITE: / |{ ls_grp-carrid }: { ls_grp-cnt } 条航班|.
   ENDLOOP.
@@ -78,8 +78,7 @@ START-OF-SELECTION.
   DATA(lv_total) = REDUCE i(
     INIT sum = 0
     FOR ls IN lt_sflight
-    NEXT sum = sum + ls-seatsocc
-  ).
+    NEXT sum = sum + ls-seatsocc ).
   WRITE: / |总已占座位: { lv_total }|.
 ```
 
@@ -180,12 +179,24 @@ ENDLOOP.
 **① `FOR ... IN`：把循环变成表达式**
 
 ```abap
-DATA(lt_carrids) = VALUE ty_carrid_tab(
-  FOR ls IN lt_sflight
-  ( ls-carrid ) ).
+" FOR 只做"遍历+投影+装载"，一行对一个——不去重、不排序
+DATA lt_all TYPE STANDARD TABLE OF s_carr_id WITH EMPTY KEY.
+lt_all = VALUE #( FOR ls IN lt_sflight ( ls-carrid ) ).
+" lines( lt_all ) = SFLIGHT 总行数：AA 出现多少次就收多少次
 ```
 
-左边是 `VALUE 目标类型( 内容 )`，内容由 FOR 逐行投喂——一个表达式完成"遍历+投影+装载"。**去重靠的是键声明，不是 SORTED 本身**：`ty_carrid_tab` 定义为 `WITH UNIQUE KEY table_line`，重复值在插入时被丢弃；键写成 NON-UNIQUE 就只排序、不去重。
+左边是 `VALUE 目标类型( 内容 )`，内容由 FOR 逐行投喂。注意 **FOR 本身不去重**——想要"每家航空公司只留一条"，在表达式里加 `GROUP BY`（Demo ② 的写法，相当于 SQL 的 `SELECT DISTINCT`）：
+
+```abap
+DATA(lt_carrids) = VALUE ty_carrid_tab(
+  FOR GROUPS grp OF ls IN lt_sflight
+    GROUP BY ( carrid = ls-carrid )
+  ( grp-carrid ) ).
+```
+
+!!! warning "UNIQUE KEY 不去重，撞键直接 dump"
+
+    `VALUE #( ... )` 属于**整块插入**：新行一旦与 `UNIQUE KEY` 撞值，立刻触发运行时错误 `ITAB_DUPLICATE_KEY`（异常类 `CX_SY_ITAB_DUPLICATE_KEY`），而不是把重复行悄悄丢掉。想要"重复就跳过"的语义，用单条语句 `INSERT wa INTO TABLE itab`——重复时 `sy-subrc = 4`、不报错；要在表达式内去重，用 `FOR GROUPS`。
 
 **② `FOR GROUPS`：ABAP 层的分组统计**
 

@@ -126,11 +126,11 @@ START-OF-SELECTION.
   " 读取航班数据
   SELECT * FROM sflight INTO TABLE @DATA(lt_sflight).
 
-  " 新语法 FOR 循环
+  " 新语法 FOR GROUPS（按 carrid 分组，一组一行即去重）
   DATA(lt_carrids) = VALUE sortd_t_scarrid(
-    FOR ls IN lt_sflight
-    WHERE carrid = 'AA'
-    ( ls-carrid )
+    FOR GROUPS grp OF ls IN lt_sflight
+      GROUP BY ( carrid = ls-carrid )
+    ( grp-carrid )
   ).
 
   " CORRESPONDING 赋值
