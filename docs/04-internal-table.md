@@ -1,5 +1,5 @@
 ---
-status: published
+status: final
 ---
 
 # 第4课：内表与结构体操作
@@ -15,7 +15,7 @@ status: published
 
 ## 问题引入
 
-SFLIGHT 有几千行，`SELECT SINGLE` 一次取一条显然不现实（数据库通讯消耗大）。怎么把数据一次性"装起来"，再分组、排序、查找？答案就是**内表（Internal Table）**——存在于 ABAP 程序中的表，也是这门语言几十年来的核心数据结构。本课同时引入一批现代写法（`FOR` / `GROUP BY` / `REDUCE`），它们会让你的内表代码从"过程式循环"进化为"表达式"。
+SFLIGHT 有几千行，`SELECT SINGLE` 一次取一条显然不现实（数据库通讯消耗大）。怎么把数据一次性"装起来"，再分组、排序、查找？答案就是**内表（Internal Table）**——存在于 ABAP 程序中的、内存中的表。本课同时引入一批现代写法（`FOR` / `GROUP BY` / `REDUCE`），它们会让你的内表代码从"过程式循环"进化为"表达式"。
 
 ## 时间安排
 
@@ -89,7 +89,7 @@ START-OF-SELECTION.
   WRITE: / |总已占座位: { lv_total }|.
 ```
 
-**你会看到什么：** 第一行是**去重后**的航空公司数量（演示数据通常十几家，取决于你的 SFLIGHT 数据）；随后每家航空公司一行"xx: N 条航班"；最后一行是全表座位占用总数。第⑤节逐段拆解。
+**你会看到什么：** 第一行是**去重后**的航空公司数量（演示数据通常十几家，取决于你的 SFLIGHT 数据）；随后每家航空公司一行"xx: N 条航班"；最后一行是全表座位占用总数。
 
 ## 知识点
 
@@ -257,6 +257,7 @@ ls_sum = CORRESPONDING #( ls_flight ).   " 只搬两边同名的字段（carrid�
 ## 📖 延伸阅读
 
 - [ABAP Keyword Documentation](https://help.sap.com/doc/abapdocu_752_index_htm/7.52/en-US/index.htm)——`VALUE / FOR / REDUCE / CORRESPONDING` 各条目；
+- [ABAP Cheat Sheet: Internal Tables](https://github.com/SAP-samples/abap-cheat-sheets/blob/main/01_Internal_Tables.md)——SAP 官方样例仓库的内表速查表，语法示例与注意事项一页通；
 - 标准表/排序表/哈希表的查找复杂度差异，本质是数据结构问题，延伸理解见参考资料库背景资料区。
 
 ## 课后思考
