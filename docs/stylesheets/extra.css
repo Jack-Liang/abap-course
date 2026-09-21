@@ -633,6 +633,11 @@ body[data-md-color-scheme="slate"] .md-typeset .md-button--primary {
   color: color-mix(in srgb, var(--ac-brand) 70%, var(--ac-ink));
 }
 .ac-status strong { font-weight: 700; }
+/* 角标悬于内容区右上角，提示框全宽会与之重叠；>480px 角标为绝对定位，
+   提示框右侧留出让位（480px 以下角标已转静态，无需让位） */
+@media (min-width: 481px) {
+  .ac-status { margin-right: 6rem; }
+}
 
 /* ---------- 课次横幅（课文页全宽图） ---------- */
 .ac-banner {
