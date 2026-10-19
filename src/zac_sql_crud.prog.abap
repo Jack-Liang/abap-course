@@ -7,12 +7,12 @@
 REPORT zac_sql_crud.
 
 START-OF-SELECTION.
-  " 1. 单行查询
-  SELECT SINGLE * FROM sflight
+  " 1. 单行查询：SELECT SINGLE 配全键（SPFLI 主键 = CARRID + CONNID）
+  SELECT SINGLE * FROM spfli
     WHERE carrid = 'AA' AND connid = '0017'
-    INTO @DATA(ls_sflight).
+    INTO @DATA(ls_spfli).
   IF sy-subrc = 0.
-    WRITE: / |找到航班: { ls_sflight-carrid }-{ ls_sflight-connid }|.
+    WRITE: / |找到航线: { ls_spfli-cityfrom } → { ls_spfli-cityto }|.
   ENDIF.
 
   " 2. 多行查询 + @占位符
@@ -37,7 +37,7 @@ START-OF-SELECTION.
   ENDLOOP.
 
   " 4. 聚合
-  SELECT carrid, COUNT(*) AS cnt, SUM( seatsocc ) AS total
+  SELECT carrid, COUNT( * ) AS cnt, SUM( seatsocc ) AS total
     FROM sflight WHERE carrid = 'AA'
     GROUP BY carrid
     INTO TABLE @DATA(lt_stats).
